@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29
@@ -21,16 +22,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 }
 
 dependencies {
-    def lifecycle_version = "2.1.0"
-    def gms_version = "17.0.0"
+    def lifecycle_version = '2.1.0'
+    def gms_version = '17.0.0'
+    def androidx_version = '1.1.0'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.1.0'
+    implementation "androidx.appcompat:appcompat:$androidx_version"
+    implementation "androidx.core:core-ktx:$androidx_version"
     implementation "com.google.android.gms:play-services-maps:$gms_version"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
@@ -38,6 +44,10 @@ dependencies {
 
     // Google play services location
     implementation "com.google.android.gms:play-services-location:$gms_version"
+    implementation 'com.google.firebase:firebase-firestore:21.3.0'
+
+    // Firebase
+    implementation 'com.google.firebase:firebase-analytics:17.2.1'
 
     // Dexter
     implementation 'com.karumi:dexter:5.0.0'
