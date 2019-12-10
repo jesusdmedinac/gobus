@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "892734723976",
+    "firebase_url": "https://gobus-260206.firebaseio.com",
+    "project_id": "gobus-260206",
+    "storage_bucket": "gobus-260206.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:892734723976:android:9cd643d5b834efe4c9cc3d",
+        "android_client_info": {
+          "package_name": "com.mupper.gobus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "892734723976-8cllhep1uuhefgso8odtvl6k6aeovkfl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mupper.gobus",
+            "certificate_hash": "9947b0c33dc792bc3792ca6693722a0f3b5e3e3c"
+          }
+        },
+        {
+          "client_id": "892734723976-mcbdc35aotmhavflv34apnjqdh1ea67c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXnTudwqU22dd8sxpbgioTKWxtz1T3fO0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "892734723976-mcbdc35aotmhavflv34apnjqdh1ea67c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

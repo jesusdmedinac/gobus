@@ -10,6 +10,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.mupper.gobus.repository.UserLocationRepository
 import com.mupper.gobus.ui.common.Scope
@@ -18,6 +19,7 @@ import kotlinx.coroutines.launch
 class MapsViewModel(activity: Activity) : ViewModel(),
     Scope by Scope.Impl() {
 
+    private lateinit var userLocationMarker: Marker
     private var userLastLocation: LatLng? = null
     private var userLocationRepository: UserLocationRepository = UserLocationRepository(activity)
 
@@ -33,10 +35,10 @@ class MapsViewModel(activity: Activity) : ViewModel(),
         launch {
             userLastLocation = userLocationRepository.findLastLocation()?.getLatLng()
 
-            gobusMap.addMarker(userLastLocation?.let {
+            userLocationMarker = gobusMap.addMarker(userLastLocation?.let {
                 MarkerOptions().position(it).title("User position")
             })
-            gobusMap.moveCamera(CameraUpdateFactory.newLatLng(userLastLocation))
+            gobusMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLastLocation, 17f))
         }
     }
 
