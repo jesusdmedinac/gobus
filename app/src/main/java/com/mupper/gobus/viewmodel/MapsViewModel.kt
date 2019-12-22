@@ -16,7 +16,7 @@ import java.util.*
 class MapsViewModel(private val locationRepository: LocationRepository) : ScopedViewModel() {
 
     private lateinit var googleMap: GoogleMap
-    private lateinit var userMarker: Marker
+    private var travelerMarker: Marker? = null
     private var timer: Timer
 
     private val _model = MutableLiveData<MapsModel>()
@@ -30,7 +30,7 @@ class MapsViewModel(private val locationRepository: LocationRepository) : Scoped
         class MapReady(val onMapReady: OnMapReadyCallback) : MapsModel()
         class RequestLocationPermissions : MapsModel()
         object RequestNewLocation : MapsModel()
-        class NewLocation(val lastLocation: LatLng): MapsModel()
+        class NewLocation(val lastLocation: LatLng) : MapsModel()
     }
 
     init {
@@ -50,7 +50,7 @@ class MapsViewModel(private val locationRepository: LocationRepository) : Scoped
 
     fun onPermissionsRequested() {
         _model.value = MapsModel.MapReady(OnMapReadyCallback { loadedMap ->
-            loadedMap.let { googleMap = it  }
+            loadedMap.let { googleMap = it }
 
             timer.scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
@@ -73,10 +73,14 @@ class MapsViewModel(private val locationRepository: LocationRepository) : Scoped
                 onLocationChanged(LatLng(it.latitude, it.longitude))
             }
 
+            if (travelerMarker != null) {
+                travelerMarker?.remove()
+                travelerMarker = null
+            }
             googleMap.addMarker(lastLocation?.let {
                 MarkerOptions().position(it).title("User position")
             }).let {
-                userMarker = it
+                travelerMarker = it
             }
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLocation, 17f))
         }
