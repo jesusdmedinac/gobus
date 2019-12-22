@@ -1,7 +1,6 @@
 package com.mupper.gobus.model
 
-import android.annotation.SuppressLint
-import android.app.Activity
+import android.app.Application
 import android.location.Location
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -11,15 +10,18 @@ interface LocationDataSource {
     suspend fun findLastLocation(): Location?
 }
 
-class PlayServicesLocationDataSource(activity: Activity) : LocationDataSource {
-    private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
+class PlayServicesLocationDataSource(app: Application) : LocationDataSource {
+    private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(app)
 
-    @SuppressLint("MissingPermission")
     override suspend fun findLastLocation(): Location? =
         suspendCancellableCoroutine { continuation ->
             fusedLocationClient.lastLocation
                 .addOnCompleteListener {
-                    continuation.resume(it.result)
+                    if (it.isSuccessful && it.result != null) {
+                        continuation.resume(it.result)
+                    } else {
+                        continuation.resume(Location("dummyprovider"))
+                    }
                 }
         }
 }

@@ -1,6 +1,6 @@
 package com.mupper.gobus.model
 
-import android.location.Location
+import android.location.Location as AndroidLocation
 import com.google.android.gms.maps.model.LatLng
 
 /**
@@ -8,6 +8,6 @@ import com.google.android.gms.maps.model.LatLng
  * Insulet Corporation
  * Andromeda
  */
-class UserLocation(l: Location?) : Location(l) {
+class Location(l: AndroidLocation?) : AndroidLocation(l) {
     fun getLatLng() = LatLng(latitude, longitude)
 }
