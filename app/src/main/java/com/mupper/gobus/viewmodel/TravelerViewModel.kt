@@ -2,12 +2,10 @@ package com.mupper.gobus.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.mupper.commons.scope.ScopedViewModel
 import com.mupper.core.database.traveler.Traveler
-import com.mupper.gobus.scope.Scope
 import com.mupper.core.utils.LatLng
 import com.mupper.gobus.repository.TravelerRepository
-import com.mupper.gobus.scope.ScopedViewModel
 import kotlinx.coroutines.launch
 
 

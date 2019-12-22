@@ -7,7 +7,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.mupper.gobus.scope.ScopedViewModel
+import com.mupper.commons.scope.ScopedViewModel
 import com.mupper.core.utils.LatLng
 import com.mupper.gobus.repository.LocationRepository
 import kotlinx.coroutines.launch
@@ -19,7 +19,7 @@ class MapsViewModel(private val locationRepository: LocationRepository) : Scoped
     private lateinit var userMarker: Marker
     private var timer: Timer
 
-    private val _model = MutableLiveData<MapsModel>();
+    private val _model = MutableLiveData<MapsModel>()
     val model: LiveData<MapsModel>
         get() {
             if (_model.value == null) refresh()
