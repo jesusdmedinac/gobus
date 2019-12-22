@@ -1,4 +1,4 @@
-package com.mupper.gobus.ui.common
+package com.mupper.gobus.scope
 
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope

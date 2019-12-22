@@ -1,49 +1,88 @@
 package com.mupper.gobus.viewmodel
 
-import android.app.Activity
-import android.app.Application
-import android.content.Context
-import android.location.LocationManager
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.mupper.gobus.repository.UserLocationRepository
-import com.mupper.gobus.ui.common.Scope
+import com.mupper.gobus.scope.ScopedViewModel
+import com.mupper.core.utils.LatLng
+import com.mupper.gobus.repository.LocationRepository
 import kotlinx.coroutines.launch
+import java.util.*
 
-class MapsViewModel(activity: Activity) : ViewModel(),
-    Scope by Scope.Impl() {
+class MapsViewModel(private val locationRepository: LocationRepository) : ScopedViewModel() {
 
-    private lateinit var userLocationMarker: Marker
-    private var userLastLocation: LatLng? = null
-    private var userLocationRepository: UserLocationRepository = UserLocationRepository(activity)
+    private lateinit var googleMap: GoogleMap
+    private lateinit var userMarker: Marker
+    private var timer: Timer
 
-    private lateinit var gobusMap: GoogleMap
+    private val _model = MutableLiveData<MapsModel>();
+    val model: LiveData<MapsModel>
+        get() {
+            if (_model.value == null) refresh()
+            return _model
+        }
+
+    sealed class MapsModel {
+        class MapReady(val onMapReady: OnMapReadyCallback) : MapsModel()
+        class RequestLocationPermissions : MapsModel()
+        object RequestNewLocation : MapsModel()
+        class NewLocation(val lastLocation: LatLng): MapsModel()
+    }
 
     init {
         initScope()
+        timer = Timer()
     }
 
-    fun getMapReady() = OnMapReadyCallback {googleMap ->
-        gobusMap = googleMap
-
-        launch {
-            userLastLocation = userLocationRepository.findLastLocation()?.getLatLng()
-
-            userLocationMarker = gobusMap.addMarker(userLastLocation?.let {
-                MarkerOptions().position(it).title("User position")
-            })
-            gobusMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLastLocation, 17f))
-        }
+    private fun refresh() {
+        _model.value = MapsModel.RequestLocationPermissions()
     }
 
     override fun onCleared() {
         super.onCleared()
         destroyScope()
+        timer.cancel()
+    }
+
+    fun onPermissionsRequested() {
+        _model.value = MapsModel.MapReady(OnMapReadyCallback { loadedMap ->
+            loadedMap.let { googleMap = it  }
+
+            timer.scheduleAtFixedRate(object : TimerTask() {
+                override fun run() {
+                    requestNewLocation()
+                }
+            }, 0, 5000)
+        })
+    }
+
+    fun requestNewLocation() {
+        launch {
+            _model.value = MapsModel.RequestNewLocation
+        }
+    }
+
+    fun onNewLocationRequested() {
+        launch {
+            val lastLocation = locationRepository.findLastLocation()?.getLatLng()
+            lastLocation?.let {
+                onLocationChanged(LatLng(it.latitude, it.longitude))
+            }
+
+            googleMap.addMarker(lastLocation?.let {
+                MarkerOptions().position(it).title("User position")
+            }).let {
+                userMarker = it
+            }
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLocation, 17f))
+        }
+    }
+
+    fun onLocationChanged(lastLocation: LatLng) {
+        _model.value = MapsModel.NewLocation(lastLocation)
     }
 }
