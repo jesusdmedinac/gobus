@@ -1,7 +1,7 @@
 package com.mupper.gobus.model
 
+import com.mupper.core.utils.LatLng
 import android.location.Location as AndroidLocation
-import com.google.android.gms.maps.model.LatLng
 
 /**
  * Created by jesus.medina on 11/2019.

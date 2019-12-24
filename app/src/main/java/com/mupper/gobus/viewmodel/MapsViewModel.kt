@@ -7,17 +7,21 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.LatLng as MapsLatLng
 import com.mupper.commons.scope.ScopedViewModel
 import com.mupper.core.utils.LatLng
 import com.mupper.gobus.repository.LocationRepository
 import kotlinx.coroutines.launch
 import java.util.*
+import java.util.logging.Handler
 
 class MapsViewModel(private val locationRepository: LocationRepository) : ScopedViewModel() {
 
     private lateinit var googleMap: GoogleMap
     private var travelerMarker: Marker? = null
-    private var timer: Timer
+    private var travelerMarkerOptions: MarkerOptions? = null
+    private var timer: Timer?
+    private var isTraveling = false
 
     private val _model = MutableLiveData<MapsModel>()
     val model: LiveData<MapsModel>
@@ -30,7 +34,7 @@ class MapsViewModel(private val locationRepository: LocationRepository) : Scoped
         class MapReady(val onMapReady: OnMapReadyCallback) : MapsModel()
         class RequestLocationPermissions : MapsModel()
         object RequestNewLocation : MapsModel()
-        class NewLocation(val lastLocation: LatLng) : MapsModel()
+        class NewLocation(val lastLocation: LatLng, val isTrvaling: Boolean) : MapsModel()
     }
 
     init {
@@ -45,19 +49,31 @@ class MapsViewModel(private val locationRepository: LocationRepository) : Scoped
     override fun onCleared() {
         super.onCleared()
         destroyScope()
-        timer.cancel()
+        timer?.cancel()
+        timer = Timer()
     }
 
     fun onPermissionsRequested() {
         _model.value = MapsModel.MapReady(OnMapReadyCallback { loadedMap ->
-            loadedMap.let { googleMap = it }
+            loadedMap.let {
+                initGoogleMap(it);
+            }
 
-            timer.scheduleAtFixedRate(object : TimerTask() {
+            timer?.scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
                     requestNewLocation()
                 }
             }, 0, 5000)
         })
+    }
+
+    private fun initGoogleMap(it: GoogleMap) {
+        googleMap = it
+        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL)
+        googleMap.setMyLocationEnabled(true)
+        googleMap.setTrafficEnabled(false)
+        googleMap.setIndoorEnabled(false)
+        googleMap.setBuildingsEnabled(true)
     }
 
     fun requestNewLocation() {
@@ -66,27 +82,65 @@ class MapsViewModel(private val locationRepository: LocationRepository) : Scoped
         }
     }
 
+    fun startTravel() {
+        isTraveling = true
+    }
+
+    fun stopTravel() {
+        isTraveling = false
+    }
+
     fun onNewLocationRequested() {
         launch {
-            val lastLocation = locationRepository.findLastLocation()?.getLatLng()
+            val lastLocation: LatLng? = locationRepository.findLastLocation()?.getLatLng()
             lastLocation?.let {
                 onLocationChanged(LatLng(it.latitude, it.longitude))
-            }
 
-            if (travelerMarker != null) {
-                travelerMarker?.remove()
-                travelerMarker = null
+                animateCameraToLastLocation(it)
+                moveMarkerToLastLocation(it)
             }
-            googleMap.addMarker(lastLocation?.let {
-                MarkerOptions().position(it).title("User position")
-            }).let {
-                travelerMarker = it
-            }
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLocation, 17f))
         }
     }
 
+    private fun moveMarkerToLastLocation(it: LatLng): LatLng {
+        val priorLocaiton: MapsLatLng?
+        val lastLocation = MapsLatLng(it.latitude, it.longitude)
+        if (travelerMarkerOptions == null) {
+            travelerMarkerOptions = MarkerOptions()
+            travelerMarkerOptions?.position(lastLocation)
+                ?.title("User position")
+            googleMap.addMarker(travelerMarkerOptions).let {
+                travelerMarker = it
+            }
+        } else {
+            travelerMarkerOptions?.position(lastLocation).let {
+                travelerMarkerOptions = it
+            }
+            priorLocaiton = travelerMarker?.position
+            travelerMarker?.position = lastLocation
+        }
+
+        smoothMoveMarker()
+
+        return it
+    }
+
+    private fun smoothMoveMarker() {
+        val handler = Handler()
+    }
+
+    private fun animateCameraToLastLocation(it: LatLng) {
+        googleMap.animateCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                MapsLatLng(
+                    it.latitude,
+                    it.longitude
+                ), 17f
+            )
+        )
+    }
+
     fun onLocationChanged(lastLocation: LatLng) {
-        _model.value = MapsModel.NewLocation(lastLocation)
+        _model.value = MapsModel.NewLocation(lastLocation, isTraveling)
     }
 }

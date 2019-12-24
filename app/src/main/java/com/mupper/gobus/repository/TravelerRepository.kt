@@ -1,6 +1,8 @@
 package com.mupper.gobus.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.mupper.commons.d
+import com.mupper.commons.w
 import com.mupper.core.utils.*
 import com.mupper.gobus.GobusApp
 import kotlinx.coroutines.Dispatchers
@@ -50,19 +52,28 @@ class TravelerRepository(application: GobusApp) {
 
     private fun mapFirestorTraveler(data: Map<String, Any>?): FirestoreTraveler {
         return with(data) {
-            val currentPositionMap =
-                this?.get(FIELD_TRAVELER_CURRENT_POSITION) as HashMap<String, Double>
+            var currentPosition = FirestoreCurrentPosition(0.0, 0.0)
+            var email = ""
+            if (this?.hasAll(FIELDS_TRAVELER)!!) {
+                val currentPositionMap =
+                    this.get(FIELD_TRAVELER_CURRENT_POSITION) as HashMap<String, Double>
 
-            val currentPosition =
-                FirestoreCurrentPosition(
-                    currentPositionMap[FIELD_TRAVELER_CURRENT_POSITION_LATITUDE] ?: 0.0,
-                    currentPositionMap[FIELD_TRAVELER_CURRENT_POSITION_LONGITUDE] ?: 0.0
-                )
-            val email = this.get(FIELD_TRAVELER_EMAIL) as String
+                currentPosition =
+                    FirestoreCurrentPosition(
+                        currentPositionMap[FIELD_TRAVELER_CURRENT_POSITION_LATITUDE] ?: 0.0,
+                        currentPositionMap[FIELD_TRAVELER_CURRENT_POSITION_LONGITUDE] ?: 0.0
+                    )
+                email = this.get(FIELD_TRAVELER_EMAIL) as String
+            }
+            var isTraveling = false
+            if (this.containsKey(FIELD_TRAVELER_IS_TRAVELING)) {
+                isTraveling = this.get(FIELD_TRAVELER_IS_TRAVELING) as Boolean
+            }
 
             FirestoreTraveler(
                 currentPosition,
-                email
+                email,
+                isTraveling
             )
         }
     }
@@ -74,10 +85,22 @@ class TravelerRepository(application: GobusApp) {
                 newLocation.longitude
             )
         )
+            .addOnSuccessListener { d("DocumentSnapshot successfully updated!") }
+            .addOnFailureListener { err -> w("Error updating document", err) }
     }
+}
+
+private fun Map<String, Any>.hasAll(keys: List<String>): Boolean {
+    for (element in keys) {
+        if (!this.containsKey(element)) {
+            return false
+        }
+    }
+    return true
 }
 
 private fun FirestoreTraveler.convertToDbTraveler() = DbTraveler(
     email,
-    DbCurrentPosition(currentPosition.latitude, currentPosition.longitude)
+    DbCurrentPosition(currentPosition.latitude, currentPosition.longitude),
+    isTraveling
 )

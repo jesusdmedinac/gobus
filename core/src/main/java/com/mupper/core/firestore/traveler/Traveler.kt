@@ -8,5 +8,6 @@ package com.mupper.core.firestore.traveler
  */
 class Traveler(
     val currentPosition: CurrentPosition,
-    val email: String
+    val email: String,
+    val isTraveling: Boolean
 )
