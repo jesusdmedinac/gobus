@@ -1,10 +1,10 @@
-package com.mupper.gobus.scope
+package com.mupper.commons.scope
 
-import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlin.coroutines.CoroutineContext
 
 interface Scope : CoroutineScope {
 

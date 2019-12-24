@@ -1,4 +1,4 @@
-package com.mupper.gobus.scope
+package com.mupper.commons.scope
 
 import androidx.annotation.CallSuper
 import androidx.lifecycle.ViewModel

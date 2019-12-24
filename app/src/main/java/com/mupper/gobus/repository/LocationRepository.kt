@@ -12,15 +12,13 @@ class LocationRepository(val app: Application) {
 
     private val locationDataSource = PlayServicesLocationDataSource(app)
     private val coarseLocationPermissionChecker = PermissionChecker(app, Manifest.permission.ACCESS_COARSE_LOCATION)
-    private val fineLocationPermissionChecker = PermissionChecker(app, Manifest.permission.ACCESS_FINE_LOCATION)
 
     suspend fun findLastLocation(): Location? {
         val hasCoarseLocation = coarseLocationPermissionChecker.check()
-        val hasFineLocation = fineLocationPermissionChecker.check()
         if (!isLocationEnabled()) {
             return null
         }
-        if (!hasCoarseLocation || !hasFineLocation) {
+        if (!hasCoarseLocation) {
             return null
         }
         return Location(locationDataSource.findLastLocation())

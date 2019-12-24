@@ -2,12 +2,10 @@ package com.mupper.gobus.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.mupper.commons.scope.ScopedViewModel
 import com.mupper.core.database.traveler.Traveler
-import com.mupper.gobus.scope.Scope
 import com.mupper.core.utils.LatLng
 import com.mupper.gobus.repository.TravelerRepository
-import com.mupper.gobus.scope.ScopedViewModel
 import kotlinx.coroutines.launch
 
 
@@ -16,22 +14,29 @@ import kotlinx.coroutines.launch
  * Insulet Corporation
  * Andromeda
  */
-class TravelerViewModel(private val travelerRepository: TravelerRepository): ScopedViewModel() {
+class TravelerViewModel(private val travelerRepository: TravelerRepository) : ScopedViewModel() {
     private val _traveler = MutableLiveData<Traveler>()
     val traveler: LiveData<Traveler> get() = _traveler
+
+    private val _isTraveling = MutableLiveData<Boolean>()
+    val isTraveling: LiveData<Boolean>
+        get() = _isTraveling
 
     init {
         launch {
             _traveler.value = travelerRepository.getActualTraveler()
-            updateUi()
         }
+    }
+
+    fun startTravel() {
+        _isTraveling.value = true
+    }
+
+    fun stopTravel() {
+        _isTraveling.value = false
     }
 
     fun shareActualLocation(newLocation: LatLng) {
         travelerRepository.shareActualLocation(newLocation)
-    }
-
-    private fun updateUi() {
-        // TODO("not implemented") //Add update of new live data
     }
 }

@@ -13,5 +13,6 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "traveler")
 class Traveler(
     @PrimaryKey @ColumnInfo(name = "email") val email: String,
-    @Embedded val currentPosition: CurrentPosition
+    @Embedded val currentPosition: CurrentPosition,
+    @ColumnInfo(name = "is_traveling") val isTraveling: Boolean
 )
