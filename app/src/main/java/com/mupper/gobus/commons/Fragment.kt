@@ -1,7 +1,11 @@
 package com.mupper.gobus.commons
 
+import android.app.Activity
 import android.graphics.drawable.Drawable
+import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
@@ -10,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import com.mupper.gobus.GobusApp
+import com.mupper.gobus.R
 
 
 /**
@@ -38,19 +43,13 @@ inline fun <reified T : ViewModel> Fragment.getViewModel(crossinline factory: ()
     return ViewModelProviders.of(requireActivity(), vmFactory)[T::class.java]
 }
 
+fun <T : ViewDataBinding> Fragment.bindingInflate(
+    @LayoutRes layoutRes: Int
+): T =
+    DataBindingUtil.setContentView(requireActivity(), layoutRes)
+
+
 fun Fragment.navigate(directions: NavDirections) {
     val navController = view?.findNavController()
     navController?.navigate(directions)
-}
-
-fun Fragment.getCompatDrawable(drawableId: Int): Drawable? {
-    requireContext().let {
-        return ContextCompat.getDrawable(requireContext(), drawableId)
-    }
-}
-
-fun Fragment.getCompatColor(colorId: Int): Int {
-    requireContext().let {
-        return ContextCompat.getColor(requireContext(), colorId)
-    }
 }

@@ -28,16 +28,3 @@ inline fun <reified T : ViewModel> FragmentActivity.getViewModel(crossinline fac
 
     return ViewModelProviders.of(this, vmFactory)[T::class.java]
 }
-
-fun <T : ViewDataBinding> Activity.bindingInflate(
-    @LayoutRes layoutRes: Int
-): T =
-    DataBindingUtil.setContentView(this, R.layout.activity_main)
-
-fun Activity.getCompatDrawable(drawableId: Int): Drawable? {
-    return ContextCompat.getDrawable(this, drawableId)
-}
-
-fun Activity.getCompatColor(colorId: Int): Int {
-    return ContextCompat.getColor(this, colorId)
-}

@@ -6,23 +6,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.NavDirections
 import com.google.android.gms.maps.SupportMapFragment
 import com.mupper.commons.scope.ScoppedFragment
 import com.mupper.gobus.PermissionRequester
 import com.mupper.gobus.R
-import com.mupper.gobus.commons.EventObserver
-import com.mupper.gobus.commons.app
-import com.mupper.gobus.commons.getViewModel
-import com.mupper.gobus.commons.supportFragmentManager
+import com.mupper.gobus.commons.*
+import com.mupper.gobus.databinding.FragmentMapsBinding
+import com.mupper.gobus.model.TravelControl
 import com.mupper.gobus.repository.LocationRepository
 import com.mupper.gobus.repository.TravelerRepository
 import com.mupper.gobus.viewmodel.MapsViewModel
 import com.mupper.gobus.viewmodel.MapsViewModel.MapsModel
+import com.mupper.gobus.viewmodel.TravelViewModel
 import com.mupper.gobus.viewmodel.TravelerViewModel
 
 class MapsFragment() : ScoppedFragment() {
 
     private lateinit var mapsViewModel: MapsViewModel
+    private lateinit var travelViewModel: TravelViewModel
     private lateinit var travelerViewModel: TravelerViewModel
 
     private lateinit var mapFragment: SupportMapFragment
@@ -34,26 +36,34 @@ class MapsFragment() : ScoppedFragment() {
         )
     }
 
+    private var binding: FragmentMapsBinding? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_maps, container, false)
+        binding = container?.bindingInflate(R.layout.fragment_maps, false)
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        supportFragmentManager.findFragmentById(R.id.map).let {
+            mapFragment = it as SupportMapFragment
+        }
+
         mapsViewModel =
             getViewModel { MapsViewModel(LocationRepository(app)) }
         travelerViewModel =
             getViewModel { TravelerViewModel(TravelerRepository(app)) }
-
-
-        childFragmentManager.findFragmentById(R.id.map).let {
-            mapFragment = it as SupportMapFragment
-        }
+        travelViewModel =
+            getViewModel {
+                TravelViewModel(
+                    TravelControl(requireContext())
+                )
+            }
 
         mapsViewModel.model.observe(this, Observer(::onMapsModelChange))
 
@@ -62,6 +72,24 @@ class MapsFragment() : ScoppedFragment() {
                 mapsViewModel.onPermissionsRequested()
             }
         })
+
+        travelViewModel.navigateToStartTravel.observe(this, EventObserver {
+            val toStartTravel: NavDirections =
+                MapsFragmentDirections.actionMapsFragmentToStartTravelFragment()
+            navigate(toStartTravel)
+        })
+        travelViewModel.navigateToStopTravel.observe(this, EventObserver {
+            val toStopTravel: NavDirections =
+                MapsFragmentDirections.actionMapsFragmentToStopTravelFragment()
+            navigate(toStopTravel)
+        })
+
+        travelViewModel.travelState.observe(this, EventObserver(::onTravelModelChange))
+
+        binding?.apply {
+            travel = travelViewModel
+            lifecycleOwner = this@MapsFragment
+        }
     }
 
     private fun onMapsModelChange(model: MapsModel) {
@@ -72,6 +100,21 @@ class MapsFragment() : ScoppedFragment() {
                 if (model.isTrvaling) {
                     travelerViewModel.shareActualLocation(this)
                 }
+            }
+        }
+    }
+
+    private fun onTravelModelChange(state: TravelViewModel.TravelState) {
+        when (state) {
+            is TravelViewModel.TravelState.Walking -> {
+                mapsViewModel.stopTravel()
+                travelerViewModel.stopTravel()
+                travelViewModel.setFabToStart()
+            }
+            is TravelViewModel.TravelState.OnWay -> {
+                mapsViewModel.startTravel()
+                travelerViewModel.startTravel()
+                travelViewModel.setFabToStop()
             }
         }
     }

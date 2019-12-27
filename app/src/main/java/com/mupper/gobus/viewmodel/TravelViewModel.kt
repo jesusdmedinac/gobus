@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mupper.commons.scope.ScopedViewModel
 import com.mupper.gobus.commons.Event
+import com.mupper.gobus.model.TravelControl
 
 
 /**
@@ -13,10 +14,7 @@ import com.mupper.gobus.commons.Event
  * Andromeda
  */
 class TravelViewModel(
-    val playIcon: Drawable?,
-    val stopIcon: Drawable?,
-    val defaultFabColor: Int,
-    val defaultFabIconColor: Int
+    val travelControl: TravelControl
 ) : ScopedViewModel() {
     private val _navigateToStartTravel = MutableLiveData<Event<Unit>>()
     val navigateToStartTravel: LiveData<Event<Unit>> get() = _navigateToStartTravel
@@ -27,13 +25,13 @@ class TravelViewModel(
     private val _travelState = MutableLiveData<Event<TravelState>>()
     val travelState: LiveData<Event<TravelState>> get() = _travelState
 
-    private val _fabIcon = MutableLiveData<Drawable>(playIcon)
+    private val _fabIcon = MutableLiveData<Drawable>(travelControl.playIcon)
     val fabIcon: LiveData<Drawable> get() = _fabIcon
 
-    private val _fabColor = MutableLiveData<Int>(defaultFabColor)
+    private val _fabColor = MutableLiveData<Int>(travelControl.defaultFabColor)
     val fabColor: LiveData<Int> get() = _fabColor
 
-    private val _fabIconColor = MutableLiveData<Int>(defaultFabIconColor)
+    private val _fabIconColor = MutableLiveData<Int>(travelControl.defaultFabIconColor)
     val fabIconColor: LiveData<Int> get() = _fabIconColor
 
     sealed class TravelState {
@@ -66,14 +64,18 @@ class TravelViewModel(
     }
 
     fun setFabToStop() {
-        _fabIcon.value = stopIcon
-        _fabColor.value = defaultFabIconColor
-        _fabIconColor.value = defaultFabColor
+        with(travelControl) {
+            _fabIcon.value = stopIcon
+            _fabColor.value = defaultFabIconColor
+            _fabIconColor.value = defaultFabColor
+        }
     }
 
     fun setFabToStart() {
-        _fabIcon.value = playIcon
-        _fabColor.value = defaultFabColor
-        _fabIconColor.value = defaultFabIconColor
+        with(travelControl) {
+            _fabIcon.value = playIcon
+            _fabColor.value = defaultFabColor
+            _fabIconColor.value = defaultFabIconColor
+        }
     }
 }

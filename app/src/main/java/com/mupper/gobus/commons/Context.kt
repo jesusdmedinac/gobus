@@ -1,6 +1,8 @@
 package com.mupper.gobus.commons
 
 import android.content.Context
+import android.graphics.drawable.Drawable
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.mupper.gobus.GobusApp
 
@@ -12,3 +14,12 @@ import com.mupper.gobus.GobusApp
  */
 val Context.app: GobusApp
     get() = applicationContext as GobusApp
+
+
+fun Context.getCompatDrawable(drawableId: Int): Drawable? {
+    return ContextCompat.getDrawable(this, drawableId)
+}
+
+fun Context.getCompatColor(colorId: Int): Int {
+    return ContextCompat.getColor(this, colorId)
+}
