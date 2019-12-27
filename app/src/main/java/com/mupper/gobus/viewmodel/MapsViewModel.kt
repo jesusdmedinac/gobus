@@ -10,10 +10,10 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.LatLng as MapsLatLng
 import com.mupper.commons.scope.ScopedViewModel
 import com.mupper.core.utils.LatLng
+import com.mupper.gobus.commons.Event
 import com.mupper.gobus.repository.LocationRepository
 import kotlinx.coroutines.launch
 import java.util.*
-import java.util.logging.Handler
 
 class MapsViewModel(private val locationRepository: LocationRepository) : ScopedViewModel() {
 
@@ -24,26 +24,25 @@ class MapsViewModel(private val locationRepository: LocationRepository) : Scoped
     private var isTraveling = false
 
     private val _model = MutableLiveData<MapsModel>()
-    val model: LiveData<MapsModel>
-        get() {
-            if (_model.value == null) refresh()
-            return _model
-        }
+    val model: LiveData<MapsModel> get() = _model
+
+    private val _requestCoarsePermission = MutableLiveData<Event<Unit>>()
+    val requestCoarsePermission: LiveData<Event<Unit>> get() = _requestCoarsePermission
 
     sealed class MapsModel {
         class MapReady(val onMapReady: OnMapReadyCallback) : MapsModel()
-        class RequestLocationPermissions : MapsModel()
         object RequestNewLocation : MapsModel()
         class NewLocation(val lastLocation: LatLng, val isTrvaling: Boolean) : MapsModel()
     }
 
     init {
         initScope()
+        refresh()
         timer = Timer()
     }
 
     private fun refresh() {
-        _model.value = MapsModel.RequestLocationPermissions()
+        _requestCoarsePermission.value = Event(Unit)
     }
 
     override fun onCleared() {
@@ -54,17 +53,19 @@ class MapsViewModel(private val locationRepository: LocationRepository) : Scoped
     }
 
     fun onPermissionsRequested() {
-        _model.value = MapsModel.MapReady(OnMapReadyCallback { loadedMap ->
-            loadedMap.let {
-                initGoogleMap(it);
-            }
-
-            timer?.scheduleAtFixedRate(object : TimerTask() {
-                override fun run() {
-                    requestNewLocation()
+        launch {
+            _model.value = MapsModel.MapReady(OnMapReadyCallback { loadedMap ->
+                loadedMap.let {
+                    initGoogleMap(it);
                 }
-            }, 0, 5000)
-        })
+
+                timer?.scheduleAtFixedRate(object : TimerTask() {
+                    override fun run() {
+                        requestNewLocation()
+                    }
+                }, 0, 5000)
+            })
+        }
     }
 
     private fun initGoogleMap(it: GoogleMap) {
@@ -126,7 +127,6 @@ class MapsViewModel(private val locationRepository: LocationRepository) : Scoped
     }
 
     private fun smoothMoveMarker() {
-        val handler = Handler()
     }
 
     private fun animateCameraToLastLocation(it: LatLng) {

@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Gobus</string>
     <string name="title_activity_maps">Gobus</string>
+    <string name="lets_travel_title">¡Vamos a viajar!</string>
+    <string name="lets_travel_message">Para empezar a viajar necesitas comenzar a compartir tu ubicación. ¿Quieres comenzar a viajar?</string>
+    <string name="lets_travel">¡A viajar!</string>
+    <string name="maybe_later">Quizás después</string>
+    <string name="stop_travel_title">¿Ha llegado a su destino?</string>
+    <string name="stop_travel_message">Se dejará de compartir su ubicación</string>
+    <string name="stop">Detener</string>
+    <string name="keep_travel">Seguir viajando</string>
 </resources>

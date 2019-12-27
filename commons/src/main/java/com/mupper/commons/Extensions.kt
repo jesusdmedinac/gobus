@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -19,24 +21,9 @@ import java.lang.Exception
  * Andromeda
  */
 
-@Suppress("UNCHECKED_CAST")
-inline fun <reified T : ViewModel> FragmentActivity.getViewModel(crossinline factory: () -> T): T {
-
-    val vmFactory = object : ViewModelProvider.Factory {
-        override fun <U : ViewModel> create(modelClass: Class<U>): U = factory() as U
-    }
-
-    return ViewModelProviders.of(this, vmFactory)[T::class.java]
-}
-
-// Activity
-fun Activity.getCompatDrawable(drawableId: Int) = ContextCompat.getDrawable(this, drawableId)
-
-fun Activity.getCompatColor(colorId: Int) = ContextCompat.getColor(this, colorId)
-
 // Objects
+// Log
 fun Any.tag(): String? = this::class.java.name
-
 
 fun Any.d(msg: String) {
     Log.d(tag(), msg)
