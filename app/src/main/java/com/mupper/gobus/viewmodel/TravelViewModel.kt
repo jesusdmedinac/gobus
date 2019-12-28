@@ -21,6 +21,9 @@ class TravelViewModel(
 
     private val _navigateToStopTravel = MutableLiveData<Event<Unit>>()
     val navigateToStopTravel: LiveData<Event<Unit>> get() = _navigateToStopTravel
+
+    private val _navigateToBusNavigation = MutableLiveData<Event<Unit>>()
+    val navigateToBusNavigation: LiveData<Event<Unit>>  get() = _navigateToBusNavigation
     
     private val _travelState = MutableLiveData<Event<TravelState>>()
     val travelState: LiveData<Event<TravelState>> get() = _travelState
@@ -48,7 +51,7 @@ class TravelViewModel(
     }
 
     private fun startTravel() {
-        _navigateToStartTravel.value = Event(Unit);
+        _navigateToStartTravel.value = Event(Unit)
     }
 
     private fun stopTravel() {
@@ -60,7 +63,7 @@ class TravelViewModel(
     }
 
     fun letsTravel() {
-        _travelState.value = Event(TravelState.OnWay)
+        _navigateToBusNavigation.value = Event(Unit)
     }
 
     fun setFabToStop() {

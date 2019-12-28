@@ -23,8 +23,8 @@ class MapsViewModel(private val locationRepository: LocationRepository) : Scoped
     private var timer: Timer?
     private var isTraveling = false
 
-    private val _model = MutableLiveData<MapsModel>()
-    val model: LiveData<MapsModel> get() = _model
+    private val _model = MutableLiveData<Event<MapsModel>>()
+    val model: LiveData<Event<MapsModel>> get() = _model
 
     private val _requestCoarsePermission = MutableLiveData<Event<Unit>>()
     val requestCoarsePermission: LiveData<Event<Unit>> get() = _requestCoarsePermission
@@ -54,7 +54,7 @@ class MapsViewModel(private val locationRepository: LocationRepository) : Scoped
 
     fun onPermissionsRequested() {
         launch {
-            _model.value = MapsModel.MapReady(OnMapReadyCallback { loadedMap ->
+            _model.value = Event(MapsModel.MapReady(OnMapReadyCallback { loadedMap ->
                 loadedMap.let {
                     initGoogleMap(it);
                 }
@@ -64,7 +64,7 @@ class MapsViewModel(private val locationRepository: LocationRepository) : Scoped
                         requestNewLocation()
                     }
                 }, 0, 5000)
-            })
+            }))
         }
     }
 
@@ -79,7 +79,7 @@ class MapsViewModel(private val locationRepository: LocationRepository) : Scoped
 
     fun requestNewLocation() {
         launch {
-            _model.value = MapsModel.RequestNewLocation
+            _model.value = Event(MapsModel.RequestNewLocation)
         }
     }
 
@@ -141,6 +141,6 @@ class MapsViewModel(private val locationRepository: LocationRepository) : Scoped
     }
 
     fun onLocationChanged(lastLocation: LatLng) {
-        _model.value = MapsModel.NewLocation(lastLocation, isTraveling)
+        _model.value = Event(MapsModel.NewLocation(lastLocation, isTraveling))
     }
 }

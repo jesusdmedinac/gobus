@@ -5,6 +5,7 @@ import com.mupper.commons.d
 import com.mupper.commons.w
 import com.mupper.core.utils.*
 import com.mupper.gobus.GobusApp
+import com.mupper.gobus.commons.hasAll
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
@@ -88,15 +89,6 @@ class TravelerRepository(application: GobusApp) {
             .addOnSuccessListener { d("DocumentSnapshot successfully updated!") }
             .addOnFailureListener { err -> w("Error updating document", err) }
     }
-}
-
-private fun Map<String, Any>.hasAll(keys: List<String>): Boolean {
-    for (element in keys) {
-        if (!this.containsKey(element)) {
-            return false
-        }
-    }
-    return true
 }
 
 private fun FirestoreTraveler.convertToDbTraveler() = DbTraveler(

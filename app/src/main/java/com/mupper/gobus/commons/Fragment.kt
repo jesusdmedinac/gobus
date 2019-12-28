@@ -48,7 +48,6 @@ fun <T : ViewDataBinding> Fragment.bindingInflate(
 ): T =
     DataBindingUtil.setContentView(requireActivity(), layoutRes)
 
-
 fun Fragment.navigate(directions: NavDirections) {
     val navController = view?.findNavController()
     navController?.navigate(directions)

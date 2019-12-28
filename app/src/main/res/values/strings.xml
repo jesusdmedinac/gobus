@@ -9,4 +9,7 @@
     <string name="stop_travel_message">Se dejará de compartir su ubicación</string>
     <string name="stop">Detener</string>
     <string name="keep_travel">Seguir viajando</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

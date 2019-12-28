@@ -1,7 +1,8 @@
-package com.mupper.gobus
+package com.mupper.gobus.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.mupper.gobus.R
 
 /**
  * Created by jesus.medina on 12/2019.

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
 import com.google.android.gms.maps.SupportMapFragment
 import com.mupper.commons.scope.ScoppedFragment
@@ -21,7 +20,7 @@ import com.mupper.gobus.viewmodel.MapsViewModel.MapsModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import com.mupper.gobus.viewmodel.TravelerViewModel
 
-class MapsFragment() : ScoppedFragment() {
+class MapsFragment : ScoppedFragment() {
 
     private lateinit var mapsViewModel: MapsViewModel
     private lateinit var travelViewModel: TravelViewModel
@@ -65,7 +64,7 @@ class MapsFragment() : ScoppedFragment() {
                 )
             }
 
-        mapsViewModel.model.observe(this, Observer(::onMapsModelChange))
+        mapsViewModel.model.observe(this, EventObserver(::onMapsModelChange))
 
         mapsViewModel.requestCoarsePermission.observe(this, EventObserver {
             coarsePermissionRequester.request {
