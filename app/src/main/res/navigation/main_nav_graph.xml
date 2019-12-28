@@ -21,18 +21,18 @@
         android:label="StartTravelFragment" >
         <action
             android:id="@+id/action_startTravelFragment_to_busNav"
-            app:destination="@id/busNav" />
+            app:destination="@id/busNewNav" />
     </dialog>
     <dialog
         android:id="@+id/stopTravelFragment"
         android:name="com.mupper.gobus.ui.main.dialogs.StopTravelDialog"
         android:label="StopTravelFragment" />
     <navigation
-        android:id="@+id/busNav"
-        app:startDestination="@id/busFragment">
+        android:id="@+id/busNewNav"
+        app:startDestination="@id/busNewFragment">
         <fragment
-            android:id="@+id/busFragment"
-            android:name="com.mupper.gobus.ui.bus.BusFragment"
-            android:label="BusFragment" />
+            android:id="@+id/busNewFragment"
+            android:name="com.mupper.gobus.ui.bus.NewBusFragment"
+            android:label="NewBusFragment" />
     </navigation>
 </navigation>

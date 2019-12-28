@@ -75,4 +75,7 @@ dependencies {
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
     implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
+
+    // Stepper
+    implementation "com.stepstone.stepper:material-stepper:4.3.1"
 }
