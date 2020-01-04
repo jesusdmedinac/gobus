@@ -1,9 +1,8 @@
-package com.mupper.gobus.commons
+package com.mupper.gobus.commons.extension
 
 import android.content.Context
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import com.mupper.gobus.GobusApp
 
 

@@ -4,7 +4,7 @@ import android.graphics.drawable.Drawable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mupper.commons.scope.ScopedViewModel
-import com.mupper.gobus.commons.Event
+import com.mupper.gobus.commons.extension.Event
 import com.mupper.gobus.model.TravelControl
 
 
@@ -51,19 +51,23 @@ class TravelViewModel(
     }
 
     private fun startTravel() {
-        _navigateToStartTravel.value = Event(Unit)
+        _navigateToStartTravel.value =
+            Event(Unit)
     }
 
     private fun stopTravel() {
-        _navigateToStopTravel.value = Event(Unit)
+        _navigateToStopTravel.value =
+            Event(Unit)
     }
 
     fun letsWalk() {
-        _travelState.value = Event(TravelState.Walking)
+        _travelState.value =
+            Event(TravelState.Walking)
     }
 
     fun letsTravel() {
-        _navigateToBusNavigation.value = Event(Unit)
+        _navigateToBusNavigation.value =
+            Event(Unit)
     }
 
     fun setFabToStop() {

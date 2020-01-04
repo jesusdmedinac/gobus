@@ -1,4 +1,4 @@
-package com.mupper.gobus.commons
+package com.mupper.gobus.commons.extension
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

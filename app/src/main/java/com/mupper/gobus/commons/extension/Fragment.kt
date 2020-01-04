@@ -1,9 +1,6 @@
-package com.mupper.gobus.commons
+package com.mupper.gobus.commons.extension
 
-import android.app.Activity
-import android.graphics.drawable.Drawable
 import androidx.annotation.LayoutRes
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
@@ -14,7 +11,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import com.mupper.gobus.GobusApp
-import com.mupper.gobus.R
 
 
 /**
@@ -48,7 +44,8 @@ fun <T : ViewDataBinding> Fragment.bindingInflate(
 ): T =
     DataBindingUtil.setContentView(requireActivity(), layoutRes)
 
+fun Fragment.navController() = view?.findNavController()
+
 fun Fragment.navigate(directions: NavDirections) {
-    val navController = view?.findNavController()
-    navController?.navigate(directions)
+    navController()?.navigate(directions)
 }

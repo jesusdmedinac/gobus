@@ -5,7 +5,7 @@ import com.mupper.commons.d
 import com.mupper.commons.w
 import com.mupper.core.utils.*
 import com.mupper.gobus.GobusApp
-import com.mupper.gobus.commons.hasAll
+import com.mupper.gobus.commons.extension.hasAll
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext

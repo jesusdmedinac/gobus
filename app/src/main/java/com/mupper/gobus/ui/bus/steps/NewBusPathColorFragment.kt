@@ -1,17 +1,12 @@
 package com.mupper.gobus.ui.bus.steps
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import com.mupper.gobus.R
-import com.mupper.gobus.commons.bindingInflate
-import com.mupper.gobus.commons.getViewModel
+import androidx.annotation.LayoutRes
+import com.mupper.gobus.commons.extension.getViewModel
+import com.mupper.gobus.commons.stepper.StepFragment
 import com.mupper.gobus.databinding.FragmentBusNewPathColorBinding
-import com.mupper.gobus.databinding.FragmentBusNewPathNameBinding
 import com.mupper.gobus.viewmodel.BusViewModel
-import com.stepstone.stepper.Step
 import com.stepstone.stepper.VerificationError
 
 /**
@@ -19,17 +14,15 @@ import com.stepstone.stepper.VerificationError
  * Insulet Corporation
  * Andromeda
  */
-class NewBusPathColorFragment : Fragment(), Step {
-
-    private lateinit var busViewModel: BusViewModel
-    private var binding: FragmentBusNewPathColorBinding? = null
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = container?.bindingInflate(R.layout.fragment_bus_new_path_color, false)
-        return binding?.root
+class NewBusPathColorFragment : StepFragment<FragmentBusNewPathColorBinding>() {
+    companion object {
+        fun newInstance(@LayoutRes layoutResId: Int): NewBusPathColorFragment {
+            val args = Bundle()
+            args.putInt(LAYOUT_RESOURCE_ID_ARG_KEY, layoutResId)
+            val fragment = NewBusPathColorFragment()
+            fragment.arguments = args
+            return fragment
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,7 +40,7 @@ class NewBusPathColorFragment : Fragment(), Step {
     override fun onSelected() {
     }
 
-    override fun verifyStep(): VerificationError? = VerificationError("¿De qué color es la ruta?")
+    override fun verifyStep(): VerificationError? = null
 
     override fun onError(error: VerificationError) {
     }

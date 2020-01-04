@@ -1,4 +1,4 @@
-package com.mupper.gobus.commons
+package com.mupper.gobus.commons.extension
 
 import android.app.Activity
 import androidx.navigation.NavDirections

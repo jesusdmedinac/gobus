@@ -1,16 +1,12 @@
 package com.mupper.gobus.ui.bus.steps
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import com.mupper.gobus.R
-import com.mupper.gobus.commons.bindingInflate
-import com.mupper.gobus.commons.getViewModel
+import androidx.annotation.LayoutRes
+import com.mupper.gobus.commons.extension.getViewModel
+import com.mupper.gobus.commons.stepper.StepFragment
 import com.mupper.gobus.databinding.FragmentBusNewPathNameBinding
 import com.mupper.gobus.viewmodel.BusViewModel
-import com.stepstone.stepper.Step
 import com.stepstone.stepper.VerificationError
 
 /**
@@ -18,17 +14,16 @@ import com.stepstone.stepper.VerificationError
  * Insulet Corporation
  * Andromeda
  */
-class NewBusPathNameFragment : Fragment(), Step {
+class NewBusPathNameFragment : StepFragment<FragmentBusNewPathNameBinding>() {
 
-    private lateinit var busViewModel: BusViewModel
-    private var binding: FragmentBusNewPathNameBinding? = null
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = container?.bindingInflate(R.layout.fragment_bus_new_path_name, false)
-        return binding?.root
+    companion object {
+        fun newInstance(@LayoutRes layoutResId: Int): NewBusPathNameFragment {
+            val args = Bundle()
+            args.putInt(LAYOUT_RESOURCE_ID_ARG_KEY, layoutResId)
+            val fragment = NewBusPathNameFragment()
+            fragment.arguments = args
+            return fragment
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

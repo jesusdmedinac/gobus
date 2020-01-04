@@ -1,16 +1,9 @@
-package com.mupper.gobus.commons
+package com.mupper.gobus.commons.extension
 
-import android.app.Activity
-import android.graphics.drawable.Drawable
-import androidx.annotation.LayoutRes
-import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import com.mupper.gobus.R
 
 
 /**
