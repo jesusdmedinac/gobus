@@ -77,6 +77,7 @@ class NewBusFragment : Fragment(), StepperLayout.StepperListener {
     }
 
     override fun onCompleted(completeButton: View?) {
+        busViewModel.checkValues()
         val toMapsFragment = NewBusFragmentDirections.actionBusNewNavToMapsFragment()
         val popUpTo = NavOptions.Builder().setPopUpTo(R.id.mapsFragment, true).build()
         view?.findNavController()?.navigate(toMapsFragment.actionId, null, popUpTo)
