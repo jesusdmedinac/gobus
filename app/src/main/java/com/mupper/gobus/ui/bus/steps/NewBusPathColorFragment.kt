@@ -2,29 +2,26 @@ package com.mupper.gobus.ui.bus.steps
 
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.LayoutRes
 import com.mupper.gobus.R
 import com.mupper.gobus.commons.extension.EventObserver
+import com.mupper.gobus.commons.extension.app
 import com.mupper.gobus.commons.extension.getViewModel
+import com.mupper.gobus.commons.newInstance
 import com.mupper.gobus.commons.stepper.StepFragment
 import com.mupper.gobus.databinding.FragmentBusNewPathColorBinding
+import com.mupper.gobus.repository.BusRepository
 import com.mupper.gobus.viewmodel.BusViewModel
 import com.stepstone.stepper.VerificationError
 import com.thebluealliance.spectrum.SpectrumDialog
 
 /**
  * Created by jesus.medina on 12/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  */
 class NewBusPathColorFragment : StepFragment<FragmentBusNewPathColorBinding>() {
     companion object {
-        fun newInstance(@LayoutRes layoutResId: Int): NewBusPathColorFragment {
-            val args = Bundle()
-            args.putInt(LAYOUT_RESOURCE_ID_ARG_KEY, layoutResId)
-            val fragment = NewBusPathColorFragment()
-            fragment.arguments = args
-            return fragment
+        fun newInstance(): StepFragment<FragmentBusNewPathColorBinding> {
+            return newInstance(NewBusPathColorFragment(), R.layout.fragment_bus_new_path_color)
         }
     }
 
@@ -32,7 +29,7 @@ class NewBusPathColorFragment : StepFragment<FragmentBusNewPathColorBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         busViewModel =
-            getViewModel { BusViewModel() }
+            getViewModel { BusViewModel(BusRepository(app)) }
 
         busViewModel.showColorPickerDialog.observe(this, EventObserver { color ->
             showColorPicker(color)

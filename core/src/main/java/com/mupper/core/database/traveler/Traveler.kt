@@ -4,11 +4,11 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.mupper.core.database.CurrentPosition
 
 /**
  * Created by jesus.medina on 12/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  */
 @Entity(tableName = "traveler")
 class Traveler(

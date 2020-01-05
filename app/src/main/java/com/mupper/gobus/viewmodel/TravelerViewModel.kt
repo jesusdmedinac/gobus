@@ -11,8 +11,7 @@ import kotlinx.coroutines.launch
 
 /**
  * Created by jesus.medina on 12/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  */
 class TravelerViewModel(private val travelerRepository: TravelerRepository) : ScopedViewModel() {
     private val _traveler = MutableLiveData<Traveler>()

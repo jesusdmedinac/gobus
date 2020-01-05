@@ -6,8 +6,7 @@ import com.mupper.core.database.GobusDatabase
 
 /**
  * Created by jesus.medina on 12/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  */
 class GobusApp : Application() {
 

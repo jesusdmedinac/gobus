@@ -5,8 +5,7 @@ import android.location.Location as AndroidLocation
 
 /**
  * Created by jesus.medina on 11/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  */
 class Location(l: AndroidLocation?) : AndroidLocation(l) {
     fun getLatLng() = LatLng(latitude, longitude)

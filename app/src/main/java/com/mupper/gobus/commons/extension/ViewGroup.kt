@@ -9,8 +9,7 @@ import androidx.databinding.ViewDataBinding
 
 /**
  * Created by jesus.medina on 12/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  */
 
 fun <T : ViewDataBinding> ViewGroup.bindingInflate(

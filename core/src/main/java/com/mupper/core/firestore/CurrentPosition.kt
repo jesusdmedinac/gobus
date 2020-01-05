@@ -1,10 +1,9 @@
-package com.mupper.core.firestore.traveler
+package com.mupper.core.firestore
 
 
 /**
  * Created by jesus.medina on 12/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  */
 class CurrentPosition(
     val latitude: Double,

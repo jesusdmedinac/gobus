@@ -7,8 +7,7 @@ import androidx.navigation.fragment.findNavController
 
 /**
  * Created by jesus.medina on 12/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  */
 
 fun DialogFragment.navigate(directions: NavDirections) {

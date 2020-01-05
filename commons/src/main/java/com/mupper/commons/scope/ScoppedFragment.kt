@@ -5,8 +5,7 @@ import androidx.fragment.app.Fragment
 
 /**
  * Created by jesus.medina on 12/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  */
 abstract class ScoppedFragment : Fragment(), Scope by Scope.Impl() {
     override fun onStart() {

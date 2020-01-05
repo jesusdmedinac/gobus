@@ -4,21 +4,23 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.mupper.core.database.bus.Bus
+import com.mupper.core.database.bus.BusDao
 import com.mupper.core.database.traveler.Traveler
 import com.mupper.core.database.traveler.TravelerDao
 import com.mupper.core.utils.DATABASE_NAME
 
 /**
  * Created by jesus.medina on 12/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  */
 @Database(
-    entities = [Traveler::class],
+    entities = [Traveler::class, Bus::class],
     version = 1
 )
 abstract class GobusDatabase : RoomDatabase() {
     abstract fun travelerDao(): TravelerDao
+    abstract fun busDao(): BusDao
 
     companion object {
 

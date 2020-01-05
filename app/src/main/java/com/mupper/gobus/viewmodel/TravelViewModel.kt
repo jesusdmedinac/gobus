@@ -10,8 +10,7 @@ import com.mupper.gobus.model.TravelControl
 
 /**
  * Created by jesus.medina on 12/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  */
 class TravelViewModel(
     val travelControl: TravelControl

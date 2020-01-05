@@ -2,21 +2,25 @@ package com.mupper.gobus.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.mupper.commons.d
+import com.mupper.commons.scope.ScopedViewModel
+import com.mupper.core.database.bus.Bus
 import com.mupper.gobus.commons.extension.Event
+import com.mupper.gobus.repository.BusRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 /**
  * Created by jesus.medina on 12/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  */
-class BusViewModel : ViewModel() {
+class BusViewModel(private val busRepository: BusRepository) : ScopedViewModel() {
     val pathName = MutableLiveData<String>()
 
     val pathColor = MutableLiveData<String>()
     val pathColorInt = MutableLiveData<Int>()
+
+    val capacity = MutableLiveData<String>()
 
     private val _showColorPickerDialog = MutableLiveData<Event<Int?>>()
     val showColorPickerDialog: LiveData<Event<Int?>> get() = _showColorPickerDialog
@@ -33,8 +37,18 @@ class BusViewModel : ViewModel() {
         pathColor.value = "#${Integer.toHexString(color)}"
     }
 
-    fun checkValues() {
-        d("path name: ${pathName.value}")
-        d("path name: ${pathColor.value}")
+    fun saveNewBus() {
+        launch(Dispatchers.Main) {
+            val pathName = pathName.value ?: ""
+            val pathColor = pathColor.value ?: ""
+            val capacity = capacity.value ?: ""
+            busRepository.addNewBus(
+                Bus(
+                    pathName,
+                    pathColor,
+                    capacity.toInt()
+                )
+            )
+        }
     }
 }

@@ -8,8 +8,7 @@ import androidx.room.Query
 
 /**
  * Created by jesus.medina on 12/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  *
  * The data access object for the [Traveler] class.
  *
@@ -17,11 +16,6 @@ import androidx.room.Query
  */
 @Dao
 interface TravelerDao {
-    /**
-     * Return all database added traveler ordering by email.
-     *
-     * @return LiveData<List<Traveler>>
-     */
     @Query("SELECT * FROM traveler ORDER BY email")
     fun getAllTravelerLiveData(): LiveData<List<Traveler>>
 
@@ -31,19 +25,9 @@ interface TravelerDao {
     @Query("SELECT COUNT(email) FROM traveler")
     fun travelerCount(): Int
 
-    /**
-     * Add to database a list of travelers.
-     *
-     * @param travelers List<Traveler>
-     */
     @Insert
     suspend fun insertTravelers(travelers: List<Traveler>)
 
-    /**
-     * Add to database a traveler.
-     *
-     * @param traveler Traveler
-     */
     @Insert
     suspend fun insertTraveler(traveler: Traveler)
 }

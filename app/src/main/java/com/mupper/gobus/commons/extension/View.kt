@@ -8,8 +8,7 @@ import com.mupper.gobus.R
 
 /**
  * Created by jesus.medina on 12/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  */
 
 fun Activity.navigate(directions: NavDirections) {

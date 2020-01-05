@@ -19,8 +19,7 @@ import com.mupper.gobus.viewmodel.TravelViewModel
 
 /**
  * Created by jesus.medina on 12/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  */
 class StartTravelDialog : DialogFragment() {
 

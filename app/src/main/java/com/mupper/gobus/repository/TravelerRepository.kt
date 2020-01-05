@@ -10,15 +10,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
-import com.mupper.core.database.traveler.CurrentPosition as DbCurrentPosition
+import com.mupper.core.database.CurrentPosition as DbCurrentPosition
 import com.mupper.core.database.traveler.Traveler as DbTraveler
-import com.mupper.core.firestore.traveler.CurrentPosition as FirestoreCurrentPosition
+import com.mupper.core.firestore.CurrentPosition as FirestoreCurrentPosition
 import com.mupper.core.firestore.traveler.Traveler as FirestoreTraveler
 
 /**
  * Created by jesus.medina on 12/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  */
 class TravelerRepository(application: GobusApp) {
     private val actualEmail = "dmc12345628@gmail.com"
@@ -38,7 +37,7 @@ class TravelerRepository(application: GobusApp) {
         }
     }
 
-    fun getActualTravelerDocument() = firestore.collection(COLLECTION_TRAVELER)
+    private fun getActualTravelerDocument() = firestore.collection(COLLECTION_TRAVELER)
         .document(actualEmail)
 
     private suspend fun getActualFirestoreTraveler() =
@@ -46,12 +45,12 @@ class TravelerRepository(application: GobusApp) {
             getActualTravelerDocument().get()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        continuation.resume(mapFirestorTraveler(it.result?.data))
+                        continuation.resume(mapFirestoreTraveler(it.result?.data))
                     }
                 }
         }
 
-    private fun mapFirestorTraveler(data: Map<String, Any>?): FirestoreTraveler {
+    private fun mapFirestoreTraveler(data: Map<String, Any>?): FirestoreTraveler {
         return with(data) {
             var currentPosition = FirestoreCurrentPosition(0.0, 0.0)
             var email = ""

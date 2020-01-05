@@ -15,8 +15,7 @@ import com.mupper.gobus.GobusApp
 
 /**
  * Created by jesus.medina on 12/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  */
 
 val Fragment.app: GobusApp

@@ -3,10 +3,9 @@ package com.mupper.gobus.ui.bus.steps
 
 /**
  * Created by jesus.medina on 12/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  */
-data class NewBusPath(
+data class NewBus(
     val label: String,
     val title: String,
     val pos: Int

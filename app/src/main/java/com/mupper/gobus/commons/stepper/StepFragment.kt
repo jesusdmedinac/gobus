@@ -14,8 +14,7 @@ import com.stepstone.stepper.Step
 
 /**
  * Created by jesus.medina on 12/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  */
 abstract class StepFragment<T : ViewDataBinding> : BindingFragment<T>(), Step {
 

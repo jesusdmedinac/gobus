@@ -8,8 +8,7 @@ import com.mupper.gobus.commons.extension.getCompatDrawable
 
 /**
  * Created by jesus.medina on 12/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  */
 data class TravelControl(
     val context: Context

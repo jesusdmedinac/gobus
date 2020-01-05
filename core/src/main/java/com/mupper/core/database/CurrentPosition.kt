@@ -1,13 +1,11 @@
-package com.mupper.core.database.traveler
+package com.mupper.core.database
 
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
 
 /**
  * Created by jesus.medina on 12/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  */
 @Entity(tableName = "LatLng")
 class CurrentPosition(
