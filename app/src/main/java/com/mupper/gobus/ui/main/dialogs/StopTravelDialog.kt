@@ -18,8 +18,8 @@ class StopTravelDialog : DialogFragment() {
 
     private lateinit var travelViewModel: TravelViewModel
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = MaterialAlertDialogBuilder(requireContext())
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
+        MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.stop_travel_title)
             .setMessage(R.string.stop_travel_message)
             .setPositiveButton(R.string.stop) { _, _ ->
@@ -30,9 +30,7 @@ class StopTravelDialog : DialogFragment() {
                 dismiss()
             }
             .setCancelable(true)
-
-        return dialog.create()
-    }
+            .create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

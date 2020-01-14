@@ -4,7 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mupper.commons.scope.ScopedViewModel
 import com.mupper.core.database.bus.Bus
-import com.mupper.gobus.commons.extension.Event
+import com.mupper.core.utils.LatLng
+import com.mupper.gobus.commons.Event
 import com.mupper.gobus.repository.BusRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,6 +23,8 @@ class BusViewModel(private val busRepository: BusRepository) : ScopedViewModel()
 
     val capacity = MutableLiveData<String>()
 
+    private val _isTravelingStateToNewBus = MutableLiveData<Boolean>(false)
+
     private val _showColorPickerDialog = MutableLiveData<Event<Int?>>()
     val showColorPickerDialog: LiveData<Event<Int?>> get() = _showColorPickerDialog
 
@@ -29,7 +32,8 @@ class BusViewModel(private val busRepository: BusRepository) : ScopedViewModel()
         if (pathColorInt.value == null) {
             pathColorInt.value = defaultColor
         }
-        _showColorPickerDialog.value = Event(pathColorInt.value)
+        _showColorPickerDialog.value =
+            Event(pathColorInt.value)
     }
 
     fun onColorPicked(color: Int) {
@@ -42,13 +46,27 @@ class BusViewModel(private val busRepository: BusRepository) : ScopedViewModel()
             val pathName = pathName.value ?: ""
             val pathColor = pathColor.value ?: ""
             val capacity = capacity.value ?: ""
+            val isTraveling = _isTravelingStateToNewBus.value ?: false
             busRepository.addNewBus(
                 Bus(
                     pathName,
                     pathColor,
-                    capacity.toInt()
+                    capacity.toInt(),
+                    isTraveling
                 )
             )
+            _isTravelingStateToNewBus.value = false
+        }
+    }
+
+    fun saveNewBusToStartTravel() {
+        _isTravelingStateToNewBus.value = true
+        saveNewBus()
+    }
+
+    fun shareActualLocation(newLocation: LatLng) {
+        launch {
+            busRepository.shareActualLocation(newLocation)
         }
     }
 }

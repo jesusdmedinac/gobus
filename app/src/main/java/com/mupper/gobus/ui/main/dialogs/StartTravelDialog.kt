@@ -5,12 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.NavDirections
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mupper.gobus.R
-import com.mupper.gobus.commons.extension.EventObserver
+import com.mupper.gobus.commons.EventObserver
 import com.mupper.gobus.commons.extension.getViewModel
 import com.mupper.gobus.commons.extension.navigate
 import com.mupper.gobus.model.TravelControl
@@ -23,7 +22,6 @@ import com.mupper.gobus.viewmodel.TravelViewModel
  */
 class StartTravelDialog : DialogFragment() {
 
-    private lateinit var dialog: AlertDialog
     private lateinit var travelViewModel: TravelViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,21 +35,18 @@ class StartTravelDialog : DialogFragment() {
             }
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = MaterialAlertDialogBuilder(requireActivity())
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
+        MaterialAlertDialogBuilder(requireActivity())
             .setTitle(R.string.lets_travel_title)
             .setMessage(R.string.lets_travel_message)
             .setPositiveButton(R.string.lets_travel) { _, _ ->
-                travelViewModel.letsTravel()
+                travelViewModel.navigateToBusNavigation()
             }
             .setNegativeButton(R.string.maybe_later) { _, _ ->
                 dismiss()
             }
             .setCancelable(true)
-
-        dialog = builder.create()
-        return dialog
-    }
+            .create()
 
     override fun onCreateView(
         inflater: LayoutInflater,

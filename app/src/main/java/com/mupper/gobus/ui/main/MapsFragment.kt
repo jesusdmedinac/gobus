@@ -10,11 +10,14 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.mupper.commons.scope.ScoppedFragment
 import com.mupper.gobus.PermissionRequester
 import com.mupper.gobus.R
+import com.mupper.gobus.commons.EventObserver
 import com.mupper.gobus.commons.extension.*
 import com.mupper.gobus.databinding.FragmentMapsBinding
 import com.mupper.gobus.model.TravelControl
+import com.mupper.gobus.repository.BusRepository
 import com.mupper.gobus.repository.LocationRepository
 import com.mupper.gobus.repository.TravelerRepository
+import com.mupper.gobus.viewmodel.BusViewModel
 import com.mupper.gobus.viewmodel.MapsViewModel
 import com.mupper.gobus.viewmodel.MapsViewModel.MapsModel
 import com.mupper.gobus.viewmodel.TravelViewModel
@@ -25,6 +28,7 @@ class MapsFragment : ScoppedFragment() {
     private lateinit var mapsViewModel: MapsViewModel
     private lateinit var travelViewModel: TravelViewModel
     private lateinit var travelerViewModel: TravelerViewModel
+    private lateinit var busViewModel: BusViewModel
 
     private lateinit var mapFragment: SupportMapFragment
 
@@ -59,11 +63,9 @@ class MapsFragment : ScoppedFragment() {
         travelerViewModel =
             getViewModel { TravelerViewModel(TravelerRepository(app)) }
         travelViewModel =
-            getViewModel {
-                TravelViewModel(
-                    TravelControl(requireContext())
-                )
-            }
+            getViewModel { TravelViewModel(TravelControl(requireContext())) }
+        busViewModel =
+            getViewModel { BusViewModel(BusRepository(app, TravelerRepository(app))) }
 
         mapsViewModel.model.observe(
             this,
@@ -77,13 +79,13 @@ class MapsFragment : ScoppedFragment() {
                 }
             })
 
-        travelViewModel.navigateToStartTravel.observe(this,
+        travelViewModel.navigateToStartTravelDialog.observe(this,
             EventObserver {
                 val toStartTravel: NavDirections =
                     MapsFragmentDirections.actionMapsFragmentToStartTravelFragment()
                 navigate(toStartTravel)
             })
-        travelViewModel.navigateToStopTravel.observe(this,
+        travelViewModel.navigateToStopTravelDialog.observe(this,
             EventObserver {
                 val toStopTravel: NavDirections =
                     MapsFragmentDirections.actionMapsFragmentToStopTravelFragment()
@@ -119,6 +121,7 @@ class MapsFragment : ScoppedFragment() {
             is MapsModel.NewLocation -> with(model.lastLocation) {
                 if (model.isTrvaling) {
                     travelerViewModel.shareActualLocation(this)
+                    busViewModel.shareActualLocation(this)
                 }
             }
         }

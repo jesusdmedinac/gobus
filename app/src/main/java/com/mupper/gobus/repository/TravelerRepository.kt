@@ -37,7 +37,7 @@ class TravelerRepository(application: GobusApp) {
         }
     }
 
-    private fun getActualTravelerDocument() = firestore.collection(COLLECTION_TRAVELER)
+    fun getActualTravelerDocument() = firestore.collection(COLLECTION_TRAVELER)
         .document(actualEmail)
 
     private suspend fun getActualFirestoreTraveler() =
@@ -56,12 +56,12 @@ class TravelerRepository(application: GobusApp) {
             var email = ""
             if (this?.hasAll(FIELDS_TRAVELER)!!) {
                 val currentPositionMap =
-                    this.get(FIELD_TRAVELER_CURRENT_POSITION) as HashMap<String, Double>
+                    this.get(FIELD_TRAVELER_CURRENT_POSITION) as HashMap<*, *>
 
                 currentPosition =
                     FirestoreCurrentPosition(
-                        currentPositionMap[FIELD_TRAVELER_CURRENT_POSITION_LATITUDE] ?: 0.0,
-                        currentPositionMap[FIELD_TRAVELER_CURRENT_POSITION_LONGITUDE] ?: 0.0
+                        currentPositionMap[FIELD_TRAVELER_CURRENT_POSITION_LATITUDE] as Double? ?: 0.0,
+                        currentPositionMap[FIELD_TRAVELER_CURRENT_POSITION_LONGITUDE] as Double? ?: 0.0
                     )
                 email = this.get(FIELD_TRAVELER_EMAIL) as String
             }

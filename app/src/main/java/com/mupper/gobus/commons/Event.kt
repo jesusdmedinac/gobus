@@ -1,4 +1,4 @@
-package com.mupper.gobus.commons.extension
+package com.mupper.gobus.commons
 
 import androidx.lifecycle.Observer
 

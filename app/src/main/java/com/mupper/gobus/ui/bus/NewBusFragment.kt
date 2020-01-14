@@ -12,10 +12,13 @@ import com.mupper.gobus.commons.extension.app
 import com.mupper.gobus.commons.extension.bindingInflate
 import com.mupper.gobus.commons.extension.getViewModel
 import com.mupper.gobus.databinding.FragmentBusNewBinding
+import com.mupper.gobus.model.TravelControl
 import com.mupper.gobus.repository.BusRepository
+import com.mupper.gobus.repository.TravelerRepository
 import com.mupper.gobus.ui.bus.stepper.NewBusStepperAdapter
 import com.mupper.gobus.ui.bus.steps.NewBus
 import com.mupper.gobus.viewmodel.BusViewModel
+import com.mupper.gobus.viewmodel.TravelViewModel
 import com.stepstone.stepper.StepperLayout
 import com.stepstone.stepper.VerificationError
 import kotlinx.android.synthetic.main.fragment_bus_new.*
@@ -27,6 +30,7 @@ import kotlinx.android.synthetic.main.fragment_bus_new.*
 class NewBusFragment : Fragment(), StepperLayout.StepperListener {
 
     private lateinit var busViewModel: BusViewModel
+    private lateinit var travelViewModel: TravelViewModel
     private var binding: FragmentBusNewBinding? = null
 
     private var newBusSteps: List<NewBus> = listOf(
@@ -53,7 +57,9 @@ class NewBusFragment : Fragment(), StepperLayout.StepperListener {
         stepperLayout.currentStepPosition = 0
 
         busViewModel =
-            getViewModel { BusViewModel(BusRepository(app)) }
+            getViewModel { BusViewModel(BusRepository(app, TravelerRepository(app))) }
+        travelViewModel =
+            getViewModel { TravelViewModel(TravelControl(requireContext())) }
 
         binding?.apply {
             bus = busViewModel
@@ -68,7 +74,8 @@ class NewBusFragment : Fragment(), StepperLayout.StepperListener {
     override fun onReturn() {}
 
     override fun onCompleted(completeButton: View?) {
-        busViewModel.saveNewBus()
+        busViewModel.saveNewBusToStartTravel()
+        travelViewModel.letsTravel()
         val toMapsFragment = NewBusFragmentDirections.actionBusNewNavToMapsFragment()
         val popUpTo = NavOptions.Builder().setPopUpTo(R.id.mapsFragment, true).build()
         view?.findNavController()?.navigate(toMapsFragment.actionId, null, popUpTo)

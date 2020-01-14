@@ -9,7 +9,7 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.mupper.commons.scope.ScopedViewModel
 import com.mupper.core.utils.LatLng
-import com.mupper.gobus.commons.extension.Event
+import com.mupper.gobus.commons.Event
 import com.mupper.gobus.repository.LocationRepository
 import kotlinx.coroutines.launch
 import java.util.*
@@ -82,8 +82,7 @@ class MapsViewModel(private val locationRepository: LocationRepository) : Scoped
 
     fun requestNewLocation() {
         launch {
-            _model.value =
-                Event(MapsModel.RequestNewLocation)
+            _model.value = Event(MapsModel.RequestNewLocation)
         }
     }
 
@@ -108,7 +107,7 @@ class MapsViewModel(private val locationRepository: LocationRepository) : Scoped
     }
 
     private fun moveMarkerToLastLocation(it: LatLng): LatLng {
-        val priorLocation: MapsLatLng?
+//        val priorLocation: MapsLatLng?
         val lastLocation = MapsLatLng(it.latitude, it.longitude)
         if (travelerMarkerOptions == null) {
             travelerMarkerOptions = MarkerOptions()
@@ -121,7 +120,7 @@ class MapsViewModel(private val locationRepository: LocationRepository) : Scoped
             travelerMarkerOptions?.position(lastLocation).let {
                 travelerMarkerOptions = it
             }
-            priorLocation = travelerMarker?.position
+//            priorLocation = travelerMarker?.position
             travelerMarker?.position = lastLocation
         }
 

@@ -3,13 +3,14 @@ package com.mupper.gobus.ui.bus.steps
 import android.os.Bundle
 import android.view.View
 import com.mupper.gobus.R
-import com.mupper.gobus.commons.extension.EventObserver
+import com.mupper.gobus.commons.EventObserver
 import com.mupper.gobus.commons.extension.app
 import com.mupper.gobus.commons.extension.getViewModel
 import com.mupper.gobus.commons.newInstance
 import com.mupper.gobus.commons.stepper.StepFragment
 import com.mupper.gobus.databinding.FragmentBusNewPathColorBinding
 import com.mupper.gobus.repository.BusRepository
+import com.mupper.gobus.repository.TravelerRepository
 import com.mupper.gobus.viewmodel.BusViewModel
 import com.stepstone.stepper.VerificationError
 import com.thebluealliance.spectrum.SpectrumDialog
@@ -29,11 +30,12 @@ class NewBusPathColorFragment : StepFragment<FragmentBusNewPathColorBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         busViewModel =
-            getViewModel { BusViewModel(BusRepository(app)) }
+            getViewModel { BusViewModel(BusRepository(app, TravelerRepository(app))) }
 
-        busViewModel.showColorPickerDialog.observe(this, EventObserver { color ->
-            showColorPicker(color)
-        })
+        busViewModel.showColorPickerDialog.observe(this,
+            EventObserver { color ->
+                showColorPicker(color)
+            })
 
         binding?.apply {
             bus = busViewModel

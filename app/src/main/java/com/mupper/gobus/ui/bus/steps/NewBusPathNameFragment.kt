@@ -9,6 +9,7 @@ import com.mupper.gobus.commons.newInstance
 import com.mupper.gobus.commons.stepper.StepFragment
 import com.mupper.gobus.databinding.FragmentBusNewPathNameBinding
 import com.mupper.gobus.repository.BusRepository
+import com.mupper.gobus.repository.TravelerRepository
 import com.mupper.gobus.viewmodel.BusViewModel
 import com.stepstone.stepper.VerificationError
 
@@ -27,7 +28,7 @@ class NewBusPathNameFragment : StepFragment<FragmentBusNewPathNameBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         busViewModel =
-            getViewModel { BusViewModel(BusRepository(app)) }
+            getViewModel { BusViewModel(BusRepository(app, TravelerRepository(app))) }
 
         binding?.apply {
             bus = busViewModel

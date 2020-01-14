@@ -8,8 +8,9 @@ import com.mupper.gobus.commons.extension.app
 import com.mupper.gobus.commons.extension.getViewModel
 import com.mupper.gobus.commons.newInstance
 import com.mupper.gobus.commons.stepper.StepFragment
-import com.mupper.gobus.databinding.FragmentNewBusCapacityBinding
+import com.mupper.gobus.databinding.FragmentBusNewCapacityBinding
 import com.mupper.gobus.repository.BusRepository
+import com.mupper.gobus.repository.TravelerRepository
 import com.mupper.gobus.viewmodel.BusViewModel
 import com.stepstone.stepper.VerificationError
 
@@ -17,11 +18,11 @@ import com.stepstone.stepper.VerificationError
  * Created by jesus.medina on 01/2020.
  * Mupper
  */
-class NewBusCapacityFragment : StepFragment<FragmentNewBusCapacityBinding>() {
+class NewBusCapacityFragment : StepFragment<FragmentBusNewCapacityBinding>() {
     companion object {
-        fun newInstance(): StepFragment<FragmentNewBusCapacityBinding> = newInstance(
+        fun newInstance(): StepFragment<FragmentBusNewCapacityBinding> = newInstance(
             NewBusCapacityFragment(),
-            R.layout.fragment_new_bus_capacity
+            R.layout.fragment_bus_new_capacity
         )
     }
 
@@ -29,7 +30,7 @@ class NewBusCapacityFragment : StepFragment<FragmentNewBusCapacityBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         busViewModel =
-            getViewModel { BusViewModel(BusRepository(app)) }
+            getViewModel { BusViewModel(BusRepository(app, TravelerRepository(app))) }
 
         binding?.apply {
             bus = busViewModel

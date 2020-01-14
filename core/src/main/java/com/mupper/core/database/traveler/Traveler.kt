@@ -11,7 +11,7 @@ import com.mupper.core.database.CurrentPosition
  * Mupper
  */
 @Entity(tableName = "traveler")
-class Traveler(
+data class Traveler(
     @PrimaryKey @ColumnInfo(name = "email") val email: String,
     @Embedded val currentPosition: CurrentPosition,
     @ColumnInfo(name = "is_traveling") val isTraveling: Boolean

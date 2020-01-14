@@ -4,7 +4,7 @@ import android.graphics.drawable.Drawable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mupper.commons.scope.ScopedViewModel
-import com.mupper.gobus.commons.extension.Event
+import com.mupper.gobus.commons.Event
 import com.mupper.gobus.model.TravelControl
 
 
@@ -15,15 +15,15 @@ import com.mupper.gobus.model.TravelControl
 class TravelViewModel(
     val travelControl: TravelControl
 ) : ScopedViewModel() {
-    private val _navigateToStartTravel = MutableLiveData<Event<Unit>>()
-    val navigateToStartTravel: LiveData<Event<Unit>> get() = _navigateToStartTravel
+    private val _navigateToStartTravelDialog = MutableLiveData<Event<Unit>>()
+    val navigateToStartTravelDialog: LiveData<Event<Unit>> get() = _navigateToStartTravelDialog
 
-    private val _navigateToStopTravel = MutableLiveData<Event<Unit>>()
-    val navigateToStopTravel: LiveData<Event<Unit>> get() = _navigateToStopTravel
+    private val _navigateToStopTravelDialog = MutableLiveData<Event<Unit>>()
+    val navigateToStopTravelDialog: LiveData<Event<Unit>> get() = _navigateToStopTravelDialog
 
     private val _navigateToBusNavigation = MutableLiveData<Event<Unit>>()
-    val navigateToBusNavigation: LiveData<Event<Unit>>  get() = _navigateToBusNavigation
-    
+    val navigateToBusNavigation: LiveData<Event<Unit>> get() = _navigateToBusNavigation
+
     private val _travelState = MutableLiveData<Event<TravelState>>()
     val travelState: LiveData<Event<TravelState>> get() = _travelState
 
@@ -43,30 +43,30 @@ class TravelViewModel(
 
     fun toggleTravelState() {
         if (travelState.value?.peekContent() == TravelState.OnWay) {
-            stopTravel()
+            navigateToStopTravelDialog()
         } else {
-            startTravel()
+            navigateToStartTravelDialog()
         }
     }
 
-    private fun startTravel() {
-        _navigateToStartTravel.value =
-            Event(Unit)
+    private fun navigateToStartTravelDialog() {
+        _navigateToStartTravelDialog.value = Event(Unit)
     }
 
-    private fun stopTravel() {
-        _navigateToStopTravel.value =
-            Event(Unit)
+    private fun navigateToStopTravelDialog() {
+        _navigateToStopTravelDialog.value = Event(Unit)
+    }
+
+    fun navigateToBusNavigation() {
+        _navigateToBusNavigation.value = Event(Unit)
     }
 
     fun letsWalk() {
-        _travelState.value =
-            Event(TravelState.Walking)
+        _travelState.value = Event(TravelState.Walking)
     }
 
     fun letsTravel() {
-        _navigateToBusNavigation.value =
-            Event(Unit)
+        _travelState.value = Event(TravelState.OnWay)
     }
 
     fun setFabToStop() {
