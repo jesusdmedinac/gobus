@@ -7,14 +7,19 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
+import com.mupper.features.bus.AddNewBus
+import com.mupper.features.traveler.GetCurrentTraveler
+import com.mupper.features.bus.GetTravelingBus
+import com.mupper.features.ShareActualLocation
 import com.mupper.gobus.R
 import com.mupper.gobus.commons.extension.app
 import com.mupper.gobus.commons.extension.bindingInflate
 import com.mupper.gobus.commons.extension.getViewModel
+import com.mupper.gobus.data.database.TravelerRoomDataSource
+import com.mupper.gobus.data.source.bus.BusFirebaseDataSource
+import com.mupper.gobus.data.source.bus.BusRoomDataSource
 import com.mupper.gobus.databinding.FragmentBusNewBinding
 import com.mupper.gobus.model.TravelControl
-import com.mupper.gobus.repository.BusRepository
-import com.mupper.gobus.repository.TravelerRepository
 import com.mupper.gobus.ui.bus.stepper.NewBusStepperAdapter
 import com.mupper.gobus.ui.bus.steps.NewBus
 import com.mupper.gobus.viewmodel.BusViewModel
@@ -57,7 +62,27 @@ class NewBusFragment : Fragment(), StepperLayout.StepperListener {
         stepperLayout.currentStepPosition = 0
 
         busViewModel =
-            getViewModel { BusViewModel(BusRepository(app, TravelerRepository(app))) }
+            getViewModel {
+                BusViewModel(
+                    AddNewBus(
+                        BusRoomDataSource(app.db),
+                        BusFirebaseDataSource()
+                    ),
+                    ShareActualLocation(
+                        GetTravelingBus(
+                            BusRoomDataSource(app.db),
+                            BusFirebaseDataSource()
+                        ),
+                        GetCurrentTraveler(
+                            TravelerRoomDataSource(
+                                app.db
+                            )
+                        ),
+                        BusRoomDataSource(app.db),
+                        BusFirebaseDataSource()
+                    )
+                )
+            }
         travelViewModel =
             getViewModel { TravelViewModel(TravelControl(requireContext())) }
 

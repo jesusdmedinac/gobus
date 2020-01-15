@@ -8,15 +8,20 @@ import android.view.ViewGroup
 import androidx.navigation.NavDirections
 import com.google.android.gms.maps.SupportMapFragment
 import com.mupper.commons.scope.ScoppedFragment
+import com.mupper.features.ShareActualLocation
+import com.mupper.features.bus.AddNewBus
+import com.mupper.features.bus.GetTravelingBus
+import com.mupper.features.traveler.GetCurrentTraveler
 import com.mupper.gobus.PermissionRequester
 import com.mupper.gobus.R
 import com.mupper.gobus.commons.EventObserver
 import com.mupper.gobus.commons.extension.*
+import com.mupper.gobus.data.database.TravelerRoomDataSource
+import com.mupper.gobus.data.source.bus.BusFirebaseDataSource
+import com.mupper.gobus.data.source.bus.BusRoomDataSource
 import com.mupper.gobus.databinding.FragmentMapsBinding
 import com.mupper.gobus.model.TravelControl
-import com.mupper.gobus.repository.BusRepository
 import com.mupper.gobus.repository.LocationRepository
-import com.mupper.gobus.repository.TravelerRepository
 import com.mupper.gobus.viewmodel.BusViewModel
 import com.mupper.gobus.viewmodel.MapsViewModel
 import com.mupper.gobus.viewmodel.MapsViewModel.MapsModel
@@ -61,11 +66,43 @@ class MapsFragment : ScoppedFragment() {
         mapsViewModel =
             getViewModel { MapsViewModel(LocationRepository(app)) }
         travelerViewModel =
-            getViewModel { TravelerViewModel(TravelerRepository(app)) }
+            getViewModel { TravelerViewModel(
+                GetCurrentTraveler(
+                    TravelerRoomDataSource(app.db)
+                ),
+                ShareActualLocation(
+                    GetTravelingBus(
+                        BusRoomDataSource(app.db),
+                        BusFirebaseDataSource()
+                    ),
+                    GetCurrentTraveler(
+                        TravelerRoomDataSource(app.db)
+                    ),
+                    BusRoomDataSource(app.db),
+                    BusFirebaseDataSource()
+                )
+            ) }
         travelViewModel =
             getViewModel { TravelViewModel(TravelControl(requireContext())) }
         busViewModel =
-            getViewModel { BusViewModel(BusRepository(app, TravelerRepository(app))) }
+            getViewModel {
+                BusViewModel(
+                    AddNewBus(
+                        BusRoomDataSource(app.db),
+                        BusFirebaseDataSource()
+                    ),
+                    ShareActualLocation(
+                        GetTravelingBus(
+                            BusRoomDataSource(app.db),
+                            BusFirebaseDataSource()
+                        ),
+                        GetCurrentTraveler(
+                            TravelerRoomDataSource(app.db)
+                        ),
+                        BusRoomDataSource(app.db),
+                        BusFirebaseDataSource()
+                    )
+                ) }
 
         mapsViewModel.model.observe(
             this,

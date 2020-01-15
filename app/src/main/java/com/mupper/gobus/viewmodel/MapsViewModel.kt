@@ -8,7 +8,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.mupper.commons.scope.ScopedViewModel
-import com.mupper.core.utils.LatLng
+import com.mupper.domain.LatLng
 import com.mupper.gobus.commons.Event
 import com.mupper.gobus.repository.LocationRepository
 import kotlinx.coroutines.launch
@@ -108,7 +108,7 @@ class MapsViewModel(private val locationRepository: LocationRepository) : Scoped
 
     private fun moveMarkerToLastLocation(it: LatLng): LatLng {
 //        val priorLocation: MapsLatLng?
-        val lastLocation = MapsLatLng(it.latitude, it.longitude)
+        val lastLocation = MapsLatLng(it.latitude.toDouble(), it.longitude.toDouble())
         if (travelerMarkerOptions == null) {
             travelerMarkerOptions = MarkerOptions()
             travelerMarkerOptions?.position(lastLocation)
@@ -136,8 +136,8 @@ class MapsViewModel(private val locationRepository: LocationRepository) : Scoped
         googleMap?.animateCamera(
             CameraUpdateFactory.newLatLngZoom(
                 MapsLatLng(
-                    it.latitude,
-                    it.longitude
+                    it.latitude.toDouble(),
+                    it.longitude.toDouble()
                 ), 17f
             )
         )

@@ -10,7 +10,7 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.mupper.gobus"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -32,8 +32,10 @@ android {
 }
 
 dependencies {
-    implementation project(':core')
     implementation project(':commons')
+    implementation project(':data')
+    implementation project(':domain')
+    implementation project(':features')
 
     def lifecycle_version = '2.1.0'
     def gms_version = '17.0.0'

@@ -2,15 +2,20 @@ package com.mupper.gobus.ui.bus.steps
 
 import android.os.Bundle
 import android.view.View
+import com.mupper.features.ShareActualLocation
+import com.mupper.features.bus.AddNewBus
+import com.mupper.features.bus.GetTravelingBus
+import com.mupper.features.traveler.GetCurrentTraveler
 import com.mupper.gobus.R
 import com.mupper.gobus.commons.EventObserver
 import com.mupper.gobus.commons.extension.app
 import com.mupper.gobus.commons.extension.getViewModel
 import com.mupper.gobus.commons.newInstance
 import com.mupper.gobus.commons.stepper.StepFragment
+import com.mupper.gobus.data.database.TravelerRoomDataSource
+import com.mupper.gobus.data.source.bus.BusFirebaseDataSource
+import com.mupper.gobus.data.source.bus.BusRoomDataSource
 import com.mupper.gobus.databinding.FragmentBusNewPathColorBinding
-import com.mupper.gobus.repository.BusRepository
-import com.mupper.gobus.repository.TravelerRepository
 import com.mupper.gobus.viewmodel.BusViewModel
 import com.stepstone.stepper.VerificationError
 import com.thebluealliance.spectrum.SpectrumDialog
@@ -30,7 +35,25 @@ class NewBusPathColorFragment : StepFragment<FragmentBusNewPathColorBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         busViewModel =
-            getViewModel { BusViewModel(BusRepository(app, TravelerRepository(app))) }
+            getViewModel {
+                BusViewModel(
+                    AddNewBus(
+                        BusRoomDataSource(app.db),
+                        BusFirebaseDataSource()
+                    ),
+                    ShareActualLocation(
+                        GetTravelingBus(
+                            BusRoomDataSource(app.db),
+                            BusFirebaseDataSource()
+                        ),
+                        GetCurrentTraveler(
+                            TravelerRoomDataSource(app.db)
+                        ),
+                        BusRoomDataSource(app.db),
+                        BusFirebaseDataSource()
+                    )
+                )
+            }
 
         busViewModel.showColorPickerDialog.observe(this,
             EventObserver { color ->
@@ -47,7 +70,7 @@ class NewBusPathColorFragment : StepFragment<FragmentBusNewPathColorBinding>() {
         val colorPicker = SpectrumDialog.Builder(requireActivity())
         colorPicker.setColors(R.array.md_colors)
         color?.let { colorPicker.setSelectedColor(it) }
-        colorPicker.setOnColorSelectedListener { positiveResult, colorInt ->
+        colorPicker.setOnColorSelectedListener { _, colorInt ->
             busViewModel.onColorPicked(colorInt)
         }
         colorPicker.build().show(childFragmentManager, "¿De qué color es el camión?")
