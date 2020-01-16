@@ -5,11 +5,11 @@ import com.mupper.domain.relations.BusWithTravelers
 import com.mupper.domain.traveler.Traveler
 
 interface BusRemoteDataSource {
-    fun addNewBus(bus: Bus)
+    fun addNewBusWithTravelers(bus: Bus, traveler: Traveler)
 
     suspend fun findBusByPathName(path: String) : Bus
 
     suspend fun findBusTravelersByPathName(path: String) : List<Traveler>
 
-    suspend fun shareActualLocation(bus: Bus, traveler: Traveler)
+    suspend fun shareActualLocation(bus: BusWithTravelers, traveler: Traveler)
 }

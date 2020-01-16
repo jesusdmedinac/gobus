@@ -14,5 +14,6 @@ import com.mupper.gobus.data.database.CurrentPosition
 data class Traveler(
     @PrimaryKey @ColumnInfo(name = "email") val email: String,
     @Embedded val currentPosition: CurrentPosition,
+    @ColumnInfo(name = "traveling_path") val travelingPath: String,
     @ColumnInfo(name = "is_traveling") val isTraveling: Boolean
 )

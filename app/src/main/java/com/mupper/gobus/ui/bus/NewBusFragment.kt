@@ -7,17 +7,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
-import com.mupper.features.bus.AddNewBus
-import com.mupper.features.traveler.GetCurrentTraveler
+import com.mupper.features.bus.AddNewBusWithTravelers
+import com.mupper.features.traveler.GetActualTraveler
 import com.mupper.features.bus.GetTravelingBus
 import com.mupper.features.ShareActualLocation
 import com.mupper.gobus.R
 import com.mupper.gobus.commons.extension.app
 import com.mupper.gobus.commons.extension.bindingInflate
 import com.mupper.gobus.commons.extension.getViewModel
-import com.mupper.gobus.data.database.TravelerRoomDataSource
+import com.mupper.gobus.data.source.traveler.TravelerRoomDataSource
 import com.mupper.gobus.data.source.bus.BusFirebaseDataSource
 import com.mupper.gobus.data.source.bus.BusRoomDataSource
+import com.mupper.gobus.data.source.traveler.TravelerFirebaseDataSource
 import com.mupper.gobus.databinding.FragmentBusNewBinding
 import com.mupper.gobus.model.TravelControl
 import com.mupper.gobus.ui.bus.stepper.NewBusStepperAdapter
@@ -64,19 +65,12 @@ class NewBusFragment : Fragment(), StepperLayout.StepperListener {
         busViewModel =
             getViewModel {
                 BusViewModel(
-                    AddNewBus(
-                        BusRoomDataSource(app.db),
-                        BusFirebaseDataSource()
-                    ),
-                    ShareActualLocation(
-                        GetTravelingBus(
-                            BusRoomDataSource(app.db),
-                            BusFirebaseDataSource()
-                        ),
-                        GetCurrentTraveler(
+                    AddNewBusWithTravelers(
+                        GetActualTraveler(
                             TravelerRoomDataSource(
                                 app.db
-                            )
+                            ),
+                            TravelerFirebaseDataSource()
                         ),
                         BusRoomDataSource(app.db),
                         BusFirebaseDataSource()

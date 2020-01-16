@@ -21,11 +21,11 @@ interface TravelerDao {
     @Query("SELECT * FROM traveler ORDER BY email")
     fun getAllTravelerLiveData(): LiveData<List<Traveler>>
 
-    @Query("SELECT * from traveler LIMIT 1")
-    fun getActualTraveler(): Traveler
+    @Query("SELECT * from traveler WHERE email = :email")
+    fun findTravelerByEmail(email: String): Traveler?
 
     @Query("UPDATE traveler SET latitude = :latitude, longitude = :longitude WHERE email = :email")
-    fun updateTraveler(email: String, latitude: Float, longitude: Float)
+    fun updateTraveler(email: String, latitude: Double, longitude: Double)
 
     @Query("SELECT COUNT(email) FROM traveler")
     fun travelerCount(): Int

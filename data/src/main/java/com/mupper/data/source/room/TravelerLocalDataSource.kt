@@ -1,11 +1,13 @@
 package com.mupper.data.source.room
 
-import com.mupper.domain.LatLng
 import com.mupper.domain.traveler.Traveler
 
 interface TravelerLocalDataSource {
+    suspend fun getCount(): Int
 
-    fun getActualTraveler(): Traveler
+    suspend fun insertTraveler(travelingPath: String, traveler: Traveler)
 
-    suspend fun shareActualLocation(newLocation: LatLng)
+    suspend fun findTravelerByEmail(email: String): Traveler?
+
+    suspend fun shareActualLocation(traveler: Traveler)
 }

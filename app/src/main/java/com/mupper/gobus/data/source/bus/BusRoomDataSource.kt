@@ -13,18 +13,24 @@ class BusRoomDataSource(db: GobusDatabase) : BusLocalDataSource {
 
     private val busDao = db.busDao()
 
-    override fun getCount(path: String) = busDao.getCount(path)
+    override suspend fun getCount(path: String): Int =
+        withContext(Dispatchers.IO) {
+            busDao.getCount(path)
+        }
 
-    override fun getTravelingBusWithTravelers(): List<BusWithTravelers> =
-        busDao.getBusWithTravelers().map {
-            it.toDomainBusWithTravelers()
+    override suspend fun getTravelingBusWithTravelers(): List<BusWithTravelers> =
+        withContext(Dispatchers.IO) {
+            val busWithTravelers = busDao.getBusWithTravelers()
+            busWithTravelers.map {
+                it.toDomainBusWithTravelers()
+            }
         }
 
     override suspend fun addNewBus(bus: DomainBus) = withContext(Dispatchers.IO) {
         busDao.insertBus(bus.toRoomBus())
     }
 
-    override suspend fun shareActualLocation(bus: DomainBus) = withContext(Dispatchers.IO) {
+    override suspend fun shareActualLocation(bus: BusWithTravelers) = withContext(Dispatchers.IO) {
         busDao.updateBus(bus.toRoomBus())
     }
 }

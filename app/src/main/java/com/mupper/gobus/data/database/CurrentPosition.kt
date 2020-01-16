@@ -6,6 +6,6 @@ package com.mupper.gobus.data.database
  * Mupper
  */
 data class CurrentPosition(
-    val latitude: Float,
-    val longitude: Float
+    val latitude: Double,
+    val longitude: Double
 )

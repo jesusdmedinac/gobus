@@ -1,17 +1,17 @@
 package com.mupper.gobus.data
 
-import com.google.type.LatLng
 import com.mupper.commons.*
 import com.mupper.gobus.commons.extension.hasAll
 import android.location.Location as AndroidLocation
 import com.mupper.gobus.data.database.bus.Bus as RoomBus
 import com.mupper.domain.bus.Bus as DomainBus
+import com.mupper.gobus.data.database.relations.BusWithTravelers as RoomBusWithTravelers
+import com.mupper.domain.relations.BusWithTravelers as DomainBusWithTravelers
 import com.mupper.gobus.data.database.traveler.Traveler as RoomTraveler
 import com.mupper.domain.traveler.Traveler as DomainTraveler
 import com.mupper.gobus.data.database.CurrentPosition as RoomLatLng
 import com.mupper.domain.LatLng as DomainLatLng
-import com.mupper.gobus.data.database.relations.BusWithTravelers as RoomBusWithTravelers
-import com.mupper.domain.relations.BusWithTravelers as DomainBusWithTravelers
+import com.google.android.gms.maps.model.LatLng as MapsLatLng
 
 // Bus
 fun DomainBus.toRoomBus() = RoomBus(
@@ -21,11 +21,18 @@ fun DomainBus.toRoomBus() = RoomBus(
     isTraveling
 )
 
-fun RoomBus.toDomainBus(travelers: List<DomainTraveler>) = DomainBus(
+fun RoomBus.toDomainBus() = DomainBus(
     path,
     color,
     capacity,
     isTraveling
+)
+
+fun DomainBus.toDomainBusWithTravelers(traveler: DomainTraveler) = DomainBusWithTravelers(
+    path,
+    color,
+    capacity,
+    listOf(traveler)
 )
 
 fun Map<String, Any>.toDomainBus(): DomainBus {
@@ -47,7 +54,7 @@ fun Map<String, Any>.toDomainBus(): DomainBus {
 }
 
 fun Map<String, Any>.toDomainTraveler(): DomainTraveler {
-    var currentPosition = DomainLatLng(0f, 0f)
+    var currentPosition = DomainLatLng(0.0, 0.0)
     var email = ""
     if (hasAll(FIELDS_TRAVELER)) {
         val currentPositionMap =
@@ -55,8 +62,8 @@ fun Map<String, Any>.toDomainTraveler(): DomainTraveler {
 
         currentPosition =
             DomainLatLng(
-                currentPositionMap[FIELD_TRAVELER_CURRENT_POSITION_LATITUDE] as Float? ?: 0f,
-                currentPositionMap[FIELD_TRAVELER_CURRENT_POSITION_LONGITUDE] as Float? ?: 0f
+                currentPositionMap[FIELD_TRAVELER_CURRENT_POSITION_LATITUDE] as Double? ?: 0.0,
+                currentPositionMap[FIELD_TRAVELER_CURRENT_POSITION_LONGITUDE] as Double? ?: 0.0
             )
         email = get(FIELD_TRAVELER_EMAIL) as String
     }
@@ -79,9 +86,10 @@ fun RoomTraveler.toDomainTraveler() = DomainTraveler(
     isTraveling
 )
 
-fun DomainTraveler.toRoomTraveler() = RoomTraveler(
+fun DomainTraveler.toRoomTraveler(travelingPath: String) = RoomTraveler(
     email,
     currentPosition.toRoomLatLng(),
+    travelingPath,
     isTraveling
 )
 
@@ -96,6 +104,16 @@ fun DomainLatLng.toRoomLatLng() = RoomLatLng(
     longitude
 )
 
+fun DomainLatLng.toMapsLatLng() = MapsLatLng(
+    latitude,
+    longitude
+)
+
+fun MapsLatLng.toDomainLatLng() = DomainLatLng(
+    latitude,
+    longitude
+)
+
 // BusWithTravelers
 fun DomainBusWithTravelers.toRoomBusWithTravelers() = RoomBusWithTravelers(
     RoomBus(
@@ -104,7 +122,7 @@ fun DomainBusWithTravelers.toRoomBusWithTravelers() = RoomBusWithTravelers(
         capacity,
         travelers.isNotEmpty()
     ),
-    travelers.toRoomTravelerList()
+    travelers.toRoomTravelerList(path)
 )
 
 fun RoomBusWithTravelers.toDomainBusWithTravelers() = DomainBusWithTravelers(
@@ -114,11 +132,26 @@ fun RoomBusWithTravelers.toDomainBusWithTravelers() = DomainBusWithTravelers(
     travelers.toDomainTravelerList()
 )
 
+fun DomainBusWithTravelers.toDomainBus() = DomainBus(
+    path,
+    color,
+    capacity,
+    travelers.isNotEmpty()
+)
+
+fun DomainBusWithTravelers.toRoomBus() = RoomBus(
+    path,
+    color,
+    capacity,
+    travelers.isNotEmpty()
+)
+
 // List<Traveler>
-fun List<DomainTraveler>.toRoomTravelerList() = map {
+fun List<DomainTraveler>.toRoomTravelerList(travelingPath: String) = map {
     RoomTraveler(
         it.email,
         it.currentPosition.toRoomLatLng(),
+        travelingPath,
         it.isTraveling
     )
 }
@@ -132,4 +165,5 @@ fun List<RoomTraveler>.toDomainTravelerList() = map {
 }
 
 // AndroidLocation
-fun AndroidLocation.toDomainLatLng() = DomainLatLng(latitude.toFloat(), longitude.toFloat())
+fun AndroidLocation.toDomainLatLng() = DomainLatLng(latitude, longitude)
+

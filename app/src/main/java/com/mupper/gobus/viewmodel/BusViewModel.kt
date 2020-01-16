@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.mupper.commons.scope.ScopedViewModel
 import com.mupper.domain.LatLng
 import com.mupper.domain.bus.Bus as DomainBus
-import com.mupper.features.bus.AddNewBus
+import com.mupper.features.bus.AddNewBusWithTravelers
 import com.mupper.features.ShareActualLocation
 import com.mupper.gobus.commons.Event
 import kotlinx.coroutines.Dispatchers
@@ -17,8 +17,7 @@ import kotlinx.coroutines.launch
  * Mupper
  */
 class BusViewModel(
-    private val addNewBus: AddNewBus,
-    private val shareActualLocation: ShareActualLocation
+    private val addNewBusWithTravelers: AddNewBusWithTravelers
 ) : ScopedViewModel() {
     val pathName = MutableLiveData<String>()
 
@@ -51,7 +50,7 @@ class BusViewModel(
             val pathColor = pathColor.value ?: ""
             val capacity = capacity.value ?: ""
             val isTraveling = _isTravelingStateToNewBus.value ?: false
-            addNewBus.invoke(
+            addNewBusWithTravelers.invoke(
                 DomainBus(
                     pathName,
                     pathColor,
@@ -66,11 +65,5 @@ class BusViewModel(
     fun saveNewBusToStartTravel() {
         _isTravelingStateToNewBus.value = true
         saveNewBus()
-    }
-
-    fun shareActualLocation(newLocation: LatLng) {
-        launch {
-            shareActualLocation.invoke(newLocation)
-        }
     }
 }

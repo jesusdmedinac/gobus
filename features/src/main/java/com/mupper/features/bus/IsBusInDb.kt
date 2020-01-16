@@ -6,5 +6,5 @@ class IsBusInDb(
     private val busLocalDataSource: BusLocalDataSource,
     private val path: String
 ) {
-    fun invoke() = busLocalDataSource.getCount(path)
+    suspend fun invoke() = busLocalDataSource.getCount(path)
 }

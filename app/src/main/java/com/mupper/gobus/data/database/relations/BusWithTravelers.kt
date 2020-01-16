@@ -13,7 +13,7 @@ data class BusWithTravelers(
     @Embedded val bus: Bus,
     @Relation(
         parentColumn = "path",
-        entityColumn = "email"
+        entityColumn = "traveling_path"
     )
     val travelers: List<Traveler>
 )

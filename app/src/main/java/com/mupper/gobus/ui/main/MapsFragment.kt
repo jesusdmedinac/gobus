@@ -9,16 +9,17 @@ import androidx.navigation.NavDirections
 import com.google.android.gms.maps.SupportMapFragment
 import com.mupper.commons.scope.ScoppedFragment
 import com.mupper.features.ShareActualLocation
-import com.mupper.features.bus.AddNewBus
+import com.mupper.features.bus.AddNewBusWithTravelers
 import com.mupper.features.bus.GetTravelingBus
-import com.mupper.features.traveler.GetCurrentTraveler
+import com.mupper.features.traveler.GetActualTraveler
 import com.mupper.gobus.PermissionRequester
 import com.mupper.gobus.R
 import com.mupper.gobus.commons.EventObserver
 import com.mupper.gobus.commons.extension.*
-import com.mupper.gobus.data.database.TravelerRoomDataSource
+import com.mupper.gobus.data.source.traveler.TravelerRoomDataSource
 import com.mupper.gobus.data.source.bus.BusFirebaseDataSource
 import com.mupper.gobus.data.source.bus.BusRoomDataSource
+import com.mupper.gobus.data.source.traveler.TravelerFirebaseDataSource
 import com.mupper.gobus.databinding.FragmentMapsBinding
 import com.mupper.gobus.model.TravelControl
 import com.mupper.gobus.repository.LocationRepository
@@ -37,10 +38,10 @@ class MapsFragment : ScoppedFragment() {
 
     private lateinit var mapFragment: SupportMapFragment
 
-    private val coarsePermissionRequester by lazy {
+    private val locationPermissionRequester by lazy {
         PermissionRequester(
             activity!!,
-            Manifest.permission.ACCESS_COARSE_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION
         )
     }
 
@@ -66,53 +67,50 @@ class MapsFragment : ScoppedFragment() {
         mapsViewModel =
             getViewModel { MapsViewModel(LocationRepository(app)) }
         travelerViewModel =
-            getViewModel { TravelerViewModel(
-                GetCurrentTraveler(
-                    TravelerRoomDataSource(app.db)
-                ),
-                ShareActualLocation(
-                    GetTravelingBus(
-                        BusRoomDataSource(app.db),
-                        BusFirebaseDataSource()
-                    ),
-                    GetCurrentTraveler(
-                        TravelerRoomDataSource(app.db)
-                    ),
-                    BusRoomDataSource(app.db),
-                    BusFirebaseDataSource()
-                )
-            ) }
-        travelViewModel =
-            getViewModel { TravelViewModel(TravelControl(requireContext())) }
-        busViewModel =
             getViewModel {
-                BusViewModel(
-                    AddNewBus(
-                        BusRoomDataSource(app.db),
-                        BusFirebaseDataSource()
-                    ),
+                TravelerViewModel(
                     ShareActualLocation(
                         GetTravelingBus(
                             BusRoomDataSource(app.db),
                             BusFirebaseDataSource()
                         ),
-                        GetCurrentTraveler(
-                            TravelerRoomDataSource(app.db)
+                        TravelerRoomDataSource(
+                            app.db
+                        ),
+                        TravelerFirebaseDataSource(),
+                        BusRoomDataSource(app.db),
+                        BusFirebaseDataSource()
+                    )
+                )
+            }
+        travelViewModel =
+            getViewModel { TravelViewModel(TravelControl(requireContext())) }
+        busViewModel =
+            getViewModel {
+                BusViewModel(
+                    AddNewBusWithTravelers(
+                        GetActualTraveler(
+                            TravelerRoomDataSource(
+                                app.db
+                            ),
+                            TravelerFirebaseDataSource()
                         ),
                         BusRoomDataSource(app.db),
                         BusFirebaseDataSource()
                     )
-                ) }
+                )
+            }
 
         mapsViewModel.model.observe(
             this,
             EventObserver(::onMapsModelChange)
         )
 
-        mapsViewModel.requestCoarsePermission.observe(this,
+        mapsViewModel.requestLocationPermission.observe(this,
             EventObserver {
-                coarsePermissionRequester.request {
-                    mapsViewModel.onPermissionsRequested()
+                locationPermissionRequester.request {
+                    if (it)
+                        mapsViewModel.onPermissionsRequested()
                 }
             })
 
@@ -142,7 +140,7 @@ class MapsFragment : ScoppedFragment() {
 
     override fun onResume() {
         super.onResume()
-        mapsViewModel.requestCoarsePermission()
+        mapsViewModel.requestLocationPermission()
     }
 
     override fun onDestroyView() {
@@ -156,9 +154,8 @@ class MapsFragment : ScoppedFragment() {
             is MapsModel.MapReady -> mapFragment.getMapAsync(model.onMapReady)
             is MapsModel.RequestNewLocation -> mapsViewModel.onNewLocationRequested()
             is MapsModel.NewLocation -> with(model.lastLocation) {
-                if (model.isTrvaling) {
+                if (model.isTraveling) {
                     travelerViewModel.shareActualLocation(this)
-                    busViewModel.shareActualLocation(this)
                 }
             }
         }
@@ -168,12 +165,10 @@ class MapsFragment : ScoppedFragment() {
         when (state) {
             is TravelViewModel.TravelState.Walking -> {
                 mapsViewModel.stopTravel()
-                travelerViewModel.stopTravel()
                 travelViewModel.setFabToStart()
             }
             is TravelViewModel.TravelState.OnWay -> {
                 mapsViewModel.startTravel()
-                travelerViewModel.startTravel()
                 travelViewModel.setFabToStop()
             }
         }

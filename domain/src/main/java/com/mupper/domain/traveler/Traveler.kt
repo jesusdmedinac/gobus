@@ -9,6 +9,6 @@ import com.mupper.domain.LatLng
  */
 data class Traveler(
     val email: String,
-    val currentPosition: LatLng,
-    val isTraveling: Boolean
+    var currentPosition: LatLng,
+    var isTraveling: Boolean
 )

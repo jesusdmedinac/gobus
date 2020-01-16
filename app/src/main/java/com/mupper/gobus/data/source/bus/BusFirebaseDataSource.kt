@@ -6,15 +6,17 @@ import com.mupper.commons.FIELD_BUS_TRAVELERS
 import com.mupper.data.source.firestore.BusRemoteDataSource
 import com.mupper.domain.LatLng
 import com.mupper.domain.bus.Bus
+import com.mupper.domain.relations.BusWithTravelers
 import com.mupper.domain.traveler.Traveler
 import com.mupper.gobus.data.toDomainBus
+import com.mupper.gobus.data.toDomainBusWithTravelers
 import com.mupper.gobus.data.toDomainTraveler
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
 class BusFirebaseDataSource : BusRemoteDataSource {
 
-    private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val firestore = FirebaseFirestore.getInstance()
 
     private fun getBusDocument(path: String) = firestore.collection(COLLECTION_BUS).document(path)
 
@@ -22,8 +24,15 @@ class BusFirebaseDataSource : BusRemoteDataSource {
         FIELD_BUS_TRAVELERS
     )
 
-    override fun addNewBus(bus: Bus) {
-        getBusDocument(bus.path).set(bus)
+    override fun addNewBusWithTravelers(bus: Bus, traveler: Traveler) {
+        val busWithTravelers = bus.toDomainBusWithTravelers(traveler)
+        val (path, _, _, travelers) = busWithTravelers
+        getBusDocument(path).set(busWithTravelers.toDomainBus())
+        travelers.forEach {
+            with(it) {
+                getBusTravelersCollection(path).document(email).set(this)
+            }
+        }
     }
 
     override suspend fun findBusByPathName(path: String): Bus =
@@ -43,7 +52,7 @@ class BusFirebaseDataSource : BusRemoteDataSource {
                         if (it.data != null) {
                             it.data!!.toDomainTraveler()
                         } else {
-                            Traveler("", LatLng(0f, 0f), false)
+                            Traveler("", LatLng(0.0, 0.0), false)
                         }
                     }.toMutableList()
                     travalersList.removeAll { it.email.isEmpty() }
@@ -53,7 +62,7 @@ class BusFirebaseDataSource : BusRemoteDataSource {
         }
 
 
-    override suspend fun shareActualLocation(bus: Bus, traveler: Traveler) {
+    override suspend fun shareActualLocation(bus: BusWithTravelers, traveler: Traveler) {
         val (path) = bus
         val (email) = traveler
 
