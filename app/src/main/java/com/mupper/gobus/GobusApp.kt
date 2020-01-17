@@ -1,13 +1,11 @@
 package com.mupper.gobus
 
 import android.app.Application
-import com.mupper.core.database.GobusDatabase
-
+import com.mupper.gobus.data.database.GobusDatabase
 
 /**
  * Created by jesus.medina on 12/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  */
 class GobusApp : Application() {
 

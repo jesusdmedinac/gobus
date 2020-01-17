@@ -5,8 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 /**
  * Created by jesus.medina on 12/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  */
 abstract class ScoppedActivity : AppCompatActivity(), Scope by Scope.Impl() {
     override fun onStart() {

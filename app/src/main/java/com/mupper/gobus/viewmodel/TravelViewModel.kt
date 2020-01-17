@@ -4,55 +4,84 @@ import android.graphics.drawable.Drawable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mupper.commons.scope.ScopedViewModel
+import com.mupper.gobus.commons.Event
+import com.mupper.gobus.model.TravelControl
 
 
 /**
  * Created by jesus.medina on 12/2019.
- * Insulet Corporation
- * Andromeda
+ * Mupper
  */
 class TravelViewModel(
-    val playIcon: Drawable?,
-    val stopIcon: Drawable?,
-    val defaultFabColor: Int,
-    val defaultFabIconColor: Int
+    private val travelControl: TravelControl
 ) : ScopedViewModel() {
-    private val _model = MutableLiveData<TravelModel>()
-    val model: LiveData<TravelModel> get() = _model
+    private val _navigateToStartTravelDialog = MutableLiveData<Event<Unit>>()
+    val navigateToStartTravelDialog: LiveData<Event<Unit>> get() = _navigateToStartTravelDialog
 
-    private val _fabIcon = MutableLiveData<Drawable>(playIcon)
+    private val _navigateToStopTravelDialog = MutableLiveData<Event<Unit>>()
+    val navigateToStopTravelDialog: LiveData<Event<Unit>> get() = _navigateToStopTravelDialog
+
+    private val _navigateToBusNavigation = MutableLiveData<Event<Unit>>()
+    val navigateToBusNavigation: LiveData<Event<Unit>> get() = _navigateToBusNavigation
+
+    private val _travelState = MutableLiveData<Event<TravelState>>()
+    val travelState: LiveData<Event<TravelState>> get() = _travelState
+
+    private val _fabIcon = MutableLiveData<Drawable>(travelControl.playIcon)
     val fabIcon: LiveData<Drawable> get() = _fabIcon
 
-    private val _fabColor = MutableLiveData<Int>(defaultFabColor)
+    private val _fabColor = MutableLiveData<Int>(travelControl.defaultFabColor)
     val fabColor: LiveData<Int> get() = _fabColor
 
-    private val _fabIconColor = MutableLiveData<Int>(defaultFabIconColor)
+    private val _fabIconColor = MutableLiveData<Int>(travelControl.defaultFabIconColor)
     val fabIconColor: LiveData<Int> get() = _fabIconColor
 
-    sealed class TravelModel {
-        object StartTravel : TravelModel()
-        object StopTravel : TravelModel()
+    sealed class TravelState {
+        object OnWay : TravelState()
+        object Walking : TravelState()
     }
 
     fun toggleTravelState() {
-        _model.value = if (model.value == TravelModel.StartTravel) {
-            stopTravel()
+        if (travelState.value?.peekContent() == TravelState.OnWay) {
+            navigateToStopTravelDialog()
         } else {
-            startTravel()
+            navigateToStartTravelDialog()
         }
     }
 
-    private fun startTravel(): TravelModel.StartTravel {
-        _fabIcon.value = stopIcon
-        _fabColor.value = defaultFabIconColor
-        _fabIconColor.value = defaultFabColor
-        return TravelModel.StartTravel
+    private fun navigateToStartTravelDialog() {
+        _navigateToStartTravelDialog.value = Event(Unit)
     }
 
-    private fun stopTravel(): TravelModel.StopTravel {
-        _fabIcon.value = playIcon
-        _fabColor.value = defaultFabColor
-        _fabIconColor.value = defaultFabIconColor
-        return TravelModel.StopTravel
+    private fun navigateToStopTravelDialog() {
+        _navigateToStopTravelDialog.value = Event(Unit)
+    }
+
+    fun navigateToBusNavigation() {
+        _navigateToBusNavigation.value = Event(Unit)
+    }
+
+    fun letsWalk() {
+        _travelState.value = Event(TravelState.Walking)
+    }
+
+    fun letsTravel() {
+        _travelState.value = Event(TravelState.OnWay)
+    }
+
+    fun setFabToStop() {
+        with(travelControl) {
+            _fabIcon.value = stopIcon
+            _fabColor.value = defaultFabIconColor
+            _fabIconColor.value = defaultFabColor
+        }
+    }
+
+    fun setFabToStart() {
+        with(travelControl) {
+            _fabIcon.value = playIcon
+            _fabColor.value = defaultFabColor
+            _fabIconColor.value = defaultFabIconColor
+        }
     }
 }
