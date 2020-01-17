@@ -1,6 +1,6 @@
 package com.mupper.gobus.model
 
-import com.mupper.core.utils.LatLng
+import com.mupper.gobus.data.toDomainLatLng
 import android.location.Location as AndroidLocation
 
 /**
@@ -8,5 +8,5 @@ import android.location.Location as AndroidLocation
  * Mupper
  */
 class Location(l: AndroidLocation?) : AndroidLocation(l) {
-    fun getLatLng() = LatLng(latitude, longitude)
+    fun getLatLng() = toDomainLatLng()
 }

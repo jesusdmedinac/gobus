@@ -13,7 +13,7 @@ import com.mupper.gobus.model.TravelControl
  * Mupper
  */
 class TravelViewModel(
-    val travelControl: TravelControl
+    private val travelControl: TravelControl
 ) : ScopedViewModel() {
     private val _navigateToStartTravelDialog = MutableLiveData<Event<Unit>>()
     val navigateToStartTravelDialog: LiveData<Event<Unit>> get() = _navigateToStartTravelDialog
