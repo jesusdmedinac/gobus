@@ -22,7 +22,7 @@ class ShareActualLocation(
         val travelingBus = getTravelingBus.getActualBusWithTravelers()
         travelingBus?.let {
             val travelersInBus = it.travelers
-            if (travelersInBus.isEmpty()) {
+            if (travelersInBus.isNullOrEmpty()) {
                 return@withContext
             }
             val travelerInBus = travelersInBus[0]
