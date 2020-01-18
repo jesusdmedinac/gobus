@@ -64,8 +64,18 @@ class MapsFragment : ScoppedFragment() {
             mapFragment = it as SupportMapFragment
         }
 
+        val busMarker = resources.getBitmapFromVector(
+            R.drawable.ic_bus_marker,
+            requireContext().getCompatColor(R.color.primaryDarkColor)
+        )
+
         mapsViewModel =
-            getViewModel { MapsViewModel(LocationRepository(app)) }
+            getViewModel {
+                MapsViewModel(
+                    LocationRepository(app),
+                    busMarker
+                )
+            }
         travelerViewModel =
             getViewModel {
                 TravelerViewModel(
