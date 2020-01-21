@@ -14,13 +14,10 @@ class GobusApp : Application() {
     lateinit var component: GobusComponent
         private set
 
-    lateinit var db: GobusDatabase
-        private set
+    val db: GobusDatabase by lazy { component.gobusDatabaseComponent().db }
 
     override fun onCreate() {
         super.onCreate()
-
-        db = GobusDatabase.getInstance(this)
 
         component = DaggerGobusComponent
             .factory()
