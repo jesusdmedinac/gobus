@@ -9,9 +9,6 @@ import org.koin.android.ext.android.inject
  * Mupper
  */
 class GobusApp : Application() {
-
-    val db: GobusDatabase by inject()
-
     override fun onCreate() {
         super.onCreate()
         initDI()
