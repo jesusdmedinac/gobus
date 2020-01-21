@@ -28,8 +28,7 @@ class AppModule {
     @Provides
     @Singleton
     fun databaseProvider(app: Application) =
-        Room.databaseBuilder(app, GobusDatabase::class.java, DATABASE_NAME)
-            .build()
+        GobusDatabase.getInstance(app)
 
     @Provides
     fun busMarkerBitmapDescriptorProvider(app: Application): BitmapDescriptor = app.applicationContext.resources.getBitmapFromVector(
