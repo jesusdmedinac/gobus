@@ -12,7 +12,6 @@ import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import com.mupper.gobus.GobusApp
 
-
 /**
  * Created by jesus.medina on 12/2019.
  * Mupper

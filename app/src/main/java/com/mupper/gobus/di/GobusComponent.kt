@@ -1,17 +1,18 @@
 package com.mupper.gobus.di
 
 import android.app.Application
+import com.mupper.gobus.ui.bus.NewBusFragmentComponent
 import com.mupper.gobus.ui.main.MapsFragmentComponent
-import com.mupper.gobus.ui.main.MapsFragmentModule
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AppModule::class])
+@Component(modules = [AppModule::class, DataModule::class, FeatureModule::class, ViewModelModule::class])
 interface GobusComponent {
 
-    fun plus(module: MapsFragmentModule): MapsFragmentComponent
+    fun mapsFragmentComponent(): MapsFragmentComponent
+    fun newBusFragmentComponent(): NewBusFragmentComponent
 
     @Component.Factory
     interface Factory {

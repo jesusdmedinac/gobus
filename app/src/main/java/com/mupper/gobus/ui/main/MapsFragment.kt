@@ -26,7 +26,6 @@ class MapsFragment : ScoppedFragment() {
     private val mapsViewModel: MapsViewModel by lazy { getViewModel { component.mapsViewModel } }
     private val travelViewModel: TravelViewModel by lazy { getViewModel { component.travelViewModel }}
     private val travelerViewModel: TravelerViewModel by lazy { getViewModel { component.travelerViewModel } }
-    private val busViewModel: BusViewModel by lazy { getViewModel { component.busViewModel } }
 
     private lateinit var mapFragment: SupportMapFragment
 
@@ -56,8 +55,17 @@ class MapsFragment : ScoppedFragment() {
             mapFragment = it as SupportMapFragment
         }
 
-        component = app.component.plus(MapsFragmentModule())
+        component = app.component.mapsFragmentComponent()
 
+        initObservers()
+
+        binding?.apply {
+            travel = travelViewModel
+            lifecycleOwner = this@MapsFragment
+        }
+    }
+
+    private fun initObservers() {
         mapsViewModel.model.observe(
             this,
             EventObserver(::onMapsModelChange)
@@ -77,6 +85,7 @@ class MapsFragment : ScoppedFragment() {
                     MapsFragmentDirections.actionMapsFragmentToStartTravelFragment()
                 navigate(toStartTravel)
             })
+
         travelViewModel.navigateToStopTravelDialog.observe(this,
             EventObserver {
                 val toStopTravel: NavDirections =
@@ -88,11 +97,6 @@ class MapsFragment : ScoppedFragment() {
             this,
             EventObserver(::onTravelModelChange)
         )
-
-        binding?.apply {
-            travel = travelViewModel
-            lifecycleOwner = this@MapsFragment
-        }
     }
 
     override fun onResume() {

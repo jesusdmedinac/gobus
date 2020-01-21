@@ -33,22 +33,6 @@ class NewBusPathNameFragment : StepFragment<FragmentBusNewPathNameBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        busViewModel =
-            getViewModel {
-                BusViewModel(
-                    AddNewBusWithTravelers(
-                        GetActualTraveler(
-                            TravelerRoomDataSource(
-                                app.db
-                            ),
-                            TravelerFirebaseDataSource()
-                        ),
-                        BusRoomDataSource(app.db),
-                        BusFirebaseDataSource()
-                    )
-                )
-            }
-
         binding?.apply {
             bus = busViewModel
             lifecycleOwner = this@NewBusPathNameFragment

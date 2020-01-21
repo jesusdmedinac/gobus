@@ -7,7 +7,10 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import com.mupper.gobus.commons.extension.app
 import com.mupper.gobus.commons.extension.bindingInflate
+import com.mupper.gobus.commons.extension.getViewModel
+import com.mupper.gobus.ui.bus.NewBusFragmentComponent
 import com.mupper.gobus.viewmodel.BusViewModel
 import com.stepstone.stepper.Step
 
@@ -19,7 +22,7 @@ import com.stepstone.stepper.Step
 abstract class StepFragment<T : ViewDataBinding> : BindingFragment<T>(), Step {
 
     companion object {
-        val LAYOUT_RESOURCE_ID_ARG_KEY = "messageResourceId"
+        const val LAYOUT_RESOURCE_ID_ARG_KEY = "messageResourceId"
     }
 
     override val layoutResId: Int
@@ -27,7 +30,10 @@ abstract class StepFragment<T : ViewDataBinding> : BindingFragment<T>(), Step {
 }
 
 abstract class BindingFragment<T : ViewDataBinding> : Fragment() {
-    lateinit var busViewModel: BusViewModel
+    private lateinit var component: NewBusFragmentComponent
+
+    val busViewModel: BusViewModel by lazy { getViewModel { component.busViewModel } }
+
     var binding: T? = null
 
     override fun onCreateView(
@@ -36,6 +42,11 @@ abstract class BindingFragment<T : ViewDataBinding> : Fragment() {
     ): View? {
         binding = container?.bindingInflate(layoutResId, false)
         return binding?.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        component = app.component.newBusFragmentComponent()
     }
 
     @get:LayoutRes

@@ -35,31 +35,19 @@ class NewBusPathColorFragment : StepFragment<FragmentBusNewPathColorBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        busViewModel =
-            getViewModel {
-                BusViewModel(
-                    AddNewBusWithTravelers(
-                        GetActualTraveler(
-                            TravelerRoomDataSource(
-                                app.db
-                            ),
-                            TravelerFirebaseDataSource()
-                        ),
-                        BusRoomDataSource(app.db),
-                        BusFirebaseDataSource()
-                    )
-                )
-            }
-
-        busViewModel.showColorPickerDialog.observe(this,
-            EventObserver { color ->
-                showColorPicker(color)
-            })
+        initObservers()
 
         binding?.apply {
             bus = busViewModel
             lifecycleOwner = this@NewBusPathColorFragment
         }
+    }
+
+    private fun initObservers() {
+        busViewModel.showColorPickerDialog.observe(this,
+            EventObserver { color ->
+                showColorPicker(color)
+            })
     }
 
     private fun showColorPicker(color: Int?) {
