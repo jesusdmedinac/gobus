@@ -8,6 +8,7 @@ import com.mupper.gobus.R
 import com.mupper.gobus.commons.extension.getViewModel
 import com.mupper.gobus.model.TravelControl
 import com.mupper.gobus.viewmodel.TravelViewModel
+import org.koin.android.ext.android.inject
 
 
 /**
@@ -16,7 +17,7 @@ import com.mupper.gobus.viewmodel.TravelViewModel
  */
 class StopTravelDialog : DialogFragment() {
 
-    private lateinit var travelViewModel: TravelViewModel
+    private val travelViewModel: TravelViewModel by inject()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
         MaterialAlertDialogBuilder(requireContext())
@@ -31,15 +32,4 @@ class StopTravelDialog : DialogFragment() {
             }
             .setCancelable(true)
             .create()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        travelViewModel =
-            getViewModel {
-                TravelViewModel(
-                    TravelControl(requireContext())
-                )
-            }
-    }
 }

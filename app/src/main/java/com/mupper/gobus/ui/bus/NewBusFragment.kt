@@ -7,27 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
-import com.mupper.features.bus.AddNewBusWithTravelers
-import com.mupper.features.traveler.GetActualTraveler
-import com.mupper.features.bus.GetTravelingBus
-import com.mupper.features.ShareActualLocation
 import com.mupper.gobus.R
-import com.mupper.gobus.commons.extension.app
 import com.mupper.gobus.commons.extension.bindingInflate
-import com.mupper.gobus.commons.extension.getViewModel
-import com.mupper.gobus.data.source.traveler.TravelerRoomDataSource
-import com.mupper.gobus.data.source.bus.BusFirebaseDataSource
-import com.mupper.gobus.data.source.bus.BusRoomDataSource
-import com.mupper.gobus.data.source.traveler.TravelerFirebaseDataSource
 import com.mupper.gobus.databinding.FragmentBusNewBinding
-import com.mupper.gobus.model.TravelControl
 import com.mupper.gobus.ui.bus.stepper.NewBusStepperAdapter
-import com.mupper.gobus.ui.bus.steps.NewBus
+import com.mupper.gobus.ui.bus.steps.NewBusStep
 import com.mupper.gobus.viewmodel.BusViewModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import com.stepstone.stepper.StepperLayout
 import com.stepstone.stepper.VerificationError
 import kotlinx.android.synthetic.main.fragment_bus_new.*
+import org.koin.android.ext.android.inject
 
 /**
  * Created by jesus.medina on 12/2019.
@@ -35,14 +25,15 @@ import kotlinx.android.synthetic.main.fragment_bus_new.*
  */
 class NewBusFragment : Fragment(), StepperLayout.StepperListener {
 
-    private lateinit var busViewModel: BusViewModel
-    private lateinit var travelViewModel: TravelViewModel
+    private val busViewModel: BusViewModel by inject()
+    private val travelViewModel: TravelViewModel by inject()
+
     private var binding: FragmentBusNewBinding? = null
 
-    private var newBusSteps: List<NewBus> = listOf(
-        NewBus("new_bus_path_name", "Nombre de la ruta", 0),
-        NewBus("new_bus_path_color", "Color de la ruta", 1),
-        NewBus("new_bus_capacity", "Capcidad del autobus", 2)
+    private var newBusStepSteps: List<NewBusStep> = listOf(
+        NewBusStep("new_bus_path_name", "Nombre de la ruta", 0),
+        NewBusStep("new_bus_path_color", "Color de la ruta", 1),
+        NewBusStep("new_bus_capacity", "Capcidad del autobus", 2)
     )
 
     override fun onCreateView(
@@ -58,27 +49,9 @@ class NewBusFragment : Fragment(), StepperLayout.StepperListener {
         super.onViewCreated(view, savedInstanceState)
 
         stepperLayout.adapter =
-            NewBusStepperAdapter(newBusSteps, childFragmentManager, requireActivity())
+            NewBusStepperAdapter(newBusStepSteps, childFragmentManager, requireActivity())
         stepperLayout.setListener(this)
         stepperLayout.currentStepPosition = 0
-
-        busViewModel =
-            getViewModel {
-                BusViewModel(
-                    AddNewBusWithTravelers(
-                        GetActualTraveler(
-                            TravelerRoomDataSource(
-                                app.db
-                            ),
-                            TravelerFirebaseDataSource()
-                        ),
-                        BusRoomDataSource(app.db),
-                        BusFirebaseDataSource()
-                    )
-                )
-            }
-        travelViewModel =
-            getViewModel { TravelViewModel(TravelControl(requireContext())) }
 
         binding?.apply {
             bus = busViewModel

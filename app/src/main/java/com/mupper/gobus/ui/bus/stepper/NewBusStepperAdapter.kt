@@ -2,7 +2,7 @@ package com.mupper.gobus.ui.bus.stepper
 
 import android.content.Context
 import androidx.fragment.app.FragmentManager
-import com.mupper.gobus.ui.bus.steps.NewBus
+import com.mupper.gobus.ui.bus.steps.NewBusStep
 import com.mupper.gobus.ui.bus.steps.NewBusCapacityFragment
 import com.mupper.gobus.ui.bus.steps.NewBusPathColorFragment
 import com.mupper.gobus.ui.bus.steps.NewBusPathNameFragment
@@ -16,7 +16,7 @@ import com.stepstone.stepper.viewmodel.StepViewModel
  * Mupper
  */
 class NewBusStepperAdapter(
-    private val newBusSteps: List<NewBus>,
+    private val newBusStepSteps: List<NewBusStep>,
     fm: FragmentManager,
     context: Context
 ) :
@@ -31,11 +31,11 @@ class NewBusStepperAdapter(
         }
     }
 
-    override fun getCount(): Int = newBusSteps.size
+    override fun getCount(): Int = newBusStepSteps.size
 
     override fun getViewModel(position: Int): StepViewModel {
         return StepViewModel.Builder(context)
-            .setTitle(newBusSteps[position].title)
+            .setTitle(newBusStepSteps[position].title)
             .create()
     }
 }
