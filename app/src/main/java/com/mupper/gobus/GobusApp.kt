@@ -13,9 +13,7 @@ class GobusApp : Application() {
 
     lateinit var component: GobusComponent
         private set
-
-    val db: GobusDatabase by lazy { component.gobusDatabaseComponent().db }
-
+    
     override fun onCreate() {
         super.onCreate()
 
