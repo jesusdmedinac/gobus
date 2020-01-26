@@ -2,21 +2,10 @@ package com.mupper.gobus.ui.bus.steps
 
 import android.os.Bundle
 import android.view.View
-import com.mupper.features.ShareActualLocation
-import com.mupper.features.bus.AddNewBusWithTravelers
-import com.mupper.features.bus.GetTravelingBus
-import com.mupper.features.traveler.GetActualTraveler
 import com.mupper.gobus.R
-import com.mupper.gobus.commons.extension.app
-import com.mupper.gobus.commons.extension.getViewModel
 import com.mupper.gobus.commons.newInstance
 import com.mupper.gobus.commons.stepper.StepFragment
-import com.mupper.gobus.data.source.traveler.TravelerRoomDataSource
-import com.mupper.gobus.data.source.bus.BusFirebaseDataSource
-import com.mupper.gobus.data.source.bus.BusRoomDataSource
-import com.mupper.gobus.data.source.traveler.TravelerFirebaseDataSource
 import com.mupper.gobus.databinding.FragmentBusNewPathNameBinding
-import com.mupper.gobus.viewmodel.BusViewModel
 import com.stepstone.stepper.VerificationError
 
 /**
@@ -32,22 +21,6 @@ class NewBusPathNameFragment : StepFragment<FragmentBusNewPathNameBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        busViewModel =
-            getViewModel {
-                BusViewModel(
-                    AddNewBusWithTravelers(
-                        GetActualTraveler(
-                            TravelerRoomDataSource(
-                                app.db
-                            ),
-                            TravelerFirebaseDataSource()
-                        ),
-                        BusRoomDataSource(app.db),
-                        BusFirebaseDataSource()
-                    )
-                )
-            }
 
         binding?.apply {
             bus = busViewModel

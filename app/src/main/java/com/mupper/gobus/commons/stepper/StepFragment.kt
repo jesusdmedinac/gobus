@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.mupper.gobus.commons.extension.bindingInflate
 import com.mupper.gobus.viewmodel.BusViewModel
 import com.stepstone.stepper.Step
+import org.koin.android.ext.android.inject
 
 
 /**
@@ -27,7 +28,7 @@ abstract class StepFragment<T : ViewDataBinding> : BindingFragment<T>(), Step {
 }
 
 abstract class BindingFragment<T : ViewDataBinding> : Fragment() {
-    lateinit var busViewModel: BusViewModel
+    val busViewModel: BusViewModel by inject()
     var binding: T? = null
 
     override fun onCreateView(
