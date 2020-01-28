@@ -15,4 +15,7 @@
     <string name="add_new_bus_title">Agregar un nuevo Bus</string>
     <string name="path_name_title">Nombre de la ruta</string>
     <string name="path_color_title">Color de la ruta</string>
+    <string name="bus_new_capacity">Capacidad del autobus</string>
+    <string name="bus_new_path_color">Color de la ruta</string>
+    <string name="bus_new_path_name">Nombre de la ruta</string>
 </resources>

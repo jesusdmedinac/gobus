@@ -29,6 +29,10 @@ android {
     dataBinding {
         enabled true
     }
+    lintOptions {
+        disable "UnsafeExperimentalUsageError",
+                "UnsafeExperimentalUsageWarning"
+    }
 }
 
 dependencies {
@@ -37,10 +41,10 @@ dependencies {
     implementation project(':domain')
     implementation project(':features')
 
-    def lifecycle_version = '2.1.0'
+    def lifecycle_version = '2.2.0'
     def gms_version = '17.0.0'
     def androidx_version = '1.1.0'
-    def material_version = '1.2.0-alpha03'
+    def material_version = '1.2.0-alpha04'
     def room_version = '2.2.3'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
