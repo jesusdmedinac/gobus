@@ -1,10 +1,10 @@
 package com.mupper.gobus.data.source.traveler
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.mupper.commons.COLLECTION_TRAVELER
 import com.mupper.data.source.firestore.TravelerRemoteDataSource
 import com.mupper.domain.LatLng
 import com.mupper.domain.traveler.Traveler
+import com.mupper.gobus.commons.COLLECTION_TRAVELER
 import com.mupper.gobus.data.toDomainTraveler
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume

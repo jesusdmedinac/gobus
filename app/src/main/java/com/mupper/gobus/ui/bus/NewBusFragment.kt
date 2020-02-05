@@ -16,7 +16,7 @@ import com.mupper.gobus.viewmodel.BusViewModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import com.stepstone.stepper.StepperLayout
 import com.stepstone.stepper.VerificationError
-import kotlinx.android.synthetic.main.fragment_bus_new.*
+import kotlinx.android.synthetic.main.fragment_bus_new.stepperLayout
 import org.koin.android.ext.android.inject
 
 /**

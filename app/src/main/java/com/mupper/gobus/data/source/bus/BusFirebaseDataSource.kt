@@ -1,13 +1,13 @@
 package com.mupper.gobus.data.source.bus
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.mupper.commons.COLLECTION_BUS
-import com.mupper.commons.FIELD_BUS_TRAVELERS
 import com.mupper.data.source.firestore.BusRemoteDataSource
 import com.mupper.domain.LatLng
 import com.mupper.domain.bus.Bus
 import com.mupper.domain.relations.BusWithTravelers
 import com.mupper.domain.traveler.Traveler
+import com.mupper.gobus.commons.COLLECTION_BUS
+import com.mupper.gobus.commons.FIELD_BUS_TRAVELERS
 import com.mupper.gobus.data.toDomainBus
 import com.mupper.gobus.data.toDomainBusWithTravelers
 import com.mupper.gobus.data.toDomainTraveler

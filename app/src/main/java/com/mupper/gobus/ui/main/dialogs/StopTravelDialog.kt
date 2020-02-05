@@ -5,8 +5,6 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mupper.gobus.R
-import com.mupper.gobus.commons.extension.getViewModel
-import com.mupper.gobus.model.TravelControl
 import com.mupper.gobus.viewmodel.TravelViewModel
 import org.koin.android.ext.android.inject
 

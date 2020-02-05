@@ -1,17 +1,26 @@
 package com.mupper.gobus.data
 
-import com.mupper.commons.*
+import com.mupper.gobus.commons.FIELDS_BUS
+import com.mupper.gobus.commons.FIELD_BUS_CAPACITY
+import com.mupper.gobus.commons.FIELD_BUS_COLOR
+import com.mupper.gobus.commons.FIELD_BUS_PATH
+import com.mupper.gobus.commons.FIELDS_TRAVELER
+import com.mupper.gobus.commons.FIELD_TRAVELER_CURRENT_POSITION
+import com.mupper.gobus.commons.FIELD_TRAVELER_CURRENT_POSITION_LATITUDE
+import com.mupper.gobus.commons.FIELD_TRAVELER_CURRENT_POSITION_LONGITUDE
+import com.mupper.gobus.commons.FIELD_TRAVELER_EMAIL
+import com.mupper.gobus.commons.FIELD_TRAVELER_IS_TRAVELING
 import com.mupper.gobus.commons.extension.hasAll
 import android.location.Location as AndroidLocation
-import com.mupper.gobus.data.database.bus.Bus as RoomBus
+import com.google.android.gms.maps.model.LatLng as MapsLatLng
+import com.mupper.domain.LatLng as DomainLatLng
 import com.mupper.domain.bus.Bus as DomainBus
-import com.mupper.gobus.data.database.relations.BusWithTravelers as RoomBusWithTravelers
 import com.mupper.domain.relations.BusWithTravelers as DomainBusWithTravelers
-import com.mupper.gobus.data.database.traveler.Traveler as RoomTraveler
 import com.mupper.domain.traveler.Traveler as DomainTraveler
 import com.mupper.gobus.data.database.CurrentPosition as RoomLatLng
-import com.mupper.domain.LatLng as DomainLatLng
-import com.google.android.gms.maps.model.LatLng as MapsLatLng
+import com.mupper.gobus.data.database.bus.Bus as RoomBus
+import com.mupper.gobus.data.database.relations.BusWithTravelers as RoomBusWithTravelers
+import com.mupper.gobus.data.database.traveler.Traveler as RoomTraveler
 
 // Bus
 fun DomainBus.toRoomBus() = RoomBus(
