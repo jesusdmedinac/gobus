@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavDirections
 import com.google.android.gms.maps.SupportMapFragment
-import com.mupper.commons.scope.ScoppedFragment
+import com.mupper.gobus.commons.scope.ScoppedFragment
 import com.mupper.gobus.PermissionRequester
 import com.mupper.gobus.R
 import com.mupper.gobus.commons.EventObserver

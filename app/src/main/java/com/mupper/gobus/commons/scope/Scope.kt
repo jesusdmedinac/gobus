@@ -1,4 +1,4 @@
-package com.mupper.commons.scope
+package com.mupper.gobus.commons.scope
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

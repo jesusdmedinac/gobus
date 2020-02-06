@@ -36,16 +36,7 @@ android {
     lintOptions {
         abortOnError false
     }
-    testOptions {
-        unitTests.all {
-            jacoco {
-                includeNoLocationClasses = true
-            }
-        }
-    }
 }
-
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest'])
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

@@ -1,6 +1,7 @@
-package com.mupper.commons.scope
+package com.mupper.gobus.commons.scope
 
 import androidx.fragment.app.Fragment
+import com.mupper.gobus.commons.scope.Scope
 
 
 /**
