@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
-apply plugin: 'org.sonarqube'
+apply from: 'jacoco.gradle'
 
 android {
     compileSdkVersion 29
@@ -18,6 +18,9 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            testCoverageEnabled = true
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -31,24 +34,18 @@ android {
         enabled true
     }
     lintOptions {
-        disable "UnsafeExperimentalUsageError",
-                "UnsafeExperimentalUsageWarning"
+        abortOnError false
+    }
+    testOptions {
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
+        }
     }
 }
 
-sonarqube {
-    properties {
-        property "sonar.projectName", "Gobus"
-        property "sonar.projectKey", "gobus-sonarqube"
-        property "sonar.host.url", "http://localhost:9000"
-        property "sonar.language", "kotlin"
-        property "sonar.sources", "src/main/java"
-        property "sonar.java.sources", "src/main/java"
-        property "sonar.sourceEncoding", "UTF-8"
-        property "sonar.login", "admin"
-        property "sonar.password", "admin"
-    }
-}
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest'])
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
