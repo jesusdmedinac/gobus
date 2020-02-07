@@ -6,24 +6,25 @@ import android.content.Context
 import android.location.LocationManager
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
+import com.mupper.domain.LatLng
+import com.mupper.gobus.data.source.LocationDataSource
 import com.mupper.gobus.model.PermissionChecker
 import com.mupper.gobus.model.PlayServicesLocationDataSource
-import com.mupper.gobus.model.Location
 
-class LocationRepository(val app: Application) {
+class PlayServiceLocationDataSource(val app: Application) : LocationDataSource {
 
     private val locationDataSource = PlayServicesLocationDataSource(app)
     private val fineLocationPermissionChecker =
         PermissionChecker(app, Manifest.permission.ACCESS_FINE_LOCATION)
 
-    suspend fun findLastLocation(): Location? {
+    override suspend fun findLastLocation(): LatLng? {
         if (!canAccessLocation()) {
             return null
         }
-        return Location(locationDataSource.findLastLocation())
+        return locationDataSource.findLastLocation()
     }
 
-    suspend fun requestLocationUpdates(
+    override suspend fun requestLocationUpdates(
         locationRequest: LocationRequest,
         locationCallback: LocationCallback
     ) {

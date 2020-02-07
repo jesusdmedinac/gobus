@@ -7,6 +7,7 @@ import com.mupper.domain.LatLng
 import com.mupper.domain.traveler.Traveler
 import com.mupper.features.ShareActualLocation
 import com.mupper.features.traveler.GetActualTraveler
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 
 
@@ -15,8 +16,9 @@ import kotlinx.coroutines.launch
  * Mupper
  */
 class TravelerViewModel(
-    private val shareActualLocation: ShareActualLocation
-) : ScopedViewModel() {
+    private val shareActualLocation: ShareActualLocation,
+    uiDispatcher: CoroutineDispatcher
+) : ScopedViewModel(uiDispatcher) {
     fun shareActualLocation(newLocation: LatLng) {
         launch {
             shareActualLocation.invoke(newLocation)

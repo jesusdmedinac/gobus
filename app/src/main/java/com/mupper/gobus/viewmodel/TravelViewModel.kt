@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.mupper.commons.scope.ScopedViewModel
 import com.mupper.gobus.commons.Event
 import com.mupper.gobus.model.TravelControl
+import kotlinx.coroutines.CoroutineDispatcher
 
 
 /**
@@ -13,8 +14,9 @@ import com.mupper.gobus.model.TravelControl
  * Mupper
  */
 class TravelViewModel(
-    private val travelControl: TravelControl
-) : ScopedViewModel() {
+    private val travelControl: TravelControl,
+    uiDispatcher: CoroutineDispatcher
+) : ScopedViewModel(uiDispatcher) {
     private val _navigateToStartTravelDialog = MutableLiveData<Event<Unit>>()
     val navigateToStartTravelDialog: LiveData<Event<Unit>> get() = _navigateToStartTravelDialog
 

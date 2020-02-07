@@ -1,9 +1,9 @@
-package com.mupper.gobus.data.source.bus
+package com.mupper.gobus.data.source.firebase
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mupper.commons.COLLECTION_BUS
 import com.mupper.commons.FIELD_BUS_TRAVELERS
-import com.mupper.data.source.firestore.BusRemoteDataSource
+import com.mupper.data.source.remote.BusRemoteDataSource
 import com.mupper.domain.LatLng
 import com.mupper.domain.bus.Bus
 import com.mupper.domain.relations.BusWithTravelers

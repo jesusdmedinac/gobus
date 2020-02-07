@@ -1,7 +1,7 @@
 package com.mupper.features.traveler
 
-import com.mupper.data.source.firestore.TravelerRemoteDataSource
-import com.mupper.data.source.room.TravelerLocalDataSource
+import com.mupper.data.source.remote.TravelerRemoteDataSource
+import com.mupper.data.source.local.TravelerLocalDataSource
 import com.mupper.domain.LatLng
 import com.mupper.domain.traveler.Traveler
 

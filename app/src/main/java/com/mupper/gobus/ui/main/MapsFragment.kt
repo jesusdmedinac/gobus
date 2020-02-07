@@ -19,9 +19,11 @@ import com.mupper.gobus.viewmodel.MapsViewModel
 import com.mupper.gobus.viewmodel.MapsViewModel.MapsModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import com.mupper.gobus.viewmodel.TravelerViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.android.inject
 
-class MapsFragment : ScoppedFragment() {
+class MapsFragment : ScoppedFragment(Dispatchers.Main) {
 
     private val mapsViewModel: MapsViewModel by inject()
     private val travelViewModel: TravelViewModel by inject()

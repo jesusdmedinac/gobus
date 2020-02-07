@@ -1,34 +1,27 @@
 package com.mupper.gobus.model
 
 import android.app.Application
-import android.location.Location
+import android.location.Location as AndroidLocation
 import android.os.Looper
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
+import com.mupper.domain.LatLng
+import com.mupper.gobus.data.source.LocationDataSource
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
-
-interface LocationDataSource {
-    suspend fun findLastLocation(): Location?
-
-    suspend fun requestLocationUpdates(
-        locationRequest: LocationRequest,
-        locationCallback: LocationCallback
-    )
-}
 
 class PlayServicesLocationDataSource(app: Application) : LocationDataSource {
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(app)
 
-    override suspend fun findLastLocation(): Location? =
+    override suspend fun findLastLocation(): LatLng? =
         suspendCancellableCoroutine { continuation ->
             fusedLocationClient.lastLocation
                 .addOnCompleteListener {
                     if (it.isSuccessful && it.result != null) {
-                        continuation.resume(it.result)
+                        continuation.resume(Location(it.result).getLatLng())
                     } else {
-                        continuation.resume(Location("dummyprovider"))
+                        continuation.resume(Location(AndroidLocation("dummyprovider")).getLatLng())
                     }
                 }
         }

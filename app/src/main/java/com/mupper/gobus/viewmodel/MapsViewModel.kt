@@ -15,19 +15,22 @@ import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.mupper.commons.scope.ScopedViewModel
+import com.mupper.data.source.resources.MapResourcesDataSource
 import com.mupper.domain.LatLng
 import com.mupper.gobus.commons.Event
+import com.mupper.gobus.data.source.LocationDataSource
 import com.mupper.gobus.data.toDomainLatLng
 import com.mupper.gobus.data.toMapsLatLng
-import com.mupper.gobus.repository.LocationRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import com.google.android.gms.maps.model.LatLng as MapsLatLng
 
 
 class MapsViewModel(
-    private val locationRepository: LocationRepository,
-    private val bitmapDescriptor: BitmapDescriptor
-) : ScopedViewModel() {
+    private val locationDataSource: LocationDataSource,
+    private val mapResourcesDataSource: MapResourcesDataSource<BitmapDescriptor>,
+    uiDispatcher: CoroutineDispatcher
+) : ScopedViewModel(uiDispatcher) {
 
     private var googleMap: GoogleMap? = null
     private var travelerMarker: Marker? = null
@@ -96,7 +99,7 @@ class MapsViewModel(
 
     fun onNewLocationRequested() {
         launch {
-            val lastLatLng: LatLng? = locationRepository.findLastLocation()?.getLatLng()
+            val lastLatLng: LatLng? = locationDataSource.findLastLocation()
             lastLatLng?.let {
                 onLocationChanged(it)
 
@@ -119,7 +122,7 @@ class MapsViewModel(
                 priority = LocationRequest.PRIORITY_HIGH_ACCURACY
                 interval = 1000
             }
-            locationRepository.requestLocationUpdates(locationRequest, locationCallback)
+            locationDataSource.requestLocationUpdates(locationRequest, locationCallback)
         }
     }
 
@@ -129,7 +132,7 @@ class MapsViewModel(
             travelerMarkerOptions = MarkerOptions().apply {
                 position(mapsLatLng)
                     ?.title("User position")
-                icon(bitmapDescriptor)
+                icon(mapResourcesDataSource.getBusIcon())
             }
 
             googleMap?.addMarker(travelerMarkerOptions)?.let {

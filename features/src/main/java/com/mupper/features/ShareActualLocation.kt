@@ -1,13 +1,12 @@
 package com.mupper.features
 
-import com.mupper.data.source.firestore.BusRemoteDataSource
-import com.mupper.data.source.firestore.TravelerRemoteDataSource
-import com.mupper.data.source.room.BusLocalDataSource
-import com.mupper.data.source.room.TravelerLocalDataSource
+import com.mupper.data.source.remote.BusRemoteDataSource
+import com.mupper.data.source.remote.TravelerRemoteDataSource
+import com.mupper.data.source.local.BusLocalDataSource
+import com.mupper.data.source.local.TravelerLocalDataSource
 import com.mupper.domain.LatLng
 import com.mupper.domain.traveler.Traveler
 import com.mupper.features.bus.GetTravelingBus
-import com.mupper.features.traveler.GetActualTraveler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

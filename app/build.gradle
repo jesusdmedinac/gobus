@@ -6,12 +6,12 @@ apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 28
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.mupper.gobus"
         minSdkVersion 24
-        targetSdkVersion 29
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -22,16 +22,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    dataBinding {
+        enabled true
+    }
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
-    dataBinding {
-        enabled true
-    }
     lintOptions {
         disable "UnsafeExperimentalUsageError",
                 "UnsafeExperimentalUsageWarning"
+    }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
     }
 }
 

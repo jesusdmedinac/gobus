@@ -1,6 +1,7 @@
 package com.mupper.gobus.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.mupper.gobus.R
 

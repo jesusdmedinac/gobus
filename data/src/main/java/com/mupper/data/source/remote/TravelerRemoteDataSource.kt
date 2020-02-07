@@ -1,4 +1,4 @@
-package com.mupper.data.source.firestore
+package com.mupper.data.source.remote
 
 import com.mupper.domain.traveler.Traveler
 

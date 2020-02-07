@@ -8,6 +8,7 @@ import com.mupper.domain.bus.Bus as DomainBus
 import com.mupper.features.bus.AddNewBusWithTravelers
 import com.mupper.features.ShareActualLocation
 import com.mupper.gobus.commons.Event
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -17,8 +18,9 @@ import kotlinx.coroutines.launch
  * Mupper
  */
 class BusViewModel(
-    private val addNewBusWithTravelers: AddNewBusWithTravelers
-) : ScopedViewModel() {
+    private val addNewBusWithTravelers: AddNewBusWithTravelers,
+    uiDispatcher: CoroutineDispatcher
+) : ScopedViewModel(uiDispatcher) {
     val pathName = MutableLiveData<String>()
 
     val pathColor = MutableLiveData<String>()

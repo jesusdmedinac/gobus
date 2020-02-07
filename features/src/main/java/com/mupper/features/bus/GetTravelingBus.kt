@@ -1,7 +1,7 @@
 package com.mupper.features.bus
 
-import com.mupper.data.source.firestore.BusRemoteDataSource
-import com.mupper.data.source.room.BusLocalDataSource
+import com.mupper.data.source.remote.BusRemoteDataSource
+import com.mupper.data.source.local.BusLocalDataSource
 import com.mupper.domain.relations.BusWithTravelers
 
 class GetTravelingBus(

@@ -1,4 +1,4 @@
-package com.mupper.data.source.room
+package com.mupper.data.source.local
 
 import com.mupper.domain.bus.Bus
 import com.mupper.domain.relations.BusWithTravelers

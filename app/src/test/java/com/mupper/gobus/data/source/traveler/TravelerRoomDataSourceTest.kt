@@ -2,6 +2,7 @@ package com.mupper.gobus.data.source.traveler
 
 import com.mupper.gobus.data.database.GobusDatabase
 import com.mupper.gobus.data.database.traveler.TravelerDao
+import com.mupper.gobus.data.source.room.TravelerRoomDataSource
 import com.mupper.gobus.data.toRoomTraveler
 import com.mupper.sharedtestcode.mockedTraveler
 import com.mupper.sharedtestcode.mockedTravelingPath
@@ -11,7 +12,6 @@ import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 
-import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
@@ -31,7 +31,8 @@ class TravelerRoomDataSourceTest {
     @Before
     fun setUp() {
         whenever(db.travelerDao()).thenReturn(travelerDao)
-        travelerRoomDataSource = TravelerRoomDataSource(db)
+        travelerRoomDataSource =
+            TravelerRoomDataSource(db)
     }
 
     @Test

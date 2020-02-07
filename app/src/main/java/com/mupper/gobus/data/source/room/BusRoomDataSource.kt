@@ -1,6 +1,6 @@
-package com.mupper.gobus.data.source.bus
+package com.mupper.gobus.data.source.room
 
-import com.mupper.data.source.room.BusLocalDataSource
+import com.mupper.data.source.local.BusLocalDataSource
 import com.mupper.domain.relations.BusWithTravelers
 import com.mupper.gobus.data.database.GobusDatabase
 import com.mupper.domain.bus.Bus as DomainBus

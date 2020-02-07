@@ -1,6 +1,6 @@
 package com.mupper.features.bus
 
-import com.mupper.data.source.room.BusLocalDataSource
+import com.mupper.data.source.local.BusLocalDataSource
 
 class IsBusInDb(
     private val busLocalDataSource: BusLocalDataSource,
