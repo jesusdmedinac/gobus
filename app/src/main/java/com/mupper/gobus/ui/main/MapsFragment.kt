@@ -5,9 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections
 import com.google.android.gms.maps.SupportMapFragment
-import com.mupper.gobus.commons.scope.ScoppedFragment
 import com.mupper.gobus.PermissionRequester
 import com.mupper.gobus.R
 import com.mupper.gobus.commons.EventObserver
@@ -19,11 +19,9 @@ import com.mupper.gobus.viewmodel.MapsViewModel
 import com.mupper.gobus.viewmodel.MapsViewModel.MapsModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import com.mupper.gobus.viewmodel.TravelerViewModel
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.android.inject
 
-class MapsFragment : ScoppedFragment(Dispatchers.Main) {
+class MapsFragment : Fragment() {
 
     private val mapsViewModel: MapsViewModel by inject()
     private val travelViewModel: TravelViewModel by inject()

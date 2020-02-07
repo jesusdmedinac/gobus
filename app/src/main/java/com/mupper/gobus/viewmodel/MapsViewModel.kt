@@ -14,6 +14,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.mupper.data.source.resources.MapResourcesDataSource
 import com.mupper.gobus.commons.scope.ScopedViewModel
 import com.mupper.domain.LatLng
 import com.mupper.gobus.commons.Event

@@ -11,13 +11,11 @@ import com.mupper.features.ShareActualLocation
 import com.mupper.features.bus.AddNewBusWithTravelers
 import com.mupper.features.bus.GetTravelingBus
 import com.mupper.features.traveler.GetActualTraveler
-import com.mupper.gobus.commons.extension.getBitmapFromVector
-import com.mupper.gobus.commons.extension.getCompatColor
 import com.mupper.gobus.data.database.GobusDatabase
 import com.mupper.gobus.data.source.LocationDataSource
 import com.mupper.gobus.data.source.firebase.BusFirebaseDataSource
-import com.mupper.gobus.data.source.room.BusRoomDataSource
 import com.mupper.gobus.data.source.firebase.TravelerFirebaseDataSource
+import com.mupper.gobus.data.source.room.BusRoomDataSource
 import com.mupper.gobus.data.source.resources.MapBitmapDescriptorDataSource
 import com.mupper.gobus.data.source.room.TravelerRoomDataSource
 import com.mupper.gobus.model.TravelControl
