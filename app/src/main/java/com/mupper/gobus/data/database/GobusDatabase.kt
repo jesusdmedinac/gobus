@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.mupper.commons.DATABASE_NAME
+import com.mupper.gobus.commons.DATABASE_NAME
 import com.mupper.gobus.data.database.bus.Bus
 import com.mupper.gobus.data.database.bus.BusDao
 import com.mupper.gobus.data.database.traveler.Traveler
@@ -16,7 +16,8 @@ import com.mupper.gobus.data.database.traveler.TravelerDao
  */
 @Database(
     entities = [Traveler::class, Bus::class],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 abstract class GobusDatabase : RoomDatabase() {
     abstract fun travelerDao(): TravelerDao

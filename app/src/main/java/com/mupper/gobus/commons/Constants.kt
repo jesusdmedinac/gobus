@@ -1,4 +1,4 @@
-package com.mupper.commons
+package com.mupper.gobus.commons
 
 
 /**

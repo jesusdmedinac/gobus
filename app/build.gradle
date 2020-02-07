@@ -3,7 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-kapt'
-apply plugin: "androidx.navigation.safeargs.kotlin"
+apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply from: 'jacoco.gradle'
 
 android {
     compileSdkVersion 28
@@ -17,6 +18,9 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            testCoverageEnabled = true
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -30,8 +34,7 @@ android {
         targetCompatibility = 1.8
     }
     lintOptions {
-        disable "UnsafeExperimentalUsageError",
-                "UnsafeExperimentalUsageWarning"
+        abortOnError false
     }
     testOptions {
         unitTests {
@@ -43,7 +46,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation project(':commons')
     implementation project(':data')
     implementation project(':domain')
     implementation project(':features')

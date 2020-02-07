@@ -1,13 +1,8 @@
 package com.mupper.gobus.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.mupper.commons.scope.ScopedViewModel
+import com.mupper.gobus.commons.scope.ScopedViewModel
 import com.mupper.domain.LatLng
-import com.mupper.domain.traveler.Traveler
 import com.mupper.features.ShareActualLocation
-import com.mupper.features.traveler.GetActualTraveler
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 
 
