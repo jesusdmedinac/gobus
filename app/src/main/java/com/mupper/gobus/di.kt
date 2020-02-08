@@ -9,7 +9,7 @@ import com.mupper.data.source.local.TravelerLocalDataSource
 import com.mupper.data.source.resources.MapResourcesDataSource
 import com.mupper.features.ShareActualLocation
 import com.mupper.features.bus.AddNewBusWithTravelers
-import com.mupper.features.bus.GetTravelingBus
+import com.mupper.features.bus.GetActualBusWithTravelers
 import com.mupper.features.traveler.GetActualTraveler
 import com.mupper.gobus.data.database.GobusDatabase
 import com.mupper.gobus.data.source.LocationDataSource
@@ -29,6 +29,7 @@ import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 fun Application.initDI() {
@@ -39,13 +40,20 @@ fun Application.initDI() {
     }
 }
 
+const val staticUserEmail = "dmc12345628@gmail.com"
+const val staticUserEmailName = "staticUserEmail"
+const val uiDispatcherDependencieName = "uiDispatcher"
+const val ioDispatcherDependencieName = "ioDispatcher"
+
 private val appModule = module {
     single { GobusDatabase.getInstance(get()) }
     factory<MapResourcesDataSource<BitmapDescriptor>> { MapBitmapDescriptorDataSource(get()) }
-    single<CoroutineDispatcher> { Dispatchers.Main }
+    single<CoroutineDispatcher>(named(uiDispatcherDependencieName)) { Dispatchers.Main }
+    single(named(ioDispatcherDependencieName)) { Dispatchers.IO }
 }
 
 val dataModule = module {
+    single(named(staticUserEmailName)) { staticUserEmail }
     factory { TravelControl(get()) }
     factory<LocationDataSource> { PlayServiceLocationDataSource(get()) }
     factory<BusLocalDataSource> {
@@ -63,15 +71,23 @@ val dataModule = module {
 }
 
 private val featureModule = module {
-    factory { GetActualTraveler(get(), get()) }
-    factory { AddNewBusWithTravelers(get(), get(), get()) }
-    factory { GetTravelingBus(get(), get()) }
-    factory { ShareActualLocation(get(), get(), get(), get(), get()) }
+    factory { GetActualTraveler(get(named(staticUserEmailName)), get(), get()) }
+    factory { AddNewBusWithTravelers(get(), get(), get(), get(named(ioDispatcherDependencieName))) }
+    factory { GetActualBusWithTravelers(get(), get()) }
+    factory {
+        ShareActualLocation(
+            get(), get(), get(), get(), get(), get(
+                named(
+                    ioDispatcherDependencieName
+                )
+            )
+        )
+    }
 }
 
 private val viewModelModule = module {
-    factory { MapsViewModel(get(), get(), get()) }
-    factory { TravelerViewModel(get(), get()) }
-    factory { TravelViewModel(get(), get()) }
-    factory { BusViewModel(get(), get()) }
+    factory { MapsViewModel(get(), get(), get(named(uiDispatcherDependencieName))) }
+    factory { TravelerViewModel(get(), get(named(uiDispatcherDependencieName))) }
+    factory { TravelViewModel(get(), get(named(uiDispatcherDependencieName))) }
+    factory { BusViewModel(get(), get(named(uiDispatcherDependencieName))) }
 }

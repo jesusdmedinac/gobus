@@ -6,19 +6,21 @@ import com.mupper.data.source.local.BusLocalDataSource
 import com.mupper.data.source.local.TravelerLocalDataSource
 import com.mupper.domain.LatLng
 import com.mupper.domain.traveler.Traveler
-import com.mupper.features.bus.GetTravelingBus
+import com.mupper.features.bus.GetActualBusWithTravelers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class ShareActualLocation(
-    private val getTravelingBus: GetTravelingBus,
+    private val getActualBusWithTravelers: GetActualBusWithTravelers,
     private val travelerLocalDataSource: TravelerLocalDataSource,
     private val travelerRemoteDataSource: TravelerRemoteDataSource,
     private val busLocalDataSource: BusLocalDataSource,
-    private val busRemoteDataSource: BusRemoteDataSource
+    private val busRemoteDataSource: BusRemoteDataSource,
+    private val dispatcher: CoroutineDispatcher
 ) {
-    suspend fun invoke(newLatLng: LatLng) = withContext(Dispatchers.IO) {
-        val travelingBus = getTravelingBus.getActualBusWithTravelers()
+    suspend fun invoke(newLatLng: LatLng) = withContext(dispatcher) {
+        val travelingBus = getActualBusWithTravelers.invoke()
         travelingBus?.let {
             val travelersInBus = it.travelers
             if (travelersInBus.isNullOrEmpty()) {

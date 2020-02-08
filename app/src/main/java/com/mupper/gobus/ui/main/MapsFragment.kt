@@ -65,11 +65,11 @@ class MapsFragment : Fragment() {
 
     private fun initObservers() {
         mapsViewModel.model.observe(
-            this,
+            viewLifecycleOwner,
             EventObserver(::onMapsModelChange)
         )
 
-        mapsViewModel.requestLocationPermission.observe(this,
+        mapsViewModel.requestLocationPermission.observe(viewLifecycleOwner,
             EventObserver {
                 locationPermissionRequester.request {
                     if (it)
@@ -77,13 +77,13 @@ class MapsFragment : Fragment() {
                 }
             })
 
-        travelViewModel.navigateToStartTravelDialog.observe(this,
+        travelViewModel.navigateToStartTravelDialog.observe(viewLifecycleOwner,
             EventObserver {
                 val toStartTravel: NavDirections =
                     MapsFragmentDirections.actionMapsFragmentToStartTravelFragment()
                 navigate(toStartTravel)
             })
-        travelViewModel.navigateToStopTravelDialog.observe(this,
+        travelViewModel.navigateToStopTravelDialog.observe(viewLifecycleOwner,
             EventObserver {
                 val toStopTravel: NavDirections =
                     MapsFragmentDirections.actionMapsFragmentToStopTravelFragment()
@@ -91,7 +91,7 @@ class MapsFragment : Fragment() {
             })
 
         travelViewModel.travelState.observe(
-            this,
+            viewLifecycleOwner,
             EventObserver(::onTravelModelChange)
         )
     }

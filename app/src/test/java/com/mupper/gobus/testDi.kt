@@ -4,6 +4,7 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.mupper.data.source.resources.BusIcon
 import com.mupper.data.source.resources.MapResourcesDataSource
+import com.mupper.features.bus.AddNewBusWithTravelers
 import com.mupper.features.traveler.GetActualTraveler
 import com.mupper.gobus.commons.extension.getBitmapFromVector
 import com.mupper.gobus.commons.extension.getCompatColor
@@ -34,6 +35,7 @@ private val mockedAppModule = module {
 
 private val featureModule = module {
     factory { GetActualTraveler(get(), get()) }
+    factory { AddNewBusWithTravelers(get(), get(), get(), get()) }
 }
 
 private val mockedViewModule: Module = module {

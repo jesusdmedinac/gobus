@@ -4,11 +4,11 @@ import com.mupper.data.source.remote.BusRemoteDataSource
 import com.mupper.data.source.local.BusLocalDataSource
 import com.mupper.domain.relations.BusWithTravelers
 
-class GetTravelingBus(
+class GetActualBusWithTravelers(
     private val busLocalDataSource: BusLocalDataSource,
     private val busRemoteDataSource: BusRemoteDataSource
 ) {
-    suspend fun getActualBusWithTravelers(): BusWithTravelers? {
+    suspend fun invoke(): BusWithTravelers? {
         val busWithTravelers: List<BusWithTravelers> = busLocalDataSource.getTravelingBusWithTravelers()
         if (busWithTravelers.isEmpty()) {
             return null

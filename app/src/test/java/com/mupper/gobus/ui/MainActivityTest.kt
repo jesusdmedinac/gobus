@@ -6,19 +6,13 @@ import androidx.navigation.findNavController
 import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.runner.AndroidJUnit4
-import com.google.android.gms.maps.model.BitmapDescriptor
 import com.mupper.gobus.R
 import com.mupper.gobus.initMockedDi
-import com.mupper.gobus.viewmodel.MapsViewModel
-import com.mupper.gobus.viewmodel.TravelViewModel
-import com.mupper.gobus.viewmodel.TravelerViewModel
-import com.nhaarman.mockitokotlin2.mock
 import org.hamcrest.core.Is.`is`
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.koin.dsl.module
 import org.koin.test.AutoCloseKoinTest
 
 @RunWith(AndroidJUnit4::class)
