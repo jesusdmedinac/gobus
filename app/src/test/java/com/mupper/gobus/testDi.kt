@@ -24,7 +24,7 @@ fun initMockedDi() {
     stopKoin()
     startKoin {
         androidContext(app)
-        modules(listOf(mockedAppModule, dataModule, featureModule, mockedViewModule))
+        modules(listOf(mockedAppModule, dataSourceModule, featureModule, mockedViewModule))
     }
 }
 
@@ -34,8 +34,8 @@ private val mockedAppModule = module {
 }
 
 private val featureModule = module {
-    factory { GetActualTraveler(get(), get()) }
-    factory { AddNewBusWithTravelers(get(), get(), get(), get()) }
+    factory { GetActualTraveler(get(), get(), get()) }
+    factory { AddNewBusWithTravelers(get(), get(), get()) }
 }
 
 private val mockedViewModule: Module = module {

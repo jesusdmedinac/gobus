@@ -1,7 +1,6 @@
 package com.mupper.features.bus
 
-import com.mupper.data.source.local.BusLocalDataSource
-import com.mupper.data.source.remote.BusRemoteDataSource
+import com.mupper.data.repository.BusRepository
 import com.mupper.features.traveler.GetActualTraveler
 import com.mupper.sharedtestcode.mockedBus
 import com.mupper.sharedtestcode.mockedTraveler
@@ -22,17 +21,14 @@ class AddNewBusWithTravelersTest {
     lateinit var getActualTraveler: GetActualTraveler
 
     @Mock
-    lateinit var busLocalDataSource: BusLocalDataSource
-
-    @Mock
-    lateinit var busRemoteDataSource: BusRemoteDataSource
+    lateinit var busRepository: BusRepository
 
     lateinit var addNewBusWithTravelers: AddNewBusWithTravelers
 
     @Before
     fun setUp() {
         addNewBusWithTravelers =
-            AddNewBusWithTravelers(getActualTraveler, busLocalDataSource, busRemoteDataSource, Dispatchers.Unconfined)
+            AddNewBusWithTravelers(getActualTraveler, busRepository, Dispatchers.Unconfined)
     }
 
     @Test
@@ -51,7 +47,7 @@ class AddNewBusWithTravelersTest {
     }
 
     @Test
-    fun `invoke should call addNewBusWithTravelers of busRemoteDataSource with given Bus and Traveler`() {
+    fun `invoke should call addNewBusWithTravelers of busRepository with given Bus and Traveler`() {
         runBlocking {
             // GIVEN
             val expectedBus = mockedBus.copy()
@@ -62,23 +58,7 @@ class AddNewBusWithTravelersTest {
             addNewBusWithTravelers.invoke(expectedBus)
 
             // THEN
-            verify(busRemoteDataSource).addNewBusWithTravelers(expectedBus, expectedTraveler)
-        }
-    }
-
-    @Test
-    fun `invoke should call addNewBus of busLocalDataSource with given Bus`() {
-        runBlocking {
-            // GIVEN
-            val expectedBus = mockedBus.copy()
-            val expectedTraveler = mockedTraveler.copy()
-            given(getActualTraveler.invoke(expectedBus.path)).willReturn(expectedTraveler)
-
-            // WHEN
-            addNewBusWithTravelers.invoke(expectedBus)
-
-            // THEN
-            verify(busLocalDataSource).addNewBus(expectedBus)
+            verify(busRepository).addNewBusWithTravelers(expectedBus, expectedTraveler)
         }
     }
 }

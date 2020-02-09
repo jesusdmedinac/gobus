@@ -2,10 +2,11 @@ package com.mupper.gobus
 
 import android.app.Application
 import com.google.android.gms.maps.model.BitmapDescriptor
-import com.mupper.data.source.remote.BusRemoteDataSource
-import com.mupper.data.source.remote.TravelerRemoteDataSource
+import com.mupper.data.repository.BusRepositoryDerived
 import com.mupper.data.source.local.BusLocalDataSource
 import com.mupper.data.source.local.TravelerLocalDataSource
+import com.mupper.data.source.remote.BusRemoteDataSource
+import com.mupper.data.source.remote.TravelerRemoteDataSource
 import com.mupper.data.source.resources.MapResourcesDataSource
 import com.mupper.features.ShareActualLocation
 import com.mupper.features.bus.AddNewBusWithTravelers
@@ -15,8 +16,8 @@ import com.mupper.gobus.data.database.GobusDatabase
 import com.mupper.gobus.data.source.LocationDataSource
 import com.mupper.gobus.data.source.firebase.BusFirebaseDataSource
 import com.mupper.gobus.data.source.firebase.TravelerFirebaseDataSource
-import com.mupper.gobus.data.source.room.BusRoomDataSource
 import com.mupper.gobus.data.source.resources.MapBitmapDescriptorDataSource
+import com.mupper.gobus.data.source.room.BusRoomDataSource
 import com.mupper.gobus.data.source.room.TravelerRoomDataSource
 import com.mupper.gobus.model.TravelControl
 import com.mupper.gobus.repository.PlayServiceLocationDataSource
@@ -36,23 +37,31 @@ fun Application.initDI() {
     startKoin {
         androidLogger()
         androidContext(this@initDI)
-        modules(listOf(appModule, dataModule, featureModule, viewModelModule))
+        modules(
+            listOf(
+                appModule,
+                dataSourceModule,
+                repositoryModule,
+                featureModule,
+                viewModelModule
+            )
+        )
     }
 }
 
 const val staticUserEmail = "dmc12345628@gmail.com"
 const val staticUserEmailName = "staticUserEmail"
-const val uiDispatcherDependencieName = "uiDispatcher"
-const val ioDispatcherDependencieName = "ioDispatcher"
+const val uiDispatcherDependencyName = "uiDispatcher"
+const val ioDispatcherDependencyName = "ioDispatcher"
 
 private val appModule = module {
     single { GobusDatabase.getInstance(get()) }
     factory<MapResourcesDataSource<BitmapDescriptor>> { MapBitmapDescriptorDataSource(get()) }
-    single<CoroutineDispatcher>(named(uiDispatcherDependencieName)) { Dispatchers.Main }
-    single(named(ioDispatcherDependencieName)) { Dispatchers.IO }
+    single<CoroutineDispatcher>(named(uiDispatcherDependencyName)) { Dispatchers.Main }
+    single(named(ioDispatcherDependencyName)) { Dispatchers.IO }
 }
 
-val dataModule = module {
+val dataSourceModule = module {
     single(named(staticUserEmailName)) { staticUserEmail }
     factory { TravelControl(get()) }
     factory<LocationDataSource> { PlayServiceLocationDataSource(get()) }
@@ -70,15 +79,19 @@ val dataModule = module {
     factory<TravelerRemoteDataSource> { TravelerFirebaseDataSource() }
 }
 
+val repositoryModule = module {
+    factory { BusRepositoryDerived(get(), get()) }
+}
+
 private val featureModule = module {
     factory { GetActualTraveler(get(named(staticUserEmailName)), get(), get()) }
-    factory { AddNewBusWithTravelers(get(), get(), get(), get(named(ioDispatcherDependencieName))) }
+    factory { AddNewBusWithTravelers(get(), get(), get(named(ioDispatcherDependencyName))) }
     factory { GetActualBusWithTravelers(get(), get()) }
     factory {
         ShareActualLocation(
             get(), get(), get(), get(), get(), get(
                 named(
-                    ioDispatcherDependencieName
+                    ioDispatcherDependencyName
                 )
             )
         )
@@ -86,8 +99,8 @@ private val featureModule = module {
 }
 
 private val viewModelModule = module {
-    factory { MapsViewModel(get(), get(), get(named(uiDispatcherDependencieName))) }
-    factory { TravelerViewModel(get(), get(named(uiDispatcherDependencieName))) }
-    factory { TravelViewModel(get(), get(named(uiDispatcherDependencieName))) }
-    factory { BusViewModel(get(), get(named(uiDispatcherDependencieName))) }
+    factory { MapsViewModel(get(), get(), get(named(uiDispatcherDependencyName))) }
+    factory { TravelerViewModel(get(), get(named(uiDispatcherDependencyName))) }
+    factory { TravelViewModel(get(), get(named(uiDispatcherDependencyName))) }
+    factory { BusViewModel(get(), get(named(uiDispatcherDependencyName))) }
 }
