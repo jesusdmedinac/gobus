@@ -1,12 +1,6 @@
 package com.mupper.data.source.resources
 
-import androidx.annotation.ColorInt
-import androidx.annotation.DrawableRes
-
-data class BusIcon(
-    @DrawableRes val vectorResourceId: Int,
-    @ColorInt val tintColor: Int
-)
+import com.mupper.domain.resources.BusIcon
 
 interface MapResourcesDataSource<B> {
     var busIcon: BusIcon

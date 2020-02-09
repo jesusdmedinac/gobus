@@ -2,8 +2,8 @@ package com.mupper.gobus
 
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.google.android.gms.maps.model.BitmapDescriptor
-import com.mupper.data.source.resources.BusIcon
 import com.mupper.data.source.resources.MapResourcesDataSource
+import com.mupper.domain.resources.BusIcon
 import com.mupper.features.bus.AddNewBusWithTravelers
 import com.mupper.features.traveler.GetActualTraveler
 import com.mupper.gobus.commons.extension.getBitmapFromVector
@@ -24,17 +24,24 @@ fun initMockedDi() {
     stopKoin()
     startKoin {
         androidContext(app)
-        modules(listOf(mockedAppModule, dataSourceModule, featureModule, mockedViewModule))
+        modules(
+            listOf(
+                mockedAppModule,
+                dataSourceModule,
+                repositoryModule,
+                featureModule,
+                mockedViewModule
+            )
+        )
     }
 }
 
 private val mockedAppModule = module {
-    factory<MapResourcesDataSource<BitmapDescriptor>> { FakeMapResourceDataSource() }
     single { Dispatchers.Unconfined }
 }
 
 private val featureModule = module {
-    factory { GetActualTraveler(get(), get(), get()) }
+    factory { GetActualTraveler(get()) }
     factory { AddNewBusWithTravelers(get(), get(), get()) }
 }
 

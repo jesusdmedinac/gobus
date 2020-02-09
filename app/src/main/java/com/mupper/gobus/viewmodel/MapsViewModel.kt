@@ -14,10 +14,10 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.mupper.data.source.resources.MapResourcesDataSource
-import com.mupper.gobus.commons.scope.ScopedViewModel
+import com.mupper.data.repository.MapResourcesRepository
 import com.mupper.domain.LatLng
 import com.mupper.gobus.commons.Event
+import com.mupper.gobus.commons.scope.ScopedViewModel
 import com.mupper.gobus.data.source.LocationDataSource
 import com.mupper.gobus.data.toDomainLatLng
 import com.mupper.gobus.data.toMapsLatLng
@@ -28,7 +28,7 @@ import com.google.android.gms.maps.model.LatLng as MapsLatLng
 
 class MapsViewModel(
     private val locationDataSource: LocationDataSource,
-    private val mapResourcesDataSource: MapResourcesDataSource<BitmapDescriptor>,
+    private val mapResourcesRepository: MapResourcesRepository<BitmapDescriptor>,
     uiDispatcher: CoroutineDispatcher
 ) : ScopedViewModel(uiDispatcher) {
 
@@ -130,9 +130,8 @@ class MapsViewModel(
         val mapsLatLng = latLng.toMapsLatLng()
         if (travelerMarkerOptions == null || travelerMarker == null) {
             travelerMarkerOptions = MarkerOptions().apply {
-                position(mapsLatLng)
-                    ?.title("User position")
-                icon(mapResourcesDataSource.getBusIcon())
+                position(mapsLatLng)?.title("User position")
+                icon(mapResourcesRepository.getBusIcon())
             }
 
             googleMap?.addMarker(travelerMarkerOptions)?.let {

@@ -3,6 +3,9 @@ package com.mupper.gobus
 import android.app.Application
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.mupper.data.repository.BusRepositoryDerived
+import com.mupper.data.repository.MapResourcesRepository
+import com.mupper.data.repository.MapResourcesRepositoryDerived
+import com.mupper.data.repository.TravelerRepositoryDerived
 import com.mupper.data.source.local.BusLocalDataSource
 import com.mupper.data.source.local.TravelerLocalDataSource
 import com.mupper.data.source.remote.BusRemoteDataSource
@@ -56,13 +59,13 @@ const val ioDispatcherDependencyName = "ioDispatcher"
 
 private val appModule = module {
     single { GobusDatabase.getInstance(get()) }
-    factory<MapResourcesDataSource<BitmapDescriptor>> { MapBitmapDescriptorDataSource(get()) }
     single<CoroutineDispatcher>(named(uiDispatcherDependencyName)) { Dispatchers.Main }
     single(named(ioDispatcherDependencyName)) { Dispatchers.IO }
 }
 
 val dataSourceModule = module {
     single(named(staticUserEmailName)) { staticUserEmail }
+    factory<MapResourcesDataSource<BitmapDescriptor>> { MapBitmapDescriptorDataSource(get()) }
     factory { TravelControl(get()) }
     factory<LocationDataSource> { PlayServiceLocationDataSource(get()) }
     factory<BusLocalDataSource> {
@@ -80,21 +83,17 @@ val dataSourceModule = module {
 }
 
 val repositoryModule = module {
+    factory<MapResourcesRepository<BitmapDescriptor>> { MapResourcesRepositoryDerived(get()) }
     factory { BusRepositoryDerived(get(), get()) }
+    factory { TravelerRepositoryDerived(get(named(staticUserEmailName)), get(), get()) }
 }
 
 private val featureModule = module {
-    factory { GetActualTraveler(get(named(staticUserEmailName)), get(), get()) }
+    factory { GetActualTraveler(get()) }
     factory { AddNewBusWithTravelers(get(), get(), get(named(ioDispatcherDependencyName))) }
-    factory { GetActualBusWithTravelers(get(), get()) }
+    factory { GetActualBusWithTravelers(get()) }
     factory {
-        ShareActualLocation(
-            get(), get(), get(), get(), get(), get(
-                named(
-                    ioDispatcherDependencyName
-                )
-            )
-        )
+        ShareActualLocation(get(), get(), get(), get(named(ioDispatcherDependencyName)))
     }
 }
 

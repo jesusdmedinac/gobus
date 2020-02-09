@@ -2,8 +2,6 @@ package com.mupper.gobus.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.runner.AndroidJUnit4
-import com.mupper.gobus.commons.extension.getOrAwaitValue
-import com.mupper.gobus.commons.extension.observeForTesting
 import com.mupper.gobus.initMockedDi
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.MatcherAssert.assertThat
@@ -45,12 +43,8 @@ class MapsViewModelTest : AutoCloseKoinTest() {
         // GIVEN
 
         // WHEN
-        mapsViewModel.onPermissionsRequested()
 
         // THEN
-        mapsViewModel.model.observeForTesting {
-
-        }
     }
 
     // TODO: ViewModel should call initGoogleMap when onPermissionRequested is call

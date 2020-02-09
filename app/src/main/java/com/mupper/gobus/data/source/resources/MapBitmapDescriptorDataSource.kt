@@ -2,8 +2,8 @@ package com.mupper.gobus.data.source.resources
 
 import android.app.Application
 import com.google.android.gms.maps.model.BitmapDescriptor
-import com.mupper.data.source.resources.BusIcon
 import com.mupper.data.source.resources.MapResourcesDataSource
+import com.mupper.domain.resources.BusIcon
 import com.mupper.gobus.R
 import com.mupper.gobus.commons.extension.getBitmapFromVector
 import com.mupper.gobus.commons.extension.getCompatColor
