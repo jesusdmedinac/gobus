@@ -1,9 +1,7 @@
 package com.mupper.features
 
-import com.mupper.data.source.local.BusLocalDataSource
-import com.mupper.data.source.local.TravelerLocalDataSource
-import com.mupper.data.source.remote.BusRemoteDataSource
-import com.mupper.data.source.remote.TravelerRemoteDataSource
+import com.mupper.data.repository.BusRepository
+import com.mupper.data.repository.TravelerRepository
 import com.mupper.features.bus.GetActualBusWithTravelers
 import com.mupper.sharedtestcode.mockedBusWithTravelers
 import com.mupper.sharedtestcode.mockedLatLng
@@ -25,16 +23,10 @@ class ShareActualLocationTest {
     lateinit var getActualBusWithTravelers: GetActualBusWithTravelers
 
     @Mock
-    lateinit var travelerLocalDataSource: TravelerLocalDataSource
+    lateinit var travelerRepository: TravelerRepository
 
     @Mock
-    lateinit var travelerRemoteDataSource: TravelerRemoteDataSource
-
-    @Mock
-    lateinit var busLocalDataSource: BusLocalDataSource
-
-    @Mock
-    lateinit var busRemoteDataSource: BusRemoteDataSource
+    lateinit var busRepository: BusRepository
 
     lateinit var shareActualLocation: ShareActualLocation
 
@@ -42,10 +34,8 @@ class ShareActualLocationTest {
     fun setUp() {
         shareActualLocation = ShareActualLocation(
             getActualBusWithTravelers,
-            travelerLocalDataSource,
-            travelerRemoteDataSource,
-            busLocalDataSource,
-            busRemoteDataSource,
+            travelerRepository,
+            busRepository,
             Dispatchers.Unconfined
         )
     }
@@ -74,10 +64,8 @@ class ShareActualLocationTest {
             shareActualLocation.invoke(mockedLatLng.copy())
 
             // THEN
-            verifyZeroInteractions(busLocalDataSource)
-            verifyZeroInteractions(busRemoteDataSource)
-            verifyZeroInteractions(travelerLocalDataSource)
-            verifyZeroInteractions(travelerRemoteDataSource)
+            verifyZeroInteractions(busRepository)
+            verifyZeroInteractions(travelerRepository)
         }
     }
 
@@ -85,9 +73,10 @@ class ShareActualLocationTest {
     fun `invoke should call shareActualLocation of busLocalDataSource with found busWithTravelers when busWithTravelers has travelers`() {
         runBlocking {
             // GIVEN
+            val expectedTraveler = mockedTraveler.copy("traveler 1")
             val expectedBusWithTravelersWithTravelers = mockedBusWithTravelers.copy(
                 travelers = listOf(
-                    mockedTraveler.copy("traveler 1"),
+                    expectedTraveler,
                     mockedTraveler.copy("traveler 2")
                 )
             )
@@ -99,7 +88,10 @@ class ShareActualLocationTest {
             shareActualLocation.invoke(mockedLatLng.copy())
 
             // THEN
-            verify(busLocalDataSource).shareActualLocation(expectedBusWithTravelersWithTravelers)
+            verify(busRepository).shareActualLocation(
+                expectedBusWithTravelersWithTravelers,
+                expectedTraveler
+            )
         }
     }
 
@@ -122,7 +114,7 @@ class ShareActualLocationTest {
             shareActualLocation.invoke(mockedLatLng.copy())
 
             // THEN
-            verify(busRemoteDataSource).shareActualLocation(
+            verify(busRepository).shareActualLocation(
                 expectedBusWithTravelersWithTravelers,
                 expectedTraveler
             )
@@ -148,7 +140,7 @@ class ShareActualLocationTest {
             shareActualLocation.invoke(mockedLatLng.copy())
 
             // THEN
-            verify(travelerLocalDataSource).shareActualLocation(expectedTraveler)
+            verify(travelerRepository).shareActualLocation(expectedTraveler)
         }
     }
 
@@ -171,7 +163,7 @@ class ShareActualLocationTest {
             shareActualLocation.invoke(mockedLatLng.copy())
 
             // THEN
-            verify(travelerRemoteDataSource).shareActualLocation(expectedTraveler)
+            verify(travelerRepository).shareActualLocation(expectedTraveler)
         }
     }
 }

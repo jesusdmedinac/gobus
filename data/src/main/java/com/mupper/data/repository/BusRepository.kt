@@ -10,6 +10,8 @@ interface BusRepository {
     suspend fun addNewBusWithTravelers(bus: Bus, traveler: Traveler)
 
     suspend fun getTravelingBusWithTravelers(): List<BusWithTravelers>
+
+    suspend fun shareActualLocation(travelingBus: BusWithTravelers, traveler: Traveler)
 }
 
 private class BusRepositoryImpl(
@@ -23,6 +25,11 @@ private class BusRepositoryImpl(
 
     override suspend fun getTravelingBusWithTravelers(): List<BusWithTravelers> =
         busLocalDataSource.getTravelingBusWithTravelers()
+
+    override suspend fun shareActualLocation(travelingBus: BusWithTravelers, traveler: Traveler) {
+        busLocalDataSource.shareActualLocation(travelingBus)
+        busRemoteDataSource.shareActualLocation(travelingBus, traveler)
+    }
 }
 
 class BusRepositoryDerived(
