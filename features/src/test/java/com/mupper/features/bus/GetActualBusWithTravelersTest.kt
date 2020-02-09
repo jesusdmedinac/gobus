@@ -1,8 +1,6 @@
 package com.mupper.features.bus
 
-import com.mupper.data.source.local.BusLocalDataSource
-import com.mupper.data.source.remote.BusRemoteDataSource
-import com.mupper.domain.relations.BusWithTravelers
+import com.mupper.data.repository.BusRepository
 import com.mupper.sharedtestcode.mockedBusWithTravelers
 import com.nhaarman.mockitokotlin2.given
 import kotlinx.coroutines.runBlocking
@@ -18,23 +16,20 @@ import org.mockito.junit.MockitoJUnitRunner
 @RunWith(MockitoJUnitRunner::class)
 class GetActualBusWithTravelersTest {
     @Mock
-    lateinit var busLocalDataSource: BusLocalDataSource
-
-    @Mock
-    lateinit var busRemoteDataSource: BusRemoteDataSource
+    lateinit var busRepository: BusRepository
 
     lateinit var getActualBusWithTravelers: GetActualBusWithTravelers
 
     @Before
     fun setUp() {
-        getActualBusWithTravelers = GetActualBusWithTravelers(busLocalDataSource, busRemoteDataSource)
+        getActualBusWithTravelers = GetActualBusWithTravelers(busRepository)
     }
 
     @Test
     fun `invoke should return null when getTravelingBusWithTravelers returns empty list`() {
         runBlocking {
             // GIVEN
-            given(busLocalDataSource.getTravelingBusWithTravelers()).willReturn(emptyList())
+            given(busRepository.getTravelingBusWithTravelers()).willReturn(emptyList())
 
             // WHEN
             val busWithTravelers = getActualBusWithTravelers.invoke()
@@ -53,7 +48,7 @@ class GetActualBusWithTravelersTest {
                 expectedBusWithTravelers,
                 mockedBusWithTravelers.copy("path 2")
             )
-            given(busLocalDataSource.getTravelingBusWithTravelers()).willReturn(busWithTravelers)
+            given(busRepository.getTravelingBusWithTravelers()).willReturn(busWithTravelers)
 
             // WHEN
             val actualBusWithTravelers = getActualBusWithTravelers.invoke()

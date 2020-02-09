@@ -1,15 +1,13 @@
 package com.mupper.features.bus
 
-import com.mupper.data.source.remote.BusRemoteDataSource
-import com.mupper.data.source.local.BusLocalDataSource
+import com.mupper.data.repository.BusRepository
 import com.mupper.domain.relations.BusWithTravelers
 
 class GetActualBusWithTravelers(
-    private val busLocalDataSource: BusLocalDataSource,
-    private val busRemoteDataSource: BusRemoteDataSource
+    private val busRepository: BusRepository
 ) {
     suspend fun invoke(): BusWithTravelers? {
-        val busWithTravelers: List<BusWithTravelers> = busLocalDataSource.getTravelingBusWithTravelers()
+        val busWithTravelers: List<BusWithTravelers> = busRepository.getTravelingBusWithTravelers()
         if (busWithTravelers.isEmpty()) {
             return null
         }

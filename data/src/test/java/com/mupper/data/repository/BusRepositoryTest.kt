@@ -42,4 +42,15 @@ class BusRepositoryTest {
             verify(busRemoteDataSource).addNewBusWithTravelers(expectedBus, expectedTraveler)
         }
     }
+
+    @Test
+    fun `getTravelingBusWithTravelers should call getTravelingBusWithTravelers of busLocalDataSource`() {
+        runBlocking {
+            // WHEN
+            busRepository.getTravelingBusWithTravelers()
+
+            // THEN
+            verify(busLocalDataSource).getTravelingBusWithTravelers()
+        }
+    }
 }
