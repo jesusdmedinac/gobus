@@ -3,17 +3,23 @@ package com.mupper.gobus.data.source.location
 import android.Manifest
 import android.app.Application
 import android.content.Context
+import android.location.Location as AndroidLocation
 import android.location.LocationManager
+import android.os.Looper
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
 import com.mupper.data.source.location.LocationDataSource
 import com.mupper.domain.LatLng
+import com.mupper.gobus.data.mapper.toDomainLatLng
 import com.mupper.gobus.model.PermissionChecker
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
 
 class PlayServicesLocationDataSource(val app: Application) :
     LocationDataSource<LocationRequest, LocationCallback> {
 
-    private val locationDataSource = PlayServicesLocationDataSource(app)
+    private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(app)
     private val fineLocationPermissionChecker =
         PermissionChecker(app, Manifest.permission.ACCESS_FINE_LOCATION)
 
@@ -21,7 +27,16 @@ class PlayServicesLocationDataSource(val app: Application) :
         if (!canAccessLocation()) {
             return null
         }
-        return locationDataSource.findLastLocation()
+        return suspendCancellableCoroutine { continuation ->
+            fusedLocationClient.lastLocation
+                .addOnCompleteListener {
+                    if (it.isSuccessful && it.result != null) {
+                        continuation.resume(AndroidLocation(it.result).toDomainLatLng())
+                    } else {
+                        continuation.resume(AndroidLocation("dummyprovider").toDomainLatLng())
+                    }
+                }
+        }
     }
 
     override suspend fun requestLocationUpdates(
@@ -31,7 +46,12 @@ class PlayServicesLocationDataSource(val app: Application) :
         if (!canAccessLocation()) {
             return
         }
-        locationDataSource.requestLocationUpdates(locationRequest, locationCallback)
+
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.getMainLooper()
+        )
     }
 
     private fun isLocationEnabled(): Boolean {
