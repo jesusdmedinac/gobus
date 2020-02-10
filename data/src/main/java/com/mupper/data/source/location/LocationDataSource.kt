@@ -1,10 +1,8 @@
-package com.mupper.gobus.data.source
+package com.mupper.data.source.location
 
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
 import com.mupper.domain.LatLng
 
-interface LocationDataSource {
+interface LocationDataSource<LocationRequest, LocationCallback> {
     suspend fun findLastLocation(): LatLng?
 
     suspend fun requestLocationUpdates(

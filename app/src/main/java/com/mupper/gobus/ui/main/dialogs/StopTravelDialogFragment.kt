@@ -13,7 +13,7 @@ import org.koin.android.ext.android.inject
  * Created by jesus.medina on 12/2019.
  * Mupper
  */
-class StopTravelDialog : DialogFragment() {
+class StopTravelDialogFragment : DialogFragment() {
 
     private val travelViewModel: TravelViewModel by inject()
 

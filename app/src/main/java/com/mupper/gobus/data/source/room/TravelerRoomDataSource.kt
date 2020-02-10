@@ -2,8 +2,8 @@ package com.mupper.gobus.data.source.room
 
 import com.mupper.data.source.local.TravelerLocalDataSource
 import com.mupper.gobus.data.database.GobusDatabase
-import com.mupper.gobus.data.toDomainTraveler
-import com.mupper.gobus.data.toRoomTraveler
+import com.mupper.gobus.data.mapper.toDomainTraveler
+import com.mupper.gobus.data.mapper.toRoomTraveler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import com.mupper.domain.traveler.Traveler as DomainTraveler

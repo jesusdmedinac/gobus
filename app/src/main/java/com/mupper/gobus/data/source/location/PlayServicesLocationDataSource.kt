@@ -1,4 +1,4 @@
-package com.mupper.gobus.repository
+package com.mupper.gobus.data.source.location
 
 import android.Manifest
 import android.app.Application
@@ -6,12 +6,12 @@ import android.content.Context
 import android.location.LocationManager
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
+import com.mupper.data.source.location.LocationDataSource
 import com.mupper.domain.LatLng
-import com.mupper.gobus.data.source.LocationDataSource
 import com.mupper.gobus.model.PermissionChecker
-import com.mupper.gobus.model.PlayServicesLocationDataSource
 
-class PlayServiceLocationDataSource(val app: Application) : LocationDataSource {
+class PlayServicesLocationDataSource(val app: Application) :
+    LocationDataSource<LocationRequest, LocationCallback> {
 
     private val locationDataSource = PlayServicesLocationDataSource(app)
     private val fineLocationPermissionChecker =

@@ -22,14 +22,14 @@ class NewBusStepperAdapter(
 ) :
     AbstractFragmentStepAdapter(fm, context) {
 
-    override fun createStep(position: Int): Step {
+    @Throws(IllegalArgumentException::class)
+    override fun createStep(position: Int): Step =
         when (position) {
-            0 -> return NewBusPathNameFragment.newInstance()
-            1 -> return NewBusPathColorFragment.newInstance()
-            2 -> return NewBusCapacityFragment.newInstance()
-            else -> throw IllegalArgumentException("Unsupported position: " + position)
+            0 -> NewBusPathNameFragment.newInstance()
+            1 -> NewBusPathColorFragment.newInstance()
+            2 -> NewBusCapacityFragment.newInstance()
+            else -> throw IllegalArgumentException("Unsupported position: $position")
         }
-    }
 
     override fun getCount(): Int = newBusStepSteps.size
 

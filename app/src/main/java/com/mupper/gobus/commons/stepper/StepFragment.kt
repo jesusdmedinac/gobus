@@ -20,7 +20,7 @@ import org.koin.android.ext.android.inject
 abstract class StepFragment<T : ViewDataBinding> : BindingFragment<T>(), Step {
 
     companion object {
-        val LAYOUT_RESOURCE_ID_ARG_KEY = "messageResourceId"
+        const val LAYOUT_RESOURCE_ID_ARG_KEY = "messageResourceId"
     }
 
     override val layoutResId: Int

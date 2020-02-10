@@ -3,7 +3,7 @@ package com.mupper.gobus.data.source.traveler
 import com.mupper.gobus.data.database.GobusDatabase
 import com.mupper.gobus.data.database.traveler.TravelerDao
 import com.mupper.gobus.data.source.room.TravelerRoomDataSource
-import com.mupper.gobus.data.toRoomTraveler
+import com.mupper.gobus.data.mapper.toRoomTraveler
 import com.mupper.sharedtestcode.mockedTraveler
 import com.mupper.sharedtestcode.mockedTravelingPath
 import com.nhaarman.mockitokotlin2.verify

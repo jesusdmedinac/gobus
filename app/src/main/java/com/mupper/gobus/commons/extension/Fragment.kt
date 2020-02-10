@@ -25,11 +25,6 @@ val Fragment.supportFragmentManager: FragmentManager
         ?: java.lang.IllegalStateException("Fragment needs to be attach to the activity to access the App instance"))
             as FragmentManager
 
-fun <T : ViewDataBinding> Fragment.bindingInflate(
-    @LayoutRes layoutRes: Int
-): T =
-    DataBindingUtil.setContentView(requireActivity(), layoutRes)
-
 fun Fragment.navController() = view?.findNavController()
 
 fun Fragment.navigate(directions: NavDirections) {

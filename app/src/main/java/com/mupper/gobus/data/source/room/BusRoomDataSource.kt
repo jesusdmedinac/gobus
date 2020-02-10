@@ -4,8 +4,8 @@ import com.mupper.data.source.local.BusLocalDataSource
 import com.mupper.domain.relations.BusWithTravelers
 import com.mupper.gobus.data.database.GobusDatabase
 import com.mupper.domain.bus.Bus as DomainBus
-import com.mupper.gobus.data.toRoomBus
-import com.mupper.gobus.data.toDomainBusWithTravelers
+import com.mupper.gobus.data.mapper.toRoomBus
+import com.mupper.gobus.data.mapper.toDomainBusWithTravelers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

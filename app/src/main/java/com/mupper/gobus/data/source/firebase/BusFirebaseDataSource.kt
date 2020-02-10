@@ -8,9 +8,9 @@ import com.mupper.domain.relations.BusWithTravelers
 import com.mupper.domain.traveler.Traveler
 import com.mupper.gobus.commons.COLLECTION_BUS
 import com.mupper.gobus.commons.FIELD_BUS_TRAVELERS
-import com.mupper.gobus.data.toDomainBus
-import com.mupper.gobus.data.toDomainBusWithTravelers
-import com.mupper.gobus.data.toDomainTraveler
+import com.mupper.gobus.data.mapper.toDomainBus
+import com.mupper.gobus.data.mapper.toDomainBusWithTravelers
+import com.mupper.gobus.data.mapper.toDomainTraveler
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 

@@ -5,7 +5,7 @@ import com.mupper.data.source.remote.TravelerRemoteDataSource
 import com.mupper.domain.LatLng
 import com.mupper.domain.traveler.Traveler
 import com.mupper.gobus.commons.COLLECTION_TRAVELER
-import com.mupper.gobus.data.toDomainTraveler
+import com.mupper.gobus.data.mapper.toDomainTraveler
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 

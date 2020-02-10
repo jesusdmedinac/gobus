@@ -19,7 +19,7 @@ import org.koin.android.ext.android.inject
  * Created by jesus.medina on 12/2019.
  * Mupper
  */
-class StartTravelDialog : DialogFragment() {
+class StartTravelDialogFragment : DialogFragment() {
 
     private val travelViewModel: TravelViewModel by inject()
 
@@ -43,10 +43,10 @@ class StartTravelDialog : DialogFragment() {
     ): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
-        travelViewModel.navigateToBusNavigation.observe(this,
+        travelViewModel.navigateToBusNavigation.observe(viewLifecycleOwner,
             EventObserver {
                 val toBusNavigation: NavDirections =
-                    StartTravelDialogDirections.actionStartTravelFragmentToBusNav()
+                    StartTravelDialogFragmentDirections.actionStartTravelFragmentToBusNav()
                 navigate(toBusNavigation)
             })
 

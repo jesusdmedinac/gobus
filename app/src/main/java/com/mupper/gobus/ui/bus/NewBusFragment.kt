@@ -59,11 +59,17 @@ class NewBusFragment : Fragment(), StepperLayout.StepperListener {
         }
     }
 
-    override fun onStepSelected(newStepPosition: Int) {}
+    override fun onStepSelected(newStepPosition: Int) {
+        // TODO: Animation
+    }
 
-    override fun onError(verificationError: VerificationError?) {}
+    override fun onError(verificationError: VerificationError?) {
+        // TODO: Handle error
+    }
 
-    override fun onReturn() {}
+    override fun onReturn() {
+        // TODO: Animation
+    }
 
     override fun onCompleted(completeButton: View?) {
         busViewModel.saveNewBusToStartTravel()
