@@ -46,15 +46,15 @@ class NewBusPathColorFragment : StepFragment<FragmentBusNewPathColorBinding>() {
     }
 
     override fun onSelected() {
-        // TODO: Animation
+        // TOD O: Animation
     }
 
     override fun verifyStep(): VerificationError? {
-        // TODO: Handle error
+        // TOD O: Handle error
         return null
     }
 
     override fun onError(error: VerificationError) {
-        // TODO: Handle error
+        // TOD O: Handle error
     }
 }

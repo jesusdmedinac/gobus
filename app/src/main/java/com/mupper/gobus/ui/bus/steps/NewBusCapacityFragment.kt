@@ -1,6 +1,5 @@
 package com.mupper.gobus.ui.bus.steps
 
-
 import android.os.Bundle
 import android.view.View
 import com.mupper.gobus.R
@@ -31,15 +30,15 @@ class NewBusCapacityFragment : StepFragment<FragmentBusNewCapacityBinding>() {
     }
 
     override fun onSelected() {
-        // TODO: Animation
+        // TOD O: Animation
     }
 
     override fun verifyStep(): VerificationError? {
-        // TODO: Handle error
+        // TOD O: Handle error
         return null
     }
 
     override fun onError(error: VerificationError) {
-        // TODO: Handle error
+        // TOD O: Handle error
     }
 }

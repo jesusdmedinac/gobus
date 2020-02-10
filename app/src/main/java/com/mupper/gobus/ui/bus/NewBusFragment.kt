@@ -16,7 +16,7 @@ import com.mupper.gobus.viewmodel.BusViewModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import com.stepstone.stepper.StepperLayout
 import com.stepstone.stepper.VerificationError
-import kotlinx.android.synthetic.main.fragment_bus_new.stepperLayout
+import kotlinx.android.synthetic.main.fragment_bus_new.*
 import org.koin.android.ext.android.inject
 
 /**
@@ -60,15 +60,15 @@ class NewBusFragment : Fragment(), StepperLayout.StepperListener {
     }
 
     override fun onStepSelected(newStepPosition: Int) {
-        // TODO: Animation
+        // TOD O: Animation
     }
 
     override fun onError(verificationError: VerificationError?) {
-        // TODO: Handle error
+        // TOD O: Handle error
     }
 
     override fun onReturn() {
-        // TODO: Animation
+        // TOD O: Animation
     }
 
     override fun onCompleted(completeButton: View?) {

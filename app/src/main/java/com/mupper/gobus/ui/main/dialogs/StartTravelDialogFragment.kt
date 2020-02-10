@@ -14,7 +14,6 @@ import com.mupper.gobus.commons.extension.navigate
 import com.mupper.gobus.viewmodel.TravelViewModel
 import org.koin.android.ext.android.inject
 
-
 /**
  * Created by jesus.medina on 12/2019.
  * Mupper

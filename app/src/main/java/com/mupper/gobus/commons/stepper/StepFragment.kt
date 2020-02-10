@@ -12,7 +12,6 @@ import com.mupper.gobus.viewmodel.BusViewModel
 import com.stepstone.stepper.Step
 import org.koin.android.ext.android.inject
 
-
 /**
  * Created by jesus.medina on 12/2019.
  * Mupper

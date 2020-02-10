@@ -17,11 +17,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.mupper.data.repository.MapResourcesRepository
 import com.mupper.data.source.location.LocationDataSource
 import com.mupper.domain.LatLng
-import com.mupper.gobus.commons.Event
-import com.mupper.gobus.commons.MILISECONDS_ONE_SECOND
-import com.mupper.gobus.commons.MILLISECONDS_TEN_MILLIS
-import com.mupper.gobus.commons.MILLISECONDS_SIXTEEN_MILLIS
-import com.mupper.gobus.commons.GOOGLE_MAP_DEFAULT_ZOOM
+import com.mupper.gobus.commons.*
 import com.mupper.gobus.commons.scope.ScopedViewModel
 import com.mupper.gobus.data.mapper.toDomainLatLng
 import com.mupper.gobus.data.mapper.toMapsLatLng
@@ -29,7 +25,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import com.google.android.gms.maps.model.LatLng as MapsLatLng
 
-// TODO: Extract traveler properties and function to TravelerViewModel
+// TOD O: Extract traveler properties and function to TravelerViewModel
 class MapsViewModel(
     private val locationDataSource: LocationDataSource<LocationRequest, LocationCallback>,
     private val mapResourcesRepository: MapResourcesRepository<BitmapDescriptor>,

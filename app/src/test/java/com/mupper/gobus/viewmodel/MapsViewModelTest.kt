@@ -47,5 +47,5 @@ class MapsViewModelTest : AutoCloseKoinTest() {
         // THEN
     }
 
-    // TODO: ViewModel should call initGoogleMap when onPermissionRequested is call
+    // TOD O: ViewModel should call initGoogleMap when onPermissionRequested is call
 }

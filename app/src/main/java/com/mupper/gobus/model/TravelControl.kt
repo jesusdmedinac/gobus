@@ -5,7 +5,6 @@ import com.mupper.gobus.R
 import com.mupper.gobus.commons.extension.getCompatColor
 import com.mupper.gobus.commons.extension.getCompatDrawable
 
-
 /**
  * Created by jesus.medina on 12/2019.
  * Mupper

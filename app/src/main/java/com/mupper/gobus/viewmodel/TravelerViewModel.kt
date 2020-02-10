@@ -1,11 +1,10 @@
 package com.mupper.gobus.viewmodel
 
-import com.mupper.gobus.commons.scope.ScopedViewModel
 import com.mupper.domain.LatLng
 import com.mupper.features.ShareActualLocation
+import com.mupper.gobus.commons.scope.ScopedViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
-
 
 /**
  * Created by jesus.medina on 12/2019.

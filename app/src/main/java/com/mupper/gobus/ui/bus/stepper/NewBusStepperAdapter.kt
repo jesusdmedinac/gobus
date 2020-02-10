@@ -2,14 +2,13 @@ package com.mupper.gobus.ui.bus.stepper
 
 import android.content.Context
 import androidx.fragment.app.FragmentManager
-import com.mupper.gobus.ui.bus.steps.NewBusStep
 import com.mupper.gobus.ui.bus.steps.NewBusCapacityFragment
 import com.mupper.gobus.ui.bus.steps.NewBusPathColorFragment
 import com.mupper.gobus.ui.bus.steps.NewBusPathNameFragment
+import com.mupper.gobus.ui.bus.steps.NewBusStep
 import com.stepstone.stepper.Step
 import com.stepstone.stepper.adapter.AbstractFragmentStepAdapter
 import com.stepstone.stepper.viewmodel.StepViewModel
-
 
 /**
  * Created by jesus.medina on 12/2019.

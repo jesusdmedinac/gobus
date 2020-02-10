@@ -3,11 +3,10 @@ package com.mupper.gobus.viewmodel
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.mupper.gobus.commons.scope.ScopedViewModel
 import com.mupper.gobus.commons.Event
+import com.mupper.gobus.commons.scope.ScopedViewModel
 import com.mupper.gobus.model.TravelControl
 import kotlinx.coroutines.CoroutineDispatcher
-
 
 /**
  * Created by jesus.medina on 12/2019.

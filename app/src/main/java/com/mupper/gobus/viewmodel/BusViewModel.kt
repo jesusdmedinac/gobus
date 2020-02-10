@@ -2,14 +2,13 @@ package com.mupper.gobus.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.mupper.gobus.commons.scope.ScopedViewModel
-import com.mupper.domain.bus.Bus as DomainBus
 import com.mupper.features.bus.AddNewBusWithTravelers
 import com.mupper.gobus.commons.Event
+import com.mupper.gobus.commons.scope.ScopedViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
+import com.mupper.domain.bus.Bus as DomainBus
 
 /**
  * Created by jesus.medina on 12/2019.
