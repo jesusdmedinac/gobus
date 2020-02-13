@@ -2,14 +2,13 @@ package com.mupper.gobus.ui.bus.stepper
 
 import android.content.Context
 import androidx.fragment.app.FragmentManager
-import com.mupper.gobus.ui.bus.steps.NewBusStep
 import com.mupper.gobus.ui.bus.steps.NewBusCapacityFragment
 import com.mupper.gobus.ui.bus.steps.NewBusPathColorFragment
 import com.mupper.gobus.ui.bus.steps.NewBusPathNameFragment
+import com.mupper.gobus.ui.bus.steps.NewBusStep
 import com.stepstone.stepper.Step
 import com.stepstone.stepper.adapter.AbstractFragmentStepAdapter
 import com.stepstone.stepper.viewmodel.StepViewModel
-
 
 /**
  * Created by jesus.medina on 12/2019.
@@ -22,14 +21,14 @@ class NewBusStepperAdapter(
 ) :
     AbstractFragmentStepAdapter(fm, context) {
 
-    override fun createStep(position: Int): Step {
+    @Throws(IllegalArgumentException::class)
+    override fun createStep(position: Int): Step =
         when (position) {
-            0 -> return NewBusPathNameFragment.newInstance()
-            1 -> return NewBusPathColorFragment.newInstance()
-            2 -> return NewBusCapacityFragment.newInstance()
-            else -> throw IllegalArgumentException("Unsupported position: " + position)
+            0 -> NewBusPathNameFragment.newInstance()
+            1 -> NewBusPathColorFragment.newInstance()
+            2 -> NewBusCapacityFragment.newInstance()
+            else -> throw IllegalArgumentException("Unsupported position: $position")
         }
-    }
 
     override fun getCount(): Int = newBusStepSteps.size
 

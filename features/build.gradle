@@ -4,6 +4,9 @@ apply plugin: 'kotlin'
 dependencies {
     implementation project(":data")
     implementation project(":domain")
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation project(":sharedtestcode")
+
+    implementation kotlinLibs.values()
+
+    testImplementation testLibs.values()
 }

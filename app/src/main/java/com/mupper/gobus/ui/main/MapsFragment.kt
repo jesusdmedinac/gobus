@@ -5,9 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections
 import com.google.android.gms.maps.SupportMapFragment
-import com.mupper.commons.scope.ScoppedFragment
 import com.mupper.gobus.PermissionRequester
 import com.mupper.gobus.R
 import com.mupper.gobus.commons.EventObserver
@@ -21,7 +21,7 @@ import com.mupper.gobus.viewmodel.TravelViewModel
 import com.mupper.gobus.viewmodel.TravelerViewModel
 import org.koin.android.ext.android.inject
 
-class MapsFragment : ScoppedFragment() {
+class MapsFragment : Fragment() {
 
     private val mapsViewModel: MapsViewModel by inject()
     private val travelViewModel: TravelViewModel by inject()
@@ -65,11 +65,11 @@ class MapsFragment : ScoppedFragment() {
 
     private fun initObservers() {
         mapsViewModel.model.observe(
-            this,
+            viewLifecycleOwner,
             EventObserver(::onMapsModelChange)
         )
 
-        mapsViewModel.requestLocationPermission.observe(this,
+        mapsViewModel.requestLocationPermission.observe(viewLifecycleOwner,
             EventObserver {
                 locationPermissionRequester.request {
                     if (it)
@@ -77,13 +77,13 @@ class MapsFragment : ScoppedFragment() {
                 }
             })
 
-        travelViewModel.navigateToStartTravelDialog.observe(this,
+        travelViewModel.navigateToStartTravelDialog.observe(viewLifecycleOwner,
             EventObserver {
                 val toStartTravel: NavDirections =
                     MapsFragmentDirections.actionMapsFragmentToStartTravelFragment()
                 navigate(toStartTravel)
             })
-        travelViewModel.navigateToStopTravelDialog.observe(this,
+        travelViewModel.navigateToStopTravelDialog.observe(viewLifecycleOwner,
             EventObserver {
                 val toStopTravel: NavDirections =
                     MapsFragmentDirections.actionMapsFragmentToStopTravelFragment()
@@ -91,7 +91,7 @@ class MapsFragment : ScoppedFragment() {
             })
 
         travelViewModel.travelState.observe(
-            this,
+            viewLifecycleOwner,
             EventObserver(::onTravelModelChange)
         )
     }

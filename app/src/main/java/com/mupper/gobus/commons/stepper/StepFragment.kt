@@ -12,7 +12,6 @@ import com.mupper.gobus.viewmodel.BusViewModel
 import com.stepstone.stepper.Step
 import org.koin.android.ext.android.inject
 
-
 /**
  * Created by jesus.medina on 12/2019.
  * Mupper
@@ -20,7 +19,7 @@ import org.koin.android.ext.android.inject
 abstract class StepFragment<T : ViewDataBinding> : BindingFragment<T>(), Step {
 
     companion object {
-        val LAYOUT_RESOURCE_ID_ARG_KEY = "messageResourceId"
+        const val LAYOUT_RESOURCE_ID_ARG_KEY = "messageResourceId"
     }
 
     override val layoutResId: Int

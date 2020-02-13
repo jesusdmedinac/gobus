@@ -24,7 +24,7 @@ class NewBusPathColorFragment : StepFragment<FragmentBusNewPathColorBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        busViewModel.showColorPickerDialog.observe(this,
+        busViewModel.showColorPickerDialog.observe(viewLifecycleOwner,
             EventObserver { color ->
                 showColorPicker(color)
             })
@@ -46,10 +46,15 @@ class NewBusPathColorFragment : StepFragment<FragmentBusNewPathColorBinding>() {
     }
 
     override fun onSelected() {
+        // TOD O: Animation
     }
 
-    override fun verifyStep(): VerificationError? = null
+    override fun verifyStep(): VerificationError? {
+        // TOD O: Handle error
+        return null
+    }
 
     override fun onError(error: VerificationError) {
+        // TOD O: Handle error
     }
 }

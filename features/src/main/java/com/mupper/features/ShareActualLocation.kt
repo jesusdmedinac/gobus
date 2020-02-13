@@ -1,25 +1,21 @@
 package com.mupper.features
 
-import com.mupper.data.source.firestore.BusRemoteDataSource
-import com.mupper.data.source.firestore.TravelerRemoteDataSource
-import com.mupper.data.source.room.BusLocalDataSource
-import com.mupper.data.source.room.TravelerLocalDataSource
+import com.mupper.data.repository.BusRepository
+import com.mupper.data.repository.TravelerRepository
 import com.mupper.domain.LatLng
 import com.mupper.domain.traveler.Traveler
-import com.mupper.features.bus.GetTravelingBus
-import com.mupper.features.traveler.GetActualTraveler
-import kotlinx.coroutines.Dispatchers
+import com.mupper.features.bus.GetActualBusWithTravelers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
 class ShareActualLocation(
-    private val getTravelingBus: GetTravelingBus,
-    private val travelerLocalDataSource: TravelerLocalDataSource,
-    private val travelerRemoteDataSource: TravelerRemoteDataSource,
-    private val busLocalDataSource: BusLocalDataSource,
-    private val busRemoteDataSource: BusRemoteDataSource
+    private val getActualBusWithTravelers: GetActualBusWithTravelers,
+    private val travelerRepository: TravelerRepository,
+    private val busRepository: BusRepository,
+    private val dispatcher: CoroutineDispatcher
 ) {
-    suspend fun invoke(newLatLng: LatLng) = withContext(Dispatchers.IO) {
-        val travelingBus = getTravelingBus.getActualBusWithTravelers()
+    suspend fun invoke(newLatLng: LatLng) = withContext(dispatcher) {
+        val travelingBus = getActualBusWithTravelers.invoke()
         travelingBus?.let {
             val travelersInBus = it.travelers
             if (travelersInBus.isNullOrEmpty()) {
@@ -28,16 +24,14 @@ class ShareActualLocation(
             val travelerInBus = travelersInBus[0]
             travelerInBus.isTraveling = true
             travelerInBus.currentPosition = newLatLng
-            busLocalDataSource.shareActualLocation(travelingBus)
-            busRemoteDataSource.shareActualLocation(
+            busRepository.shareActualLocation(
                 travelingBus, Traveler(
                     travelerInBus.email,
                     newLatLng,
                     true
                 )
             )
-            travelerLocalDataSource.shareActualLocation(travelerInBus)
-            travelerRemoteDataSource.shareActualLocation(travelerInBus)
+            travelerRepository.shareActualLocation(travelerInBus)
         }
     }
 }

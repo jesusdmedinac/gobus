@@ -1,5 +1,6 @@
 package com.mupper.gobus.commons.extension
 
+import android.app.Application
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
@@ -31,11 +32,11 @@ fun Context.getCompatColor(colorId: Int): Int {
     return ContextCompat.getColor(this, colorId)
 }
 
-fun Resources.getBitmapFromVector(
+fun Application.getBitmapFromVector(
     @DrawableRes vectorResourceId: Int,
     @ColorInt tintColor: Int
 ): BitmapDescriptor {
-    val vectorDrawable = ResourcesCompat.getDrawable(this, vectorResourceId, null)
+    val vectorDrawable = ResourcesCompat.getDrawable(this.applicationContext.resources, vectorResourceId, null)
         ?: return BitmapDescriptorFactory.defaultMarker()
     val bitmap = Bitmap.createBitmap(
         vectorDrawable.intrinsicWidth,

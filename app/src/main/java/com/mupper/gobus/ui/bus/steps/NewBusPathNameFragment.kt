@@ -28,9 +28,16 @@ class NewBusPathNameFragment : StepFragment<FragmentBusNewPathNameBinding>() {
         }
     }
 
-    override fun onSelected() {}
+    override fun onSelected() {
+        // TOD O: Animation
+    }
 
-    override fun verifyStep(): VerificationError? = null
+    override fun verifyStep(): VerificationError? {
+        // TOD O: Handle error
+        return null
+    }
 
-    override fun onError(error: VerificationError) {}
+    override fun onError(error: VerificationError) {
+        // TOD O: Handle error
+    }
 }
