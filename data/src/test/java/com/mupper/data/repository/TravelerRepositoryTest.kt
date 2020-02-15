@@ -2,12 +2,9 @@ package com.mupper.data.repository
 
 import com.mupper.data.source.local.TravelerLocalDataSource
 import com.mupper.data.source.remote.TravelerRemoteDataSource
-import com.mupper.sharedtestcode.mockedTraveler
-import com.mupper.sharedtestcode.mockedTravelingPath
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.given
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import com.mupper.sharedtestcode.fakeTraveler
+import com.mupper.sharedtestcode.fakeTravelingPath
+import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
@@ -16,6 +13,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
+
 
 @RunWith(MockitoJUnitRunner::class)
 class TravelerRepositoryTest {
@@ -30,7 +28,7 @@ class TravelerRepositoryTest {
     @Before
     fun setUp() {
         travelerRepository = TravelerRepositoryDerived(
-            mockedTraveler.copy().email,
+            fakeTraveler.copy().email,
             travelerLocalDataSource,
             travelerRemoteDataSource
         )
@@ -41,13 +39,13 @@ class TravelerRepositoryTest {
         runBlocking {
             // GIVEN
             given(travelerLocalDataSource.getCount()).willReturn(1)
-            val expectedTraveler = mockedTraveler.copy()
+            val expectedTraveler = fakeTraveler.copy()
             given(travelerLocalDataSource.findTravelerByEmail(expectedTraveler.email)).willReturn(
                 expectedTraveler
             )
 
             // WHEN
-            val actualTraveler = travelerRepository.retrieveActualTraveler(mockedTravelingPath)
+            val actualTraveler = travelerRepository.retrieveActualTraveler(fakeTravelingPath)
 
             // THEN
             MatcherAssert.assertThat(actualTraveler, CoreMatchers.`is`(expectedTraveler))
@@ -61,10 +59,10 @@ class TravelerRepositoryTest {
             given(travelerLocalDataSource.getCount()).willReturn(0)
 
             // WHEN
-            travelerRepository.retrieveActualTraveler(mockedTravelingPath)
+            travelerRepository.retrieveActualTraveler(fakeTravelingPath)
 
             // THEN
-            verify(travelerLocalDataSource).findTravelerByEmail(mockedTraveler.copy().email)
+            verify(travelerLocalDataSource).findTravelerByEmail(fakeTraveler.copy().email)
         }
     }
 
@@ -75,10 +73,10 @@ class TravelerRepositoryTest {
             given(travelerLocalDataSource.getCount()).willReturn(0)
 
             // WHEN
-            travelerRepository.retrieveActualTraveler(mockedTravelingPath)
+            travelerRepository.retrieveActualTraveler(fakeTravelingPath)
 
             // THEN
-            verify(travelerRemoteDataSource).findTravelerByEmail(mockedTraveler.copy().email)
+            verify(travelerRemoteDataSource).findTravelerByEmail(fakeTraveler.copy().email)
         }
     }
 
@@ -87,13 +85,13 @@ class TravelerRepositoryTest {
         runBlocking {
             // GIVEN
             given(travelerLocalDataSource.getCount()).willReturn(0)
-            val expectedTraveler = mockedTraveler.copy()
+            val expectedTraveler = fakeTraveler.copy()
             given(travelerRemoteDataSource.findTravelerByEmail(expectedTraveler.email)).willReturn(
                 expectedTraveler
             )
 
             // WHEN
-            val expectedTravelingPath = mockedTravelingPath
+            val expectedTravelingPath = fakeTravelingPath
             travelerRepository.retrieveActualTraveler(expectedTravelingPath)
 
             // THEN
@@ -108,10 +106,10 @@ class TravelerRepositoryTest {
             given(travelerLocalDataSource.getCount()).willReturn(0)
 
             // WHEN
-            whenever(travelerRemoteDataSource.findTravelerByEmail(mockedTraveler.copy().email)).thenReturn(
+            whenever(travelerRemoteDataSource.findTravelerByEmail(fakeTraveler.copy().email)).thenReturn(
                 null
             )
-            travelerRepository.retrieveActualTraveler(mockedTravelingPath)
+            travelerRepository.retrieveActualTraveler(fakeTravelingPath)
 
             // THEN
             verify(travelerRemoteDataSource).addTraveler(any())
@@ -122,7 +120,7 @@ class TravelerRepositoryTest {
     fun `shareActualLocation should call shareActualLocation of travelerLocalDataSource and travelerRemoteDataSource with given traveler`() {
         runBlocking {
             // GIVEN
-            val expectedTraveler = mockedTraveler.copy()
+            val expectedTraveler = fakeTraveler.copy()
 
             // WHEN
             travelerRepository.shareActualLocation(expectedTraveler)

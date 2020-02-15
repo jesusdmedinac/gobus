@@ -1,8 +1,8 @@
 package com.mupper.features.traveler
 
 import com.mupper.data.repository.TravelerRepository
-import com.mupper.sharedtestcode.mockedTraveler
-import com.mupper.sharedtestcode.mockedTravelingPath
+import com.mupper.sharedtestcode.fakeTraveler
+import com.mupper.sharedtestcode.fakeTravelingPath
 import com.nhaarman.mockitokotlin2.given
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.`is`
@@ -29,13 +29,13 @@ class GetActualTravelerTest {
     fun `invoke should return expected traveler from retrieveActualTraveler`() {
         runBlocking {
             // GIVEN
-            val expectedTraveler = mockedTraveler.copy()
-            given(travelerRepository.retrieveActualTraveler(mockedTravelingPath)).willReturn(
+            val expectedTraveler = fakeTraveler.copy()
+            given(travelerRepository.retrieveActualTraveler(fakeTravelingPath)).willReturn(
                 expectedTraveler
             )
 
             // WHEN
-            val actualTraveler = getActualTraveler.invoke(mockedTravelingPath)
+            val actualTraveler = getActualTraveler.invoke(fakeTravelingPath)
 
             // THEN
             assertThat(actualTraveler, `is`(expectedTraveler))

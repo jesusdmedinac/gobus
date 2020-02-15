@@ -2,9 +2,9 @@ package com.mupper.data.repository
 
 import com.mupper.data.source.local.BusLocalDataSource
 import com.mupper.data.source.remote.BusRemoteDataSource
-import com.mupper.sharedtestcode.mockedBus
-import com.mupper.sharedtestcode.mockedBusWithTravelers
-import com.mupper.sharedtestcode.mockedTraveler
+import com.mupper.sharedtestcode.fakeBus
+import com.mupper.sharedtestcode.fakeBusWithTravelers
+import com.mupper.sharedtestcode.fakeTraveler
 import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -32,8 +32,8 @@ class BusRepositoryTest {
     fun `addNewBusWithTravelers should call addNewBus of busLocalDataSource and addNewBusWithTravelers of busRemoteDataSource with given bus and traveler`() {
         runBlocking {
             // GIVEN
-            val expectedBus = mockedBus.copy()
-            val expectedTraveler = mockedTraveler.copy()
+            val expectedBus = fakeBus.copy()
+            val expectedTraveler = fakeTraveler.copy()
 
             // WHEN
             busRepository.addNewBusWithTravelers(expectedBus, expectedTraveler)
@@ -59,8 +59,8 @@ class BusRepositoryTest {
     fun `shareActualLocation should call shareActualLocation of busLocalDataSource and busRemoteDataSource with given bus and traveler`() {
         runBlocking {
             // GIVEN
-            val expectedBus = mockedBusWithTravelers.copy()
-            val expectedTraveler = mockedTraveler.copy()
+            val expectedBus = fakeBusWithTravelers.copy()
+            val expectedTraveler = fakeTraveler.copy()
 
             // WHEN
             busRepository.shareActualLocation(expectedBus, expectedTraveler)

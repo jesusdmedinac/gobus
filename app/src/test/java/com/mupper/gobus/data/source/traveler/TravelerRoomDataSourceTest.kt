@@ -4,8 +4,8 @@ import com.mupper.gobus.data.database.GobusDatabase
 import com.mupper.gobus.data.database.traveler.TravelerDao
 import com.mupper.gobus.data.source.room.TravelerRoomDataSource
 import com.mupper.gobus.data.mapper.toRoomTraveler
-import com.mupper.sharedtestcode.mockedTraveler
-import com.mupper.sharedtestcode.mockedTravelingPath
+import com.mupper.sharedtestcode.fakeTraveler
+import com.mupper.sharedtestcode.fakeTravelingPath
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.runBlocking
@@ -47,27 +47,27 @@ class TravelerRoomDataSourceTest {
     @Test
     fun `verify that insertTraveler call insertTraveler`() {
         runBlocking {
-            travelerRoomDataSource.insertTraveler(mockedTravelingPath, mockedTraveler)
+            travelerRoomDataSource.insertTraveler(fakeTravelingPath, fakeTraveler)
 
-            verify(travelerDao).insertTraveler(mockedTraveler.toRoomTraveler(mockedTravelingPath))
+            verify(travelerDao).insertTraveler(fakeTraveler.toRoomTraveler(fakeTravelingPath))
         }
     }
 
     @Test
     fun `verify that findTravelerByEmail call findTravelerByEmail`() {
         runBlocking {
-            travelerRoomDataSource.findTravelerByEmail(mockedTraveler.email)
+            travelerRoomDataSource.findTravelerByEmail(fakeTraveler.email)
 
-            verify(travelerDao).findTravelerByEmail(mockedTraveler.email)
+            verify(travelerDao).findTravelerByEmail(fakeTraveler.email)
         }
     }
 
     @Test
     fun `verify that shareActualLocation call updateTraveler`() {
         runBlocking {
-            travelerRoomDataSource.shareActualLocation(mockedTraveler)
+            travelerRoomDataSource.shareActualLocation(fakeTraveler)
 
-            with (mockedTraveler) {
+            with (fakeTraveler) {
                 val (latitude, longitude) = currentPosition
                 verify(travelerDao).updateTraveler(email, latitude, longitude)
             }

@@ -3,9 +3,9 @@ package com.mupper.features
 import com.mupper.data.repository.BusRepository
 import com.mupper.data.repository.TravelerRepository
 import com.mupper.features.bus.GetActualBusWithTravelers
-import com.mupper.sharedtestcode.mockedBusWithTravelers
-import com.mupper.sharedtestcode.mockedLatLng
-import com.mupper.sharedtestcode.mockedTraveler
+import com.mupper.sharedtestcode.fakeBusWithTravelers
+import com.mupper.sharedtestcode.fakeLatLng
+import com.mupper.sharedtestcode.fakeTraveler
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyZeroInteractions
@@ -44,10 +44,10 @@ class ShareActualLocationTest {
     fun `invoke should call invoke of getActualBusWithTravelers with given LatLng`() {
         runBlocking {
             // GIVEN
-            given(getActualBusWithTravelers.invoke()).willReturn(mockedBusWithTravelers.copy())
+            given(getActualBusWithTravelers.invoke()).willReturn(fakeBusWithTravelers.copy())
 
             // WHEN
-            shareActualLocation.invoke(mockedLatLng.copy())
+            shareActualLocation.invoke(fakeLatLng.copy())
 
             // THEN
             verify(getActualBusWithTravelers).invoke()
@@ -58,10 +58,10 @@ class ShareActualLocationTest {
     fun `invoke should not call any of shareActualLocation when busWithTravelers does not have travelers`() {
         runBlocking {
             // GIVEN
-            given(getActualBusWithTravelers.invoke()).willReturn(mockedBusWithTravelers.copy())
+            given(getActualBusWithTravelers.invoke()).willReturn(fakeBusWithTravelers.copy())
 
             // WHEN
-            shareActualLocation.invoke(mockedLatLng.copy())
+            shareActualLocation.invoke(fakeLatLng.copy())
 
             // THEN
             verifyZeroInteractions(busRepository)
@@ -73,11 +73,11 @@ class ShareActualLocationTest {
     fun `invoke should call shareActualLocation of busLocalDataSource with found busWithTravelers when busWithTravelers has travelers`() {
         runBlocking {
             // GIVEN
-            val expectedTraveler = mockedTraveler.copy("traveler 1")
-            val expectedBusWithTravelersWithTravelers = mockedBusWithTravelers.copy(
+            val expectedTraveler = fakeTraveler.copy("traveler 1")
+            val expectedBusWithTravelersWithTravelers = fakeBusWithTravelers.copy(
                 travelers = listOf(
                     expectedTraveler,
-                    mockedTraveler.copy("traveler 2")
+                    fakeTraveler.copy("traveler 2")
                 )
             )
             given(getActualBusWithTravelers.invoke()).willReturn(
@@ -85,7 +85,7 @@ class ShareActualLocationTest {
             )
 
             // WHEN
-            shareActualLocation.invoke(mockedLatLng.copy())
+            shareActualLocation.invoke(fakeLatLng.copy())
 
             // THEN
             verify(busRepository).shareActualLocation(
@@ -99,11 +99,11 @@ class ShareActualLocationTest {
     fun `invoke should call shareActualLocation of busRemoteDataSource with found busWithTravelers when busWithTravelers has travelers`() {
         runBlocking {
             // GIVEN
-            val expectedTraveler = mockedTraveler.copy("traveler 1")
-            val expectedBusWithTravelersWithTravelers = mockedBusWithTravelers.copy(
+            val expectedTraveler = fakeTraveler.copy("traveler 1")
+            val expectedBusWithTravelersWithTravelers = fakeBusWithTravelers.copy(
                 travelers = listOf(
                     expectedTraveler,
-                    mockedTraveler.copy("traveler 2")
+                    fakeTraveler.copy("traveler 2")
                 )
             )
             given(getActualBusWithTravelers.invoke()).willReturn(
@@ -111,7 +111,7 @@ class ShareActualLocationTest {
             )
 
             // WHEN
-            shareActualLocation.invoke(mockedLatLng.copy())
+            shareActualLocation.invoke(fakeLatLng.copy())
 
             // THEN
             verify(busRepository).shareActualLocation(
@@ -125,11 +125,11 @@ class ShareActualLocationTest {
     fun `invoke should call shareActualLocation of travelerLocalDataSource with found busWithTravelers when busWithTravelers has travelers`() {
         runBlocking {
             // GIVEN
-            val expectedTraveler = mockedTraveler.copy("traveler 1")
-            val expectedBusWithTravelersWithTravelers = mockedBusWithTravelers.copy(
+            val expectedTraveler = fakeTraveler.copy("traveler 1")
+            val expectedBusWithTravelersWithTravelers = fakeBusWithTravelers.copy(
                 travelers = listOf(
                     expectedTraveler,
-                    mockedTraveler.copy("traveler 2")
+                    fakeTraveler.copy("traveler 2")
                 )
             )
             given(getActualBusWithTravelers.invoke()).willReturn(
@@ -137,7 +137,7 @@ class ShareActualLocationTest {
             )
 
             // WHEN
-            shareActualLocation.invoke(mockedLatLng.copy())
+            shareActualLocation.invoke(fakeLatLng.copy())
 
             // THEN
             verify(travelerRepository).shareActualLocation(expectedTraveler)
@@ -148,11 +148,11 @@ class ShareActualLocationTest {
     fun `invoke should call shareActualLocation of travelerRemoteDataSource with found busWithTravelers when busWithTravelers has travelers`() {
         runBlocking {
             // GIVEN
-            val expectedTraveler = mockedTraveler.copy("traveler 1")
-            val expectedBusWithTravelersWithTravelers = mockedBusWithTravelers.copy(
+            val expectedTraveler = fakeTraveler.copy("traveler 1")
+            val expectedBusWithTravelersWithTravelers = fakeBusWithTravelers.copy(
                 travelers = listOf(
                     expectedTraveler,
-                    mockedTraveler.copy("traveler 2")
+                    fakeTraveler.copy("traveler 2")
                 )
             )
             given(getActualBusWithTravelers.invoke()).willReturn(
@@ -160,7 +160,7 @@ class ShareActualLocationTest {
             )
 
             // WHEN
-            shareActualLocation.invoke(mockedLatLng.copy())
+            shareActualLocation.invoke(fakeLatLng.copy())
 
             // THEN
             verify(travelerRepository).shareActualLocation(expectedTraveler)
