@@ -8,7 +8,7 @@ import com.mupper.features.bus.AddNewBusWithTravelers
 import com.mupper.features.traveler.GetActualTraveler
 import com.mupper.gobus.commons.extension.getBitmapFromVector
 import com.mupper.gobus.commons.extension.getCompatColor
-import com.mupper.gobus.viewmodel.MapsViewModel
+import com.mupper.gobus.viewmodel.MapViewModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import com.mupper.gobus.viewmodel.TravelerViewModel
 import kotlinx.coroutines.Dispatchers
@@ -46,7 +46,7 @@ private val featureModule = module {
 }
 
 private val mockedViewModule: Module = module {
-    factory { MapsViewModel(get(), get(), get()) }
+    factory { MapViewModel(get(), get(), get()) }
     factory { TravelerViewModel(get(), get()) }
     factory { TravelViewModel(get(), get()) }
 }

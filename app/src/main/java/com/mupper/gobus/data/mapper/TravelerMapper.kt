@@ -1,5 +1,6 @@
 package com.mupper.gobus.data.mapper
 
+import android.util.Log
 import com.mupper.domain.traveler.Traveler as DomainTraveler
 import com.mupper.gobus.data.database.traveler.Traveler as RoomTraveler
 
@@ -9,12 +10,14 @@ fun RoomTraveler.toDomainTraveler() = DomainTraveler(
     isTraveling
 )
 
-fun DomainTraveler.toRoomTraveler(travelingPath: String) = RoomTraveler(
-    email,
-    currentPosition.toRoomLatLng(),
-    travelingPath,
-    isTraveling
-)
+fun DomainTraveler.toRoomTraveler(travelingPath: String): RoomTraveler {
+    return RoomTraveler(
+        email,
+        currentPosition.toRoomLatLng(),
+        travelingPath,
+        isTraveling
+    )
+}
 
 fun List<DomainTraveler>.toRoomTravelerList(travelingPath: String) = map {
     RoomTraveler(

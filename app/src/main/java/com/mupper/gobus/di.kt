@@ -27,7 +27,7 @@ import com.mupper.gobus.data.source.room.BusRoomDataSource
 import com.mupper.gobus.data.source.room.TravelerRoomDataSource
 import com.mupper.gobus.model.TravelControl
 import com.mupper.gobus.viewmodel.BusViewModel
-import com.mupper.gobus.viewmodel.MapsViewModel
+import com.mupper.gobus.viewmodel.MapViewModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import com.mupper.gobus.viewmodel.TravelerViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -100,7 +100,7 @@ private val featureModule = module {
 }
 
 private val viewModelModule = module {
-    factory { MapsViewModel(get(), get(), get(named(DEPENDENCY_NAME_UI_DISPATCHER))) }
+    factory { MapViewModel(get(), get(), get(named(DEPENDENCY_NAME_UI_DISPATCHER))) }
     factory { TravelerViewModel(get(), get(named(DEPENDENCY_NAME_UI_DISPATCHER))) }
     factory { TravelViewModel(get(), get(named(DEPENDENCY_NAME_UI_DISPATCHER))) }
     factory { BusViewModel(get(), get(named(DEPENDENCY_NAME_UI_DISPATCHER))) }
