@@ -17,5 +17,13 @@ jobs:
         run: ./gradlew detekt
       - name: Run jacoco test report
         run: ./gradlew jacocoTestReport
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: app/build/reports/jacoco/jacocoTestDebugUnitTestReport/jacocoTestDebugUnitTestReport.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: true
       - name: Build with Gradle
         run: ./gradlew build
