@@ -3,11 +3,13 @@ package com.mupper.gobus.viewmodel
 import android.os.Handler
 import android.os.SystemClock
 import android.view.animation.LinearInterpolator
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
+import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -26,7 +28,7 @@ import kotlinx.coroutines.launch
 import com.google.android.gms.maps.model.LatLng as MapsLatLng
 
 // TOD O: Extract traveler properties and function to TravelerViewModel
-class MapsViewModel(
+class MapViewModel(
     private val locationDataSource: LocationDataSource<LocationRequest, LocationCallback>,
     private val mapResourcesRepository: MapResourcesRepository<BitmapDescriptor>,
     uiDispatcher: CoroutineDispatcher
@@ -38,11 +40,11 @@ class MapsViewModel(
     private var isTraveling = false
     private lateinit var locationCallback: LocationCallback
 
-    private val _model = MutableLiveData<Event<MapsModel>>()
-    val model: LiveData<Event<MapsModel>> get() = _model
+    private val _mapEventLiveData = MutableLiveData<Event<MapsModel>>()
+    val mapsEventLiveData: LiveData<Event<MapsModel>> get() = _mapEventLiveData
 
-    private val _requestLocationPermission = MutableLiveData<Event<Unit>>()
-    val requestLocationPermission: LiveData<Event<Unit>> get() = _requestLocationPermission
+    private val _requestLocationPermissionEventLiveData = MutableLiveData<Event<Unit>>()
+    val requestLocationPermissionEventLiveData: LiveData<Event<Unit>> get() = _requestLocationPermissionEventLiveData
 
     sealed class MapsModel {
         class MapReady(val onMapReady: OnMapReadyCallback) : MapsModel()
@@ -55,7 +57,7 @@ class MapsViewModel(
     }
 
     fun requestLocationPermission() {
-        _requestLocationPermission.value =
+        _requestLocationPermissionEventLiveData.value =
             Event(Unit)
     }
 
@@ -66,7 +68,7 @@ class MapsViewModel(
 
     fun onPermissionsRequested() {
         launch {
-            _model.value = Event(
+            _mapEventLiveData.value = Event(
                 MapsModel.MapReady(OnMapReadyCallback { loadedMap ->
                     initGoogleMap(loadedMap)
                 })
@@ -74,7 +76,8 @@ class MapsViewModel(
         }
     }
 
-    private fun initGoogleMap(it: GoogleMap) {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun initGoogleMap(it: GoogleMap) {
         googleMap = it.apply {
             mapType = GoogleMap.MAP_TYPE_NORMAL
             isMyLocationEnabled = true
@@ -86,7 +89,7 @@ class MapsViewModel(
     }
 
     private fun requestNewLocation() {
-        _model.value = Event(MapsModel.RequestNewLocation)
+        _mapEventLiveData.value = Event(MapsModel.RequestNewLocation)
     }
 
     fun startTravel() {
@@ -102,17 +105,16 @@ class MapsViewModel(
             val lastLatLng: LatLng? = locationDataSource.findLastLocation()
             lastLatLng?.let {
                 onLocationChanged(it)
-
                 animateCameraToLastLocation(it)
                 moveMarkerToLastLocation(it)
             }
+            // TOD O: Move to another place where they can be initialized once
             locationCallback = object : LocationCallback() {
                 override fun onLocationResult(locationResult: LocationResult?) {
                     locationResult ?: return
                     for (location in locationResult.locations) {
                         val latLng = location.toDomainLatLng()
                         onLocationChanged(latLng)
-
                         animateCameraToLastLocation(latLng)
                         moveMarkerToLastLocation(latLng)
                     }
@@ -151,7 +153,8 @@ class MapsViewModel(
         return latLng
     }
 
-    private fun smoothMoveMarker(finalLatLng: LatLng) {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun smoothMoveMarker(finalLatLng: LatLng) {
         val startLatLng = travelerMarker?.position?.toDomainLatLng() ?: LatLng(0.0, 0.0)
 
         val handler = Handler()
@@ -186,19 +189,26 @@ class MapsViewModel(
         }
     }
 
-    private fun animateCameraToLastLocation(it: LatLng) {
+    private fun animateCameraToLastLocation(newLatLng: LatLng) {
+        val newLatLngZoom = generateNewLatLngZoom(newLatLng)
         googleMap?.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                MapsLatLng(
-                    it.latitude,
-                    it.longitude
-                ), GOOGLE_MAP_DEFAULT_ZOOM
-            )
+            newLatLngZoom
+        )
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun generateNewLatLngZoom(newLatLng: LatLng): CameraUpdate? {
+        val (latitude, longitude) = newLatLng
+        return CameraUpdateFactory.newLatLngZoom(
+            MapsLatLng(
+                latitude,
+                longitude
+            ), GOOGLE_MAP_DEFAULT_ZOOM
         )
     }
 
     private fun onLocationChanged(lastLocation: LatLng) {
-        _model.value = Event(
+        _mapEventLiveData.value = Event(
             MapsModel.NewLocation(
                 lastLocation,
                 isTraveling

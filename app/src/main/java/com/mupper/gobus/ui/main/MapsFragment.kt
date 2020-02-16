@@ -15,15 +15,15 @@ import com.mupper.gobus.commons.extension.bindingInflate
 import com.mupper.gobus.commons.extension.navigate
 import com.mupper.gobus.commons.extension.supportFragmentManager
 import com.mupper.gobus.databinding.FragmentMapsBinding
-import com.mupper.gobus.viewmodel.MapsViewModel
-import com.mupper.gobus.viewmodel.MapsViewModel.MapsModel
+import com.mupper.gobus.viewmodel.MapViewModel
+import com.mupper.gobus.viewmodel.MapViewModel.MapsModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import com.mupper.gobus.viewmodel.TravelerViewModel
 import org.koin.android.ext.android.inject
 
 class MapsFragment : Fragment() {
 
-    private val mapsViewModel: MapsViewModel by inject()
+    private val mapViewModel: MapViewModel by inject()
     private val travelViewModel: TravelViewModel by inject()
     private val travelerViewModel: TravelerViewModel by inject()
 
@@ -64,16 +64,16 @@ class MapsFragment : Fragment() {
     }
 
     private fun initObservers() {
-        mapsViewModel.model.observe(
+        mapViewModel.mapsEventLiveData.observe(
             viewLifecycleOwner,
             EventObserver(::onMapsModelChange)
         )
 
-        mapsViewModel.requestLocationPermission.observe(viewLifecycleOwner,
+        mapViewModel.requestLocationPermissionEventLiveData.observe(viewLifecycleOwner,
             EventObserver {
                 locationPermissionRequester.request {
                     if (it)
-                        mapsViewModel.onPermissionsRequested()
+                        mapViewModel.onPermissionsRequested()
                 }
             })
 
@@ -98,19 +98,19 @@ class MapsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        mapsViewModel.requestLocationPermission()
+        mapViewModel.requestLocationPermission()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        mapsViewModel.clearMap()
+        mapViewModel.clearMap()
         supportFragmentManager.beginTransaction().remove(mapFragment).commit()
     }
 
     private fun onMapsModelChange(model: MapsModel) {
         when (model) {
             is MapsModel.MapReady -> mapFragment.getMapAsync(model.onMapReady)
-            is MapsModel.RequestNewLocation -> mapsViewModel.onNewLocationRequested()
+            is MapsModel.RequestNewLocation -> mapViewModel.onNewLocationRequested()
             is MapsModel.NewLocation -> with(model.lastLocation) {
                 if (model.isTraveling) {
                     travelerViewModel.shareActualLocation(this)
@@ -122,11 +122,11 @@ class MapsFragment : Fragment() {
     private fun onTravelModelChange(state: TravelViewModel.TravelState) {
         when (state) {
             is TravelViewModel.TravelState.Walking -> {
-                mapsViewModel.stopTravel()
+                mapViewModel.stopTravel()
                 travelViewModel.setFabToStart()
             }
             is TravelViewModel.TravelState.OnWay -> {
-                mapsViewModel.startTravel()
+                mapViewModel.startTravel()
                 travelViewModel.setFabToStop()
             }
         }

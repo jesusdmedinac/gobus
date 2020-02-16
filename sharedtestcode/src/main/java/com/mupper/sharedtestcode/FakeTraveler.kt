@@ -3,10 +3,10 @@ package com.mupper.sharedtestcode
 import com.mupper.domain.LatLng
 import com.mupper.domain.traveler.Traveler
 
-val mockedLatLng = LatLng(0.0, 0.0)
+val fakeLatLng = LatLng(0.0, 0.0)
 
-val mockedTraveler = Traveler(
+val fakeTraveler = Traveler(
     "dmc12345628@gmail.com",
-    mockedLatLng,
+    fakeLatLng,
     false
 )

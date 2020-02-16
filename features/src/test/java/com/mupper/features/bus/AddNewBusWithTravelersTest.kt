@@ -2,8 +2,8 @@ package com.mupper.features.bus
 
 import com.mupper.data.repository.BusRepository
 import com.mupper.features.traveler.GetActualTraveler
-import com.mupper.sharedtestcode.mockedBus
-import com.mupper.sharedtestcode.mockedTraveler
+import com.mupper.sharedtestcode.fakeBus
+import com.mupper.sharedtestcode.fakeTraveler
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +36,7 @@ class AddNewBusWithTravelersTest {
         runBlocking {
             // GIVEN
             val expectedPath = "bus path"
-            val bus = mockedBus.copy(path = expectedPath)
+            val bus = fakeBus.copy(path = expectedPath)
 
             // WHEN
             addNewBusWithTravelers.invoke(bus)
@@ -50,8 +50,8 @@ class AddNewBusWithTravelersTest {
     fun `invoke should call addNewBusWithTravelers of busRepository with given Bus and Traveler`() {
         runBlocking {
             // GIVEN
-            val expectedBus = mockedBus.copy()
-            val expectedTraveler = mockedTraveler.copy()
+            val expectedBus = fakeBus.copy()
+            val expectedTraveler = fakeTraveler.copy()
             given(getActualTraveler.invoke(expectedBus.path)).willReturn(expectedTraveler)
 
             // WHEN

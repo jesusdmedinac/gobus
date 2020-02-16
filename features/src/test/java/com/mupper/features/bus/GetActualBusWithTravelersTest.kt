@@ -1,7 +1,7 @@
 package com.mupper.features.bus
 
 import com.mupper.data.repository.BusRepository
-import com.mupper.sharedtestcode.mockedBusWithTravelers
+import com.mupper.sharedtestcode.fakeBusWithTravelers
 import com.nhaarman.mockitokotlin2.given
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.`is`
@@ -43,10 +43,10 @@ class GetActualBusWithTravelersTest {
     fun `invoke should return first busWithTravelers when getTravelingBusWithTravelers returns a list of BusWithTravelers`() {
         runBlocking {
             // GIVEN
-            val expectedBusWithTravelers = mockedBusWithTravelers.copy("path 1")
+            val expectedBusWithTravelers = fakeBusWithTravelers.copy("path 1")
             val busWithTravelers = listOf(
                 expectedBusWithTravelers,
-                mockedBusWithTravelers.copy("path 2")
+                fakeBusWithTravelers.copy("path 2")
             )
             given(busRepository.getTravelingBusWithTravelers()).willReturn(busWithTravelers)
 
