@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph.xml"
+    app:startDestination="@id/mapsFragment">
+
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.mupper.gobus.ui.main.MapsFragment"
+        android:label="MapsFragment"
+        tools:layout="@layout/fragment_maps">
+        <action
+            android:id="@+id/action_mapsFragment_to_startTravelFragment"
+            app:destination="@id/startTravelFragment" />
+        <action
+            android:id="@+id/action_mapsFragment_to_stopTravelFragment"
+            app:destination="@id/stopTravelFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/startTravelFragment"
+        android:name="com.mupper.gobus.ui.main.dialogs.StartTravelDialogFragment"
+        android:label="StartTravelFragment">
+        <action
+            android:id="@+id/action_startTravelFragment_to_busNav"
+            app:destination="@id/busNewNav" />
+    </dialog>
+    <dialog
+        android:id="@+id/stopTravelFragment"
+        android:name="com.mupper.gobus.ui.main.dialogs.StopTravelDialogFragment"
+        android:label="StopTravelFragment"/>
+    <navigation
+        android:id="@+id/busNewNav"
+        app:startDestination="@id/busNewFragment">
+        <fragment
+            android:id="@+id/busNewFragment"
+            android:name="com.mupper.gobus.ui.bus.NewBusFragment"
+            android:label="NewBusFragment"
+            tools:layout="@layout/fragment_bus_new"/>
+        <fragment
+            android:id="@+id/newBusPathNameFragment"
+            android:name="com.mupper.gobus.ui.bus.steps.NewBusPathNameFragment"
+            android:label="NewBusPathNameFragment"
+            tools:layout="@layout/fragment_bus_new_path_name"/>
+        <fragment
+            android:id="@+id/newBusPathColorFragment"
+            android:name="com.mupper.gobus.ui.bus.steps.NewBusPathNameFragment"
+            android:label="NewBusPathColorFragment"
+            tools:layout="@layout/fragment_bus_new_path_color"/>
+        <fragment
+            android:id="@+id/newBusCapacityFragment"
+            android:name="com.mupper.gobus.ui.bus.steps.NewBusCapacityFragment"
+            android:label="NewBusCapacityFragment"
+            tools:layout="@layout/fragment_bus_new_capacity"/>
+        <action
+            android:id="@+id/action_busNewNav_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+    </navigation>
+</navigation>

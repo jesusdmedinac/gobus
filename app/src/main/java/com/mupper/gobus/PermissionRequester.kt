@@ -9,20 +9,19 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
 class PermissionRequester(private val activity: Activity, private val permission: String) {
-    suspend fun request(): Boolean =
-        suspendCancellableCoroutine { continuation ->
-            Dexter
-                .withActivity(activity)
-                .withPermission(permission)
-                .withListener(object : BasePermissionListener() {
-                    override fun onPermissionGranted(response: PermissionGrantedResponse?) {
-                        continuation.resume(true)
-                    }
-
-                    override fun onPermissionDenied(response: PermissionDeniedResponse?) {
-                        continuation.resume(false)
-                    }
+    fun request(continuation: (Boolean) -> Unit) {
+        Dexter
+            .withActivity(activity)
+            .withPermission(permission)
+            .withListener(object : BasePermissionListener() {
+                override fun onPermissionGranted(response: PermissionGrantedResponse?) {
+                    continuation(true)
                 }
-                ).check()
-        }
+
+                override fun onPermissionDenied(response: PermissionDeniedResponse?) {
+                    continuation(false)
+                }
+            }
+            ).check()
+    }
 }
