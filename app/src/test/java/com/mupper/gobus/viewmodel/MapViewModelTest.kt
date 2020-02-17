@@ -6,13 +6,12 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.BitmapDescriptor
-import com.mupper.data.repository.MapResourcesRepository
 import com.mupper.data.source.location.LocationDataSource
 import com.mupper.gobus.commons.Event
 import com.mupper.gobus.commons.extension.getOrAwaitValue
+import com.mupper.gobus.data.source.resources.TravelerMapMarkerDataSource
 import com.mupper.sharedtestcode.fakeLatLng
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.mock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.`is`
@@ -22,8 +21,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.BDDMockito.will
-import org.mockito.BDDMockito.willDoNothing
+import org.mockito.BDDMockito.*
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -37,13 +35,13 @@ class MapViewModelTest {
     lateinit var locationDataSource: LocationDataSource<LocationRequest, LocationCallback>
 
     @Mock
-    lateinit var mapResourcesRepository: MapResourcesRepository<BitmapDescriptor>
+    lateinit var travelerMapMarkerDataSource: TravelerMapMarkerDataSource
 
     @Mock
     lateinit var mapEventLiveDataObserver: Observer<Event<MapViewModel.MapsModel>>
 
     @Mock
-    lateinit var eventObdserver: Observer<Event<Unit>>
+    lateinit var eventObserver: Observer<Event<Unit>>
 
     @Mock
     lateinit var googleMaps: GoogleMap
@@ -53,7 +51,7 @@ class MapViewModelTest {
     @Before
     fun setUp() {
         mapViewModel =
-            MapViewModel(locationDataSource, mapResourcesRepository, Dispatchers.Unconfined)
+            MapViewModel(locationDataSource, travelerMapMarkerDataSource, Dispatchers.Unconfined)
     }
 
     @Test
@@ -72,7 +70,7 @@ class MapViewModelTest {
         runBlocking {
             with(mapViewModel) {
                 // GIVEN
-                requestLocationPermissionEventLiveData.observeForever(eventObdserver)
+                requestLocationPermissionEventLiveData.observeForever(eventObserver)
 
                 // WHEN
                 requestLocationPermission()
@@ -80,7 +78,7 @@ class MapViewModelTest {
                 // THEN
                 val expectedRequestLocationPermissionEventLiveData =
                     requestLocationPermissionEventLiveData.value
-                verify(eventObdserver).onChanged(expectedRequestLocationPermissionEventLiveData)
+                verify(eventObserver).onChanged(expectedRequestLocationPermissionEventLiveData)
             }
         }
     }
@@ -195,9 +193,10 @@ class MapViewModelTest {
             with(spyMapsViewModel) {
                 val expectedLatLng = fakeLatLng.copy()
                 given(locationDataSource.findLastLocation()).willReturn(expectedLatLng)
-                willDoNothing().given(this).smoothMoveMarker(any())
                 val expectedNewLatLngZoom: CameraUpdate = mock()
-                will { expectedNewLatLngZoom }.given(this).generateNewLatLngZoom(any())
+                willReturn(expectedNewLatLngZoom).given(this).generateNewLatLngZoom(expectedLatLng)
+                willReturn(true).given(travelerMapMarkerDataSource).visibleForMap
+                willDoNothing().given(travelerMapMarkerDataSource).visibleForMap = true
                 startTravel()
 
                 // WHEN
