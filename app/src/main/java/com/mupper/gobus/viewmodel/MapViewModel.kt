@@ -30,8 +30,8 @@ class MapViewModel(
     uiDispatcher: CoroutineDispatcher
 ) : ScopedViewModel(uiDispatcher) {
 
-    private var googleMap: GoogleMap? = null
-    private lateinit var locationCallback: LocationCallback
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var googleMap: GoogleMap? = null
 
     private val _mapEventLiveData = MutableLiveData<Event<MapsModel>>()
     val mapsEventLiveData: LiveData<Event<MapsModel>> get() = _mapEventLiveData
@@ -54,11 +54,6 @@ class MapViewModel(
             Event(Unit)
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        destroyScope()
-    }
-
     fun onPermissionsRequested() {
         launch {
             _mapEventLiveData.value = Event(
@@ -79,10 +74,39 @@ class MapViewModel(
             isBuildingsEnabled = true
         }
         requestNewLocation()
+        prepareLocationUpdates()
     }
 
     private fun requestNewLocation() {
         _mapEventLiveData.value = Event(MapsModel.RequestNewLocation)
+    }
+
+    private fun prepareLocationUpdates() {
+        val locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+                this@MapViewModel.onLocationResult(locationResult)
+            }
+        }
+        val locationRequest = LocationRequest.create().apply {
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            interval = MILISECONDS_ONE_SECOND
+        }
+        locationDataSource.requestLocationUpdates(locationRequest, locationCallback)
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun onLocationResult(locationResult: LocationResult?) {
+        locationResult ?: return
+        for (location in locationResult.locations) {
+            val latLng = location.toDomainLatLng()
+            onLocationUpdate(latLng)
+        }
+    }
+
+    private fun onLocationUpdate(latLng: LatLng) {
+        onLocationChanged(latLng)
+        animateCameraToLastLocation(latLng)
+        moveMarkerToLastLocation(latLng)
     }
 
     fun startTravel() {
@@ -95,29 +119,14 @@ class MapViewModel(
 
     fun onNewLocationRequested() {
         launch {
-            val lastLatLng: LatLng? = locationDataSource.findLastLocation()
-            lastLatLng?.let {
-                onLocationChanged(it)
-                animateCameraToLastLocation(it)
-                moveMarkerToLastLocation(it)
-            }
-            // TOD O: Move to another place where they can be initialized once
-            locationCallback = object : LocationCallback() {
-                override fun onLocationResult(locationResult: LocationResult?) {
-                    locationResult ?: return
-                    for (location in locationResult.locations) {
-                        val latLng = location.toDomainLatLng()
-                        onLocationChanged(latLng)
-                        animateCameraToLastLocation(latLng)
-                        moveMarkerToLastLocation(latLng)
-                    }
-                }
-            }
-            val locationRequest = LocationRequest.create().apply {
-                priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-                interval = MILISECONDS_ONE_SECOND
-            }
-            locationDataSource.requestLocationUpdates(locationRequest, locationCallback)
+            findLastLocation()
+        }
+    }
+
+    private suspend fun findLastLocation() {
+        val lastLatLng: LatLng? = locationDataSource.findLastLocation()
+        lastLatLng?.let {
+            onLocationUpdate(it)
         }
     }
 
