@@ -45,10 +45,6 @@ class MapViewModel(
         class NewLocation(val lastLocation: LatLng, val isTraveling: Boolean) : MapsModel()
     }
 
-    init {
-        initScope()
-    }
-
     fun requestLocationPermission() {
         _requestLocationPermissionEventLiveData.value =
             Event(Unit)

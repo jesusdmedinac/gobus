@@ -77,20 +77,20 @@ class MapsFragment : Fragment() {
                 }
             })
 
-        travelViewModel.navigateToStartTravelDialog.observe(viewLifecycleOwner,
+        travelViewModel.navigateToStartTravelDialogLiveData.observe(viewLifecycleOwner,
             EventObserver {
-                val toStartTravel: NavDirections =
+                val toStartTravelDialogFragment: NavDirections =
                     MapsFragmentDirections.actionMapsFragmentToStartTravelFragment()
-                navigate(toStartTravel)
+                navigate(toStartTravelDialogFragment)
             })
-        travelViewModel.navigateToStopTravelDialog.observe(viewLifecycleOwner,
+        travelViewModel.navigateToStopTravelDialogLiveData.observe(viewLifecycleOwner,
             EventObserver {
-                val toStopTravel: NavDirections =
+                val toStopTravelDialogFragment: NavDirections =
                     MapsFragmentDirections.actionMapsFragmentToStopTravelFragment()
-                navigate(toStopTravel)
+                navigate(toStopTravelDialogFragment)
             })
 
-        travelViewModel.travelState.observe(
+        travelViewModel.travelStateLiveData.observe(
             viewLifecycleOwner,
             EventObserver(::onTravelModelChange)
         )
