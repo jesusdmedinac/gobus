@@ -1,12 +1,13 @@
 package com.mupper.gobus.viewmodel
 
+import androidx.annotation.ColorRes
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mupper.features.bus.AddNewBusWithTravelers
 import com.mupper.gobus.commons.Event
 import com.mupper.gobus.commons.scope.ScopedViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.mupper.domain.bus.Bus as DomainBus
 
@@ -18,37 +19,38 @@ class BusViewModel(
     private val addNewBusWithTravelers: AddNewBusWithTravelers,
     uiDispatcher: CoroutineDispatcher
 ) : ScopedViewModel(uiDispatcher) {
-    val pathName = MutableLiveData<String>()
+    val pathNameLiveData = MutableLiveData<String>()
 
-    val pathColor = MutableLiveData<String>()
-    val pathColorInt = MutableLiveData<Int>()
+    val pathColorLiveData = MutableLiveData<String>()
+    val pathColorIntLiveData = MutableLiveData<Int>()
 
-    val capacity = MutableLiveData<String>()
+    val capacityLiveData = MutableLiveData<String>()
 
-    private val _isTravelingStateToNewBus = MutableLiveData<Boolean>(false)
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    val isTravelingStateToNewBus = MutableLiveData<Boolean>(false)
 
     private val _showColorPickerDialog = MutableLiveData<Event<Int?>>()
     val showColorPickerDialog: LiveData<Event<Int?>> get() = _showColorPickerDialog
 
     fun showColorPickerDialog(defaultColor: Int) {
-        if (pathColorInt.value == null) {
-            pathColorInt.value = defaultColor
+        if (pathColorIntLiveData.value == null) {
+            pathColorIntLiveData.value = defaultColor
         }
         _showColorPickerDialog.value =
-            Event(pathColorInt.value)
+            Event(pathColorIntLiveData.value)
     }
 
-    fun onColorPicked(color: Int) {
-        pathColorInt.value = color
-        pathColor.value = "#${Integer.toHexString(color)}"
+    fun onColorPicked(@ColorRes color: Int, colorString: String) {
+        pathColorIntLiveData.value = color
+        pathColorLiveData.value = colorString
     }
 
     private fun saveNewBus() {
-        launch(Dispatchers.Main) {
-            val pathName = pathName.value ?: ""
-            val pathColor = pathColor.value ?: ""
-            val capacity = capacity.value ?: ""
-            val isTraveling = _isTravelingStateToNewBus.value ?: false
+        launch {
+            val pathName = pathNameLiveData.value ?: ""
+            val pathColor = pathColorLiveData.value ?: ""
+            val capacity = capacityLiveData.value ?: "0"
+            val isTraveling = isTravelingStateToNewBus.value ?: false
             addNewBusWithTravelers.invoke(
                 DomainBus(
                     pathName,
@@ -57,12 +59,12 @@ class BusViewModel(
                     isTraveling
                 )
             )
-            _isTravelingStateToNewBus.value = false
+            isTravelingStateToNewBus.value = false
         }
     }
 
     fun saveNewBusToStartTravel() {
-        _isTravelingStateToNewBus.value = true
+        isTravelingStateToNewBus.value = true
         saveNewBus()
     }
 }
