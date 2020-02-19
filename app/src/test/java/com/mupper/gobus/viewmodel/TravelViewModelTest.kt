@@ -91,6 +91,25 @@ class TravelViewModelTest {
     }
 
     @Test
+    fun `toggleTravelState should call navigateToStartTravelDialogLiveData event when travelStateLiveData is null`() {
+        runBlocking {
+            // GIVEN
+            with(travelViewModel) {
+                navigateToStartTravelDialogLiveData.observeForever(mockEventObserver)
+                travelStateMutableLiveData.value = null
+
+                // WHEN
+                toggleTravelState()
+
+                // THEN
+                val navigateToStartTravelDialogLiveDataEvent =
+                    navigateToStartTravelDialogLiveData.value
+                verify(mockEventObserver).onChanged(navigateToStartTravelDialogLiveDataEvent)
+            }
+        }
+    }
+
+    @Test
     fun `navigateToBusNavigation should call navigateToBusNavigationLiveData event`() {
         runBlocking {
             // GIVEN
