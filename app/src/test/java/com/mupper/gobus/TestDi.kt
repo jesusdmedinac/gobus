@@ -1,13 +1,8 @@
 package com.mupper.gobus
 
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
-import com.google.android.gms.maps.model.BitmapDescriptor
-import com.mupper.data.source.resources.MapResourcesDataSource
-import com.mupper.domain.resources.BusIcon
 import com.mupper.features.bus.AddNewBusWithTravelers
 import com.mupper.features.traveler.GetActualTraveler
-import com.mupper.gobus.commons.extension.getBitmapFromVector
-import com.mupper.gobus.commons.extension.getCompatColor
 import com.mupper.gobus.viewmodel.MapViewModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import com.mupper.gobus.viewmodel.TravelerViewModel
@@ -49,17 +44,4 @@ private val mockedViewModule: Module = module {
     factory { MapViewModel(get(), get(), get()) }
     factory { TravelerViewModel(get(), get()) }
     factory { TravelViewModel(get(), get()) }
-}
-
-class FakeMapResourceDataSource : MapResourcesDataSource<BitmapDescriptor> {
-    override fun getBusIcon(): BitmapDescriptor =
-        app.getBitmapFromVector(
-            busIcon.vectorResourceId,
-            busIcon.tintColor
-        )
-
-    override var busIcon = BusIcon(
-        R.drawable.ic_bus_marker,
-        app.getCompatColor(R.color.primaryDarkColor)
-    )
 }

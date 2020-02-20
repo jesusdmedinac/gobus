@@ -3,7 +3,6 @@ package com.mupper.gobus.data.source.location
 import android.Manifest
 import android.app.Application
 import android.content.Context
-import android.location.Location as AndroidLocation
 import android.location.LocationManager
 import android.os.Looper
 import com.google.android.gms.location.LocationCallback
@@ -15,6 +14,7 @@ import com.mupper.gobus.data.mapper.toDomainLatLng
 import com.mupper.gobus.model.PermissionChecker
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
+import android.location.Location as AndroidLocation
 
 class PlayServicesLocationDataSource(val app: Application) :
     LocationDataSource<LocationRequest, LocationCallback> {
@@ -39,7 +39,7 @@ class PlayServicesLocationDataSource(val app: Application) :
         }
     }
 
-    override suspend fun requestLocationUpdates(
+    override fun requestLocationUpdates(
         locationRequest: LocationRequest,
         locationCallback: LocationCallback
     ) {
