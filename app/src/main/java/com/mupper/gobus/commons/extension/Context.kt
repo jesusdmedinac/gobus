@@ -2,11 +2,11 @@ package com.mupper.gobus.commons.extension
 
 import android.app.Application
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -15,7 +15,6 @@ import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.mupper.gobus.GobusApp
 
-
 /**
  * Created by jesus.medina on 12/2019.
  * Mupper
@@ -23,14 +22,11 @@ import com.mupper.gobus.GobusApp
 val Context.app: GobusApp
     get() = applicationContext as GobusApp
 
+fun Context.getCompatDrawable(@DrawableRes drawableId: Int): Drawable? =
+    ContextCompat.getDrawable(this, drawableId)
 
-fun Context.getCompatDrawable(drawableId: Int): Drawable? {
-    return ContextCompat.getDrawable(this, drawableId)
-}
-
-fun Context.getCompatColor(colorId: Int): Int {
-    return ContextCompat.getColor(this, colorId)
-}
+fun Context.getCompatColor(@ColorRes colorId: Int): Int =
+    ContextCompat.getColor(this, colorId)
 
 fun Application.getBitmapFromVector(
     @DrawableRes vectorResourceId: Int,
