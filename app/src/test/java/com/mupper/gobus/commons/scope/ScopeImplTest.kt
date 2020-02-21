@@ -1,16 +1,24 @@
 package com.mupper.gobus.commons.scope
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Before
 import org.junit.Test
 
 class ScopeImplTest {
+    private lateinit var expectedDispatcher: CoroutineDispatcher
+
+    @Before
+    fun setUp() {
+        expectedDispatcher = Dispatchers.Default
+    }
+
     @Test
     fun `ScopeImpl should set uiDispatcher as given dispatcher`() {
-        // GIVEN
-        val expectedDispatcher = Dispatchers.Default
+        // GIVEN default coroutine dispatcher
 
         // WHEN
         val scopeImpl = Scope.Impl(expectedDispatcher)
@@ -22,7 +30,6 @@ class ScopeImplTest {
     @Test
     fun `coroutineContext should return an instance of given SupervisorJob`() {
         // GIVEN
-        val expectedDispatcher = Dispatchers.Default
         val scopeImpl = Scope.Impl(expectedDispatcher)
 
         // WHEN
@@ -35,7 +42,6 @@ class ScopeImplTest {
     @Test
     fun `coroutineContext should return an instance of given dispatcher`() {
         // GIVEN
-        val expectedDispatcher = Dispatchers.Default
         val scopeImpl = Scope.Impl(expectedDispatcher)
 
         // WHEN
@@ -69,11 +75,22 @@ class ScopeImplTest {
     }
 
     @Test
+    fun `initScope should not cancel the ScopeImpl job`() {
+        // GIVEN
+        val scopeImpl = Scope.Impl(Dispatchers.Unconfined)
+
+        // WHEN
+        scopeImpl.initScope()
+
+        // THEN
+        assertThat(scopeImpl.job.isCancelled, `is`(false))
+    }
+
+    @Test
     fun `destroyScope should cancel the ScopeImpl job`() {
         // GIVEN
         val scopeImpl = Scope.Impl(Dispatchers.Unconfined)
         scopeImpl.initScope()
-        assertThat(scopeImpl.job.isCancelled, `is`(false))
 
         // WHEN
         scopeImpl.destroyScope()

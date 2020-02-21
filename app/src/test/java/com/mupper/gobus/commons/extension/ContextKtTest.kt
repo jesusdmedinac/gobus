@@ -10,17 +10,32 @@ import com.nhaarman.mockitokotlin2.mock
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.instanceOf
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Before
 import org.junit.Test
 import org.mockito.BDDMockito.willDoNothing
 import org.mockito.BDDMockito.willReturn
+import org.mockito.Mock
+import org.mockito.MockitoAnnotations
 
 @Suppress("DEPRECATION")
 class ContextKtTest {
+    @Mock
+    lateinit var mockContext: Context
+
+    @Mock
+    lateinit var applicationContext: GobusApp
+
+    @Mock
+    lateinit var mockResources: Resources
+
+    @Before
+    fun setUp() {
+        MockitoAnnotations.initMocks(this)
+    }
+
     @Test
     fun `app should return applicationContext as an instance of GobusApp`() {
         // GIVEN
-        val mockContext: Context = mock()
-        val applicationContext: GobusApp = mock()
         willReturn(applicationContext).given(mockContext).applicationContext
 
         // WHEN
@@ -34,12 +49,10 @@ class ContextKtTest {
     fun `getCompatDrawable should return an instance of Drawable`() {
         // GIVEN
         // mock resources
-        val mockResources: Resources = mock()
         willDoNothing().given(mockResources).getValue(any<Int>(), any(), any())
         val mockDrawable: Drawable = mock()
         willReturn(mockDrawable).given(mockResources).getDrawable(any())
         // mock context
-        val mockContext: Context = mock()
         willReturn(mockResources).given(mockContext).resources
 
         // WHEN
@@ -53,12 +66,10 @@ class ContextKtTest {
     fun `getCompatColor should return an instance of Int color`() {
         // GIVEN
         // mock resources
-        val mockResources: Resources = mock()
         willDoNothing().given(mockResources).getValue(any<Int>(), any(), any())
         val colorId = R.color.md_red_500
         willReturn(colorId).given(mockResources).getColor(any())
         // mock context
-        val mockContext: Context = mock()
         willReturn(mockResources).given(mockContext).resources
 
         // WHEN

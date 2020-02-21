@@ -16,10 +16,10 @@ fun <VDB : ViewDataBinding> newStepInstance(
     stepFragment: StepFragment<VDB>,
     @LayoutRes layoutResId: Int,
     args: Bundle
-): StepFragment<VDB> {
-    args.putInt(LAYOUT_RESOURCE_ID_ARG_KEY, layoutResId)
-    stepFragment.arguments = args
-    return stepFragment
+): StepFragment<VDB> = stepFragment.apply {
+    arguments = args.apply {
+        putInt(LAYOUT_RESOURCE_ID_ARG_KEY, layoutResId)
+    }
 }
 
 /* Convenience wrapper that allows you to call getValue<Type>() instead of of getValue(Type::class) */
