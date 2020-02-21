@@ -5,6 +5,7 @@ import android.view.View
 import com.mupper.gobus.R
 import com.mupper.gobus.commons.EventObserver
 import com.mupper.gobus.commons.newStepInstance
+import com.mupper.gobus.commons.extension.convertColorToHexString
 import com.mupper.gobus.commons.stepper.StepFragment
 import com.mupper.gobus.databinding.FragmentBusNewPathColorBinding
 import com.stepstone.stepper.VerificationError
@@ -44,7 +45,8 @@ class NewBusPathColorFragment : StepFragment<FragmentBusNewPathColorBinding>() {
         colorPicker.setColors(R.array.md_colors)
         color?.let { colorPicker.setSelectedColor(it) }
         colorPicker.setOnColorSelectedListener { _, colorInt ->
-            busViewModel.onColorPicked(colorInt)
+            val colorString = requireContext().convertColorToHexString(colorInt)
+            busViewModel.onColorPicked(colorInt, colorString)
         }
         colorPicker.build().show(childFragmentManager, "¿De qué color es el camión?")
     }

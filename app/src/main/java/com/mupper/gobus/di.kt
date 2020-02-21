@@ -4,6 +4,8 @@ import android.app.Application
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.mupper.data.repository.BusRepositoryDerived
 import com.mupper.data.repository.MapResourcesRepository
 import com.mupper.data.repository.MapResourcesRepositoryDerived
@@ -13,6 +15,7 @@ import com.mupper.data.source.local.TravelerLocalDataSource
 import com.mupper.data.source.location.LocationDataSource
 import com.mupper.data.source.remote.BusRemoteDataSource
 import com.mupper.data.source.remote.TravelerRemoteDataSource
+import com.mupper.data.source.resources.MapMarkerDataSource
 import com.mupper.data.source.resources.MapResourcesDataSource
 import com.mupper.features.ShareActualLocation
 import com.mupper.features.bus.AddNewBusWithTravelers
@@ -23,6 +26,7 @@ import com.mupper.gobus.data.source.firebase.BusFirebaseDataSource
 import com.mupper.gobus.data.source.firebase.TravelerFirebaseDataSource
 import com.mupper.gobus.data.source.location.PlayServicesLocationDataSource
 import com.mupper.gobus.data.source.resources.MapBitmapDescriptorDataSource
+import com.mupper.gobus.data.source.resources.TravelerMapMarkerDataSource
 import com.mupper.gobus.data.source.room.BusRoomDataSource
 import com.mupper.gobus.data.source.room.TravelerRoomDataSource
 import com.mupper.gobus.model.TravelControl
@@ -86,6 +90,7 @@ val dataSourceModule = module {
 
 val repositoryModule = module {
     factory<MapResourcesRepository<BitmapDescriptor>> { MapResourcesRepositoryDerived(get()) }
+    factory<MapMarkerDataSource<Marker, MarkerOptions>> { TravelerMapMarkerDataSource(get()) } // TOD O : Remove MapResourcesRepository dependency
     factory { BusRepositoryDerived(get(), get()) }
     factory { TravelerRepositoryDerived(get(named(DEPENDENCY_NAME_STATIC_USER_EMAIL)), get(), get()) }
 }

@@ -13,7 +13,7 @@ abstract class ScopedViewModel(uiDispatcher: CoroutineDispatcher) : ViewModel(),
 
     @CallSuper
     override fun onCleared() {
-        destroyScope()
         super.onCleared()
+        destroyScope()
     }
 }
