@@ -15,7 +15,6 @@ import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.mupper.gobus.GobusApp
 
-
 /**
  * Created by jesus.medina on 12/2019.
  * Mupper
