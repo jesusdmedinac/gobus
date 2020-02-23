@@ -1,8 +1,13 @@
 package com.mupper.gobus
 
+import android.Manifest
 import android.app.Application
+import android.content.Context
+import android.location.LocationManager
+import android.os.Looper
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -29,6 +34,7 @@ import com.mupper.gobus.data.source.resources.MapBitmapDescriptorDataSource
 import com.mupper.gobus.data.source.resources.TravelerMapMarkerDataSource
 import com.mupper.gobus.data.source.room.BusRoomDataSource
 import com.mupper.gobus.data.source.room.TravelerRoomDataSource
+import com.mupper.gobus.model.PermissionChecker
 import com.mupper.gobus.model.TravelControl
 import com.mupper.gobus.viewmodel.BusViewModel
 import com.mupper.gobus.viewmodel.MapViewModel
@@ -66,6 +72,10 @@ const val DEPENDENCY_NAME_IO_DISPATCHER = "ioDispatcher"
 private val appModule = module {
     single { GobusDatabase.getInstance(get()) }
     single<CoroutineDispatcher>(named(DEPENDENCY_NAME_UI_DISPATCHER)) { Dispatchers.Main }
+    single { LocationServices.getFusedLocationProviderClient(get()) }
+    single { PermissionChecker(get(), Manifest.permission.ACCESS_FINE_LOCATION) }
+    single { (get() as Application).getSystemService(Context.LOCATION_SERVICE) as LocationManager }
+    single { Looper.getMainLooper() }
     single(named(DEPENDENCY_NAME_IO_DISPATCHER)) { Dispatchers.IO }
 }
 
@@ -73,7 +83,14 @@ val dataSourceModule = module {
     single(named(DEPENDENCY_NAME_STATIC_USER_EMAIL)) { STATIC_USER_EMAIL }
     factory<MapResourcesDataSource<BitmapDescriptor>> { MapBitmapDescriptorDataSource(get()) }
     factory { TravelControl(get()) }
-    factory<LocationDataSource<LocationRequest, LocationCallback>> { PlayServicesLocationDataSource(get()) }
+    factory<LocationDataSource<LocationRequest, LocationCallback>> {
+        PlayServicesLocationDataSource(
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
     factory<BusLocalDataSource> {
         BusRoomDataSource(
             get()
