@@ -33,8 +33,7 @@ class TravelerRoomDataSourceTest {
     @Before
     fun setUp() {
         whenever(db.travelerDao()).thenReturn(travelerDao)
-        travelerRoomDataSource =
-            TravelerRoomDataSource(db)
+        travelerRoomDataSource = TravelerRoomDataSource(db)
     }
 
     @Test
@@ -43,8 +42,7 @@ class TravelerRoomDataSourceTest {
             //GIVEN
             with(travelerRoomDataSource) {
                 val expectedCount = 2
-                given(travelerDao.travelerCount())
-                    .willReturn(expectedCount)
+                given(travelerDao.travelerCount()).willReturn(expectedCount)
 
                 // WHEN
                 val actualCount = getCount()

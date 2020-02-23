@@ -11,6 +11,7 @@ import kotlinx.coroutines.withContext
 import com.mupper.domain.traveler.Traveler as DomainTraveler
 
 class TravelerRoomDataSource(db: GobusDatabase) : TravelerLocalDataSource {
+
     private val travelerDao = db.travelerDao()
 
     override suspend fun getCount(): Int =
