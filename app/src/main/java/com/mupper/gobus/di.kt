@@ -11,6 +11,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.firestore.FirebaseFirestore
 import com.mupper.data.repository.BusRepositoryDerived
 import com.mupper.data.repository.MapResourcesRepository
 import com.mupper.data.repository.MapResourcesRepositoryDerived
@@ -76,6 +77,7 @@ private val appModule = module {
     single { PermissionChecker(get(), Manifest.permission.ACCESS_FINE_LOCATION) }
     single { (get() as Application).getSystemService(Context.LOCATION_SERVICE) as LocationManager }
     single { Looper.getMainLooper() }
+    single { FirebaseFirestore.getInstance() }
     single(named(DEPENDENCY_NAME_IO_DISPATCHER)) { Dispatchers.IO }
 }
 
@@ -96,7 +98,7 @@ val dataSourceModule = module {
             get()
         )
     }
-    factory<BusRemoteDataSource> { BusFirebaseDataSource() }
+    factory<BusRemoteDataSource> { BusFirebaseDataSource(get()) }
     factory<TravelerLocalDataSource> {
         TravelerRoomDataSource(
             get()
