@@ -104,7 +104,7 @@ val dataSourceModule = module {
             get()
         )
     }
-    factory<TravelerRemoteDataSource> { TravelerFirebaseDataSource() }
+    factory<TravelerRemoteDataSource> { TravelerFirebaseDataSource(get()) }
 }
 
 val repositoryModule = module {
