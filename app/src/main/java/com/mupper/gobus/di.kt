@@ -41,7 +41,6 @@ import com.mupper.gobus.viewmodel.BusViewModel
 import com.mupper.gobus.viewmodel.MapViewModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import com.mupper.gobus.viewmodel.TravelerViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -72,7 +71,7 @@ const val DEPENDENCY_NAME_IO_DISPATCHER = "ioDispatcher"
 
 private val appModule = module {
     single { GobusDatabase.getInstance(get()) }
-    single<CoroutineDispatcher>(named(DEPENDENCY_NAME_UI_DISPATCHER)) { Dispatchers.Main }
+    single(named(DEPENDENCY_NAME_UI_DISPATCHER)) { Dispatchers.Main }
     single { LocationServices.getFusedLocationProviderClient(get()) }
     single { PermissionChecker(get(), Manifest.permission.ACCESS_FINE_LOCATION) }
     single { (get() as Application).getSystemService(Context.LOCATION_SERVICE) as LocationManager }
