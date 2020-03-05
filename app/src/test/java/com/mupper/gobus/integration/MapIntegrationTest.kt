@@ -1,21 +1,29 @@
-package com.mupper.gobus.viewmodel
+@file:Suppress("DEPRECATION")
+
+package com.mupper.gobus.integration
 
 import android.location.Location
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import androidx.test.runner.AndroidJUnit4
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.mupper.data.source.location.LocationDataSource
-import com.mupper.gobus.any
+import com.mupper.data.source.resources.MapMarkerDataSource
+import com.mupper.gobus.*
 import com.mupper.gobus.commons.Event
 import com.mupper.gobus.commons.extension.getOrAwaitValue
-import com.mupper.gobus.data.source.resources.TravelerMapMarkerDataSource
+import com.mupper.gobus.viewmodel.MapViewModel
 import com.mupper.sharedtestcode.fakeLatLng
-import com.nhaarman.mockitokotlin2.*
-import kotlinx.coroutines.Dispatchers
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.spy
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.*
@@ -24,22 +32,26 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.BDDMockito.willDoNothing
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
+import org.koin.test.AutoCloseKoinTest
+import org.koin.test.get
 import org.mockito.BDDMockito.willReturn
 import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.MockitoAnnotations
 
-@RunWith(MockitoJUnitRunner::class)
-class MapViewModelTest {
+@RunWith(AndroidJUnit4::class)
+class MapIntegrationTest : AutoCloseKoinTest() {
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
 
-    @Mock
-    lateinit var mockLocationDataSource: LocationDataSource<LocationRequest, LocationCallback>
+    private lateinit var spyFakeLocationDataSource: FakeLocationDataSource
+
+    private lateinit var spyFakeMapMarkerDataSource: FakeMapMarkerDataSource
 
     @Mock
-    lateinit var mockTravelerMapMarkerDataSource: TravelerMapMarkerDataSource
+    lateinit var mockGoogleMap: GoogleMap
 
     @Mock
     lateinit var mockMapEventLiveDataObserver: Observer<Event<MapViewModel.MapModel>>
@@ -47,23 +59,26 @@ class MapViewModelTest {
     @Mock
     lateinit var mockEventObserver: Observer<Event<Unit>>
 
-    @Mock
-    lateinit var mockGoogleMap: GoogleMap
-
     private lateinit var mapViewModel: MapViewModel
 
     @Before
     fun setUp() {
-        mapViewModel =
-            MapViewModel(
-                mockLocationDataSource,
-                mockTravelerMapMarkerDataSource,
-                Dispatchers.Unconfined
-            )
+        MockitoAnnotations.initMocks(this)
+
+        val vmModule = module {
+            factory { MapViewModel(get(), get(), get(named(DEPENDENCY_NAME_UI_DISPATCHER))) }
+        }
+
+        initMockedDi(vmModule)
+        mapViewModel = get()
+        spyFakeLocationDataSource =
+            get<LocationDataSource<LocationRequest, LocationCallback>>() as FakeLocationDataSource
+        spyFakeMapMarkerDataSource =
+            get<MapMarkerDataSource<Marker, MarkerOptions>>() as FakeMapMarkerDataSource
     }
 
     @Test
-    fun `MapViewModel should not interact with mapsEventLiveData on init`() {
+    fun `MapViewModel should not interact with mapEventLiveData on init `() {
         // GIVEN
         mapViewModel.mapEventLiveData.observeForever(mockMapEventLiveDataObserver)
 
@@ -101,8 +116,8 @@ class MapViewModelTest {
             onPermissionsRequested()
 
             // THEN
-            val expectedMapsModelEvent = mapEventLiveData.value
-            verify(mockMapEventLiveDataObserver).onChanged(expectedMapsModelEvent)
+            val expectedMapModelEvent = mapEventLiveData.value
+            verify(mockMapEventLiveDataObserver).onChanged(expectedMapModelEvent)
         }
     }
 
@@ -114,9 +129,9 @@ class MapViewModelTest {
             with(spyMapViewModel) {
                 // WHEN
                 onPermissionsRequested()
-                val mapsEvent =
+                val mapEvent =
                     mapEventLiveData.getOrAwaitValue().peekContent() as MapViewModel.MapModel.MapReady
-                mapsEvent.onMapReady.onMapReady(mockGoogleMap)
+                mapEvent.onMapReady.onMapReady(mockGoogleMap)
 
                 // THEN
                 verify(spyMapViewModel).initGoogleMap(mockGoogleMap)
@@ -128,16 +143,16 @@ class MapViewModelTest {
     fun `onPermissionRequest should call requestLocationUpdates of locationDataSource with any arguments`() {
         runBlocking {
             // GIVEN
-            val spyMapViewModel = spy(mapViewModel)
-            with(spyMapViewModel) {
+            with(mapViewModel) {
+
                 // WHEN
                 onPermissionsRequested()
-                val mapsEvent =
+                val mapEvent =
                     mapEventLiveData.getOrAwaitValue().peekContent() as MapViewModel.MapModel.MapReady
-                mapsEvent.onMapReady.onMapReady(mockGoogleMap)
+                mapEvent.onMapReady.onMapReady(mockGoogleMap)
 
                 // THEN
-                verify(mockLocationDataSource).requestLocationUpdates(any(), any())
+                verify(spyFakeLocationDataSource).requestLocationUpdates(any(), any())
             }
         }
     }
@@ -151,7 +166,7 @@ class MapViewModelTest {
                 onNewLocationRequested()
 
                 // THEN
-                verify(mockLocationDataSource).findLastLocation()
+                verify(spyFakeLocationDataSource).findLastLocation()
             }
         }
     }
@@ -162,14 +177,17 @@ class MapViewModelTest {
             // GIVEN
             with(mapViewModel) {
                 val expectedLatLng = fakeLatLng.copy()
-                given(mockLocationDataSource.findLastLocation()).willReturn(expectedLatLng)
+                spyFakeLocationDataSource.lastLocation = expectedLatLng
 
                 // WHEN
                 onNewLocationRequested()
 
                 // THEN
-                val mapsEvent = mapEventLiveData.getOrAwaitValue().peekContent()
-                assertThat(mapsEvent, instanceOf(MapViewModel.MapModel.NewLocation::class.java))
+                val mapEvent = mapEventLiveData.getOrAwaitValue().peekContent()
+                assertThat(
+                    mapEvent,
+                    instanceOf(MapViewModel.MapModel.NewLocation::class.java)
+                )
             }
         }
     }
@@ -180,15 +198,15 @@ class MapViewModelTest {
             // GIVEN
             with(mapViewModel) {
                 val expectedLatLng = fakeLatLng.copy(2.0, 2.0)
-                given(mockLocationDataSource.findLastLocation()).willReturn(expectedLatLng)
+                spyFakeLocationDataSource.lastLocation = expectedLatLng
 
                 // WHEN
                 onNewLocationRequested()
 
                 // THEN
-                val mapsEvent =
+                val mapEvent =
                     mapEventLiveData.getOrAwaitValue().peekContent() as MapViewModel.MapModel.NewLocation
-                assertThat(mapsEvent.lastLocation, `is`(expectedLatLng))
+                assertThat(mapEvent.lastLocation, `is`(expectedLatLng))
             }
         }
     }
@@ -199,16 +217,16 @@ class MapViewModelTest {
             // GIVEN
             with(mapViewModel) {
                 val expectedLatLng = fakeLatLng.copy()
-                given(mockLocationDataSource.findLastLocation()).willReturn(expectedLatLng)
+                spyFakeLocationDataSource.lastLocation = expectedLatLng
                 stopTravel()
 
                 // WHEN
                 onNewLocationRequested()
 
                 // THEN
-                val mapsEvent =
+                val mapEvent =
                     mapEventLiveData.getOrAwaitValue().peekContent() as MapViewModel.MapModel.NewLocation
-                assertThat(mapsEvent.isTraveling, `is`(false))
+                assertThat(mapEvent.isTraveling, `is`(false))
             }
         }
     }
@@ -220,20 +238,18 @@ class MapViewModelTest {
             val spyMapViewModel = spy(mapViewModel)
             with(spyMapViewModel) {
                 val expectedLatLng = fakeLatLng.copy()
-                given(mockLocationDataSource.findLastLocation()).willReturn(expectedLatLng)
                 val expectedNewLatLngZoom: CameraUpdate = mock()
                 willReturn(expectedNewLatLngZoom).given(this).generateNewLatLngZoom(expectedLatLng)
-                willReturn(true).given(mockTravelerMapMarkerDataSource).visibleForMap
-                willDoNothing().given(mockTravelerMapMarkerDataSource).visibleForMap = true
+                spyFakeMapMarkerDataSource.visibleForMap = true
                 startTravel()
 
                 // WHEN
                 onNewLocationRequested()
 
                 // THEN
-                val mapsEvent =
+                val mapEvent =
                     mapEventLiveData.getOrAwaitValue().peekContent() as MapViewModel.MapModel.NewLocation
-                assertThat(mapsEvent.isTraveling, `is`(true))
+                assertThat(mapEvent.isTraveling, `is`(true))
             }
         }
     }
@@ -246,12 +262,12 @@ class MapViewModelTest {
             with(spyMapViewModel) {
                 // Map is ready
                 onPermissionsRequested()
-                val mapsEvent =
+                val mapEvent =
                     mapEventLiveData.getOrAwaitValue().peekContent() as MapViewModel.MapModel.MapReady
-                mapsEvent.onMapReady.onMapReady(mockGoogleMap)
+                mapEvent.onMapReady.onMapReady(mockGoogleMap)
                 // findLastLocation of locationDataSource return expectedLatLng
                 val expectedLatLng = fakeLatLng.copy()
-                given(mockLocationDataSource.findLastLocation()).willReturn(expectedLatLng)
+                spyFakeLocationDataSource.lastLocation = expectedLatLng
                 // generateNewLatLngZoom return expectedNewLatLngZoom
                 val expectedNewLatLngZoom: CameraUpdate = mock()
                 willReturn(expectedNewLatLngZoom).given(this).generateNewLatLngZoom(expectedLatLng)
@@ -271,9 +287,9 @@ class MapViewModelTest {
         with(mapViewModel) {
             // Map is ready
             onPermissionsRequested()
-            val mapsEvent =
+            val mapEvent =
                 mapEventLiveData.getOrAwaitValue().peekContent() as MapViewModel.MapModel.MapReady
-            mapsEvent.onMapReady.onMapReady(mockGoogleMap)
+            mapEvent.onMapReady.onMapReady(mockGoogleMap)
 
             //WHEN
             clearMap()
@@ -291,7 +307,7 @@ class MapViewModelTest {
             clearMap()
 
             // THEN
-            verify(mockTravelerMapMarkerDataSource).clearMarker()
+            verify(spyFakeMapMarkerDataSource).clearMarker()
         }
     }
 
@@ -306,8 +322,8 @@ class MapViewModelTest {
             with(spyMapViewModel) {
                 onLocationResult(expectedLocationResult)
 
-                val mapsEvent = mapEventLiveData.value
-                assertThat(mapsEvent, `is`(nullValue()))
+                val mapEvent = mapEventLiveData.value
+                assertThat(mapEvent, `is`(nullValue()))
             }
         }
     }
@@ -325,8 +341,11 @@ class MapViewModelTest {
                     onLocationResult(expectedLocationResult)
                 }
 
-                val mapsEvent = mapEventLiveData.getOrAwaitValue().peekContent()
-                assertThat(mapsEvent, instanceOf(MapViewModel.MapModel.NewLocation::class.java))
+                val mapEvent = mapEventLiveData.getOrAwaitValue().peekContent()
+                assertThat(
+                    mapEvent,
+                    instanceOf(MapViewModel.MapModel.NewLocation::class.java)
+                )
             }
         }
     }

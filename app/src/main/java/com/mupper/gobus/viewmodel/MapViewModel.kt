@@ -33,16 +33,16 @@ class MapViewModel(
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     var googleMap: GoogleMap? = null
 
-    private val _mapEventLiveData = MutableLiveData<Event<MapsModel>>()
-    val mapsEventLiveData: LiveData<Event<MapsModel>> get() = _mapEventLiveData
+    private val _mapEventLiveData = MutableLiveData<Event<MapModel>>()
+    val mapEventLiveData: LiveData<Event<MapModel>> get() = _mapEventLiveData
 
     private val _requestLocationPermissionEventLiveData = MutableLiveData<Event<Unit>>()
     val requestLocationPermissionEventLiveData: LiveData<Event<Unit>> get() = _requestLocationPermissionEventLiveData
 
-    sealed class MapsModel {
-        class MapReady(val onMapReady: OnMapReadyCallback) : MapsModel()
-        object RequestNewLocation : MapsModel()
-        class NewLocation(val lastLocation: LatLng, val isTraveling: Boolean) : MapsModel()
+    sealed class MapModel {
+        class MapReady(val onMapReady: OnMapReadyCallback) : MapModel()
+        object RequestNewLocation : MapModel()
+        class NewLocation(val lastLocation: LatLng, val isTraveling: Boolean) : MapModel()
     }
 
     fun requestLocationPermission() {
@@ -53,7 +53,7 @@ class MapViewModel(
     fun onPermissionsRequested() {
         launch {
             _mapEventLiveData.value = Event(
-                MapsModel.MapReady(OnMapReadyCallback { loadedMap ->
+                MapModel.MapReady(OnMapReadyCallback { loadedMap ->
                     initGoogleMap(loadedMap)
                 })
             )
@@ -74,7 +74,7 @@ class MapViewModel(
     }
 
     private fun requestNewLocation() {
-        _mapEventLiveData.value = Event(MapsModel.RequestNewLocation)
+        _mapEventLiveData.value = Event(MapModel.RequestNewLocation)
     }
 
     private fun prepareLocationUpdates() {
@@ -153,7 +153,7 @@ class MapViewModel(
 
     private fun onLocationChanged(lastLocation: LatLng) {
         _mapEventLiveData.value = Event(
-            MapsModel.NewLocation(
+            MapModel.NewLocation(
                 lastLocation,
                 travelerMapMarkerDataSource.visibleForMap
             )

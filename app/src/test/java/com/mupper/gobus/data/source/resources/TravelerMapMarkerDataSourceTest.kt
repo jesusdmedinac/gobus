@@ -4,7 +4,6 @@ import android.os.Handler
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.mupper.data.repository.MapResourcesRepository
 import com.mupper.gobus.data.mapper.toMapsLatLng
 import com.mupper.sharedtestcode.fakeLatLng
 import com.nhaarman.mockitokotlin2.any
@@ -32,13 +31,13 @@ class TravelerMapMarkerDataSourceTest {
     lateinit var mockMapMarker: Marker
 
     @Mock
-    lateinit var mockMapResourcesRepository: MapResourcesRepository<BitmapDescriptor>
+    lateinit var mockBusIcon: BitmapDescriptor
 
     private lateinit var travelerMapMarkerDataSource: TravelerMapMarkerDataSource
 
     @Before
     fun setUp() {
-        travelerMapMarkerDataSource = TravelerMapMarkerDataSource(mockMapResourcesRepository)
+        travelerMapMarkerDataSource = TravelerMapMarkerDataSource(mockBusIcon)
     }
 
     @Test

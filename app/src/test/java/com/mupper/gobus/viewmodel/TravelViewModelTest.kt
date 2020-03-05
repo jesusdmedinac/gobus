@@ -3,8 +3,8 @@ package com.mupper.gobus.viewmodel
 import android.graphics.drawable.Drawable
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import com.mupper.data.source.resources.TravelControlDataSource
 import com.mupper.gobus.commons.Event
-import com.mupper.gobus.model.TravelControl
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
@@ -27,7 +27,7 @@ class TravelViewModelTest {
     val rule = InstantTaskExecutorRule()
 
     @Mock
-    private lateinit var mockTravelControl: TravelControl
+    private lateinit var mockTravelControlDataSource: TravelControlDataSource<Drawable>
 
     @Mock
     lateinit var mockEventObserver: Observer<Event<Unit>>
@@ -49,7 +49,7 @@ class TravelViewModelTest {
     @Before
     fun setUp() {
         travelViewModel = TravelViewModel(
-            mockTravelControl,
+            mockTravelControlDataSource,
             Dispatchers.Unconfined
         )
     }
@@ -168,7 +168,7 @@ class TravelViewModelTest {
         // GIVEN
         with (travelViewModel) {
             val expectedStopIcon: Drawable = mock()
-            given(mockTravelControl.stopIcon).willReturn(expectedStopIcon)
+            given(mockTravelControlDataSource.stopIcon).willReturn(expectedStopIcon)
             fabIconLiveData.observeForever(mockFabIconLiveDataObserver)
 
             // WHEN
@@ -184,7 +184,9 @@ class TravelViewModelTest {
         // GIVEN
         with (travelViewModel) {
             val expectedDefaultFabColor = 1
-            given(mockTravelControl.defaultFabIconColor).willReturn(expectedDefaultFabColor)
+            given(mockTravelControlDataSource.defaultFabIconColor).willReturn(
+                expectedDefaultFabColor
+            )
             fabColorLiveData.observeForever(mockFabColorLiveDataObserver)
 
             // WHEN
@@ -200,7 +202,7 @@ class TravelViewModelTest {
         // GIVEN
         with (travelViewModel) {
             val expectedDefaultFabColor = 1
-            given(mockTravelControl.defaultFabColor).willReturn(expectedDefaultFabColor)
+            given(mockTravelControlDataSource.defaultFabColor).willReturn(expectedDefaultFabColor)
             fabIconColorLiveData.observeForever(mockFabIconColorLiveDataObserver)
 
             // WHEN
@@ -216,7 +218,7 @@ class TravelViewModelTest {
         // GIVEN
         with (travelViewModel) {
             val expectedPlayIcon: Drawable = mock()
-            given(mockTravelControl.playIcon).willReturn(expectedPlayIcon)
+            given(mockTravelControlDataSource.playIcon).willReturn(expectedPlayIcon)
             fabIconLiveData.observeForever(mockFabIconLiveDataObserver)
 
             // WHEN
@@ -232,7 +234,7 @@ class TravelViewModelTest {
         // GIVEN
         with (travelViewModel) {
             val expectedDefaultFabColor = 1
-            given(mockTravelControl.defaultFabColor).willReturn(expectedDefaultFabColor)
+            given(mockTravelControlDataSource.defaultFabColor).willReturn(expectedDefaultFabColor)
             fabColorLiveData.observeForever(mockFabColorLiveDataObserver)
 
             // WHEN
@@ -248,7 +250,9 @@ class TravelViewModelTest {
         // GIVEN
         with (travelViewModel) {
             val expectedDefaultFabIconColor = 1
-            given(mockTravelControl.defaultFabIconColor).willReturn(expectedDefaultFabIconColor)
+            given(mockTravelControlDataSource.defaultFabIconColor).willReturn(
+                expectedDefaultFabIconColor
+            )
             fabIconColorLiveData.observeForever(mockFabColorLiveDataObserver)
 
             // WHEN

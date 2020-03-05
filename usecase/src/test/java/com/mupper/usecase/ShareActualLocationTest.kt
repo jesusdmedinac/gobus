@@ -1,11 +1,11 @@
-package com.mupper.features
+package com.mupper.usecase
 
 import com.mupper.data.repository.BusRepository
 import com.mupper.data.repository.TravelerRepository
-import com.mupper.features.bus.GetActualBusWithTravelers
 import com.mupper.sharedtestcode.fakeBusWithTravelers
 import com.mupper.sharedtestcode.fakeLatLng
 import com.mupper.sharedtestcode.fakeTraveler
+import com.mupper.usecase.bus.GetActualBusWithTravelers
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyZeroInteractions

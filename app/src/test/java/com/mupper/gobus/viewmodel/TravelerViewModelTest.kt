@@ -1,8 +1,7 @@
 package com.mupper.gobus.viewmodel
 
-import com.google.android.gms.maps.model.LatLng
-import com.mupper.features.ShareActualLocation
 import com.mupper.sharedtestcode.fakeLatLng
+import com.mupper.usecase.ShareActualLocation
 import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking

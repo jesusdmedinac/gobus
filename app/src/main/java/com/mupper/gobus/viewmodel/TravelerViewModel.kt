@@ -1,8 +1,8 @@
 package com.mupper.gobus.viewmodel
 
 import com.mupper.domain.LatLng
-import com.mupper.features.ShareActualLocation
 import com.mupper.gobus.commons.scope.ScopedViewModel
+import com.mupper.usecase.ShareActualLocation
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 

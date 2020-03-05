@@ -1,2 +1,2 @@
-include ':app', ':data', ':domain', ':features', ':sharedtestcode'
+include ':app', ':data', ':domain', ':usecase', ':sharedtestcode'
 rootProject.name='Gobus'

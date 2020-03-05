@@ -1,4 +1,4 @@
-package com.mupper.features.bus
+package com.mupper.usecase.bus
 
 import com.mupper.data.source.local.BusLocalDataSource
 

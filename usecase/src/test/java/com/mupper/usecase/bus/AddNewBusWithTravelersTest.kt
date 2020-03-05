@@ -1,9 +1,9 @@
-package com.mupper.features.bus
+package com.mupper.usecase.bus
 
 import com.mupper.data.repository.BusRepository
-import com.mupper.features.traveler.GetActualTraveler
 import com.mupper.sharedtestcode.fakeBus
 import com.mupper.sharedtestcode.fakeTraveler
+import com.mupper.usecase.traveler.GetActualTraveler
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.Dispatchers
