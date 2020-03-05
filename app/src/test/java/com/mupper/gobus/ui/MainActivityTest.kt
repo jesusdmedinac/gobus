@@ -19,7 +19,7 @@ import org.koin.test.AutoCloseKoinTest
 class MainActivityTest : AutoCloseKoinTest() {
 
     @get:Rule
-    val rule = InstantTaskExecutorRule()
+    val instantExecutorRule = InstantTaskExecutorRule()
 
     @Before
     fun setUp() {

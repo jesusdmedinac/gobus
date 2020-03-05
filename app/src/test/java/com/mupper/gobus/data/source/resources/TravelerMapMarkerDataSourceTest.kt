@@ -34,7 +34,7 @@ class TravelerMapMarkerDataSourceTest {
     @Mock
     lateinit var mockMapResourcesRepository: MapResourcesRepository<BitmapDescriptor>
 
-    lateinit var travelerMapMarkerDataSource: TravelerMapMarkerDataSource
+    private lateinit var travelerMapMarkerDataSource: TravelerMapMarkerDataSource
 
     @Before
     fun setUp() {
@@ -82,6 +82,7 @@ class TravelerMapMarkerDataSourceTest {
             // WHEN
             moveMarkerToLastLocation({}, expectedLatLng) { mapMarker }
 
+            // THEN
             assertThat(mapMarkerOptions?.position, `is`(expectedLatLng.toMapsLatLng()))
         }
     }
@@ -101,6 +102,7 @@ class TravelerMapMarkerDataSourceTest {
             // WHEN
             moveMarkerToLastLocation({}, expectedLatLng) { mapMarker }
 
+            // THEN
             assertThat(mapMarker?.position, `is`(expectedLatLng.toMapsLatLng()))
         }
     }

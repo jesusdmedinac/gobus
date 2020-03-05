@@ -14,9 +14,9 @@ import com.mupper.gobus.data.mapper.toDomainTraveler
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
-class BusFirebaseDataSource : BusRemoteDataSource {
-
-    private val firestore = FirebaseFirestore.getInstance()
+class BusFirebaseDataSource(
+    private val firestore: FirebaseFirestore
+) : BusRemoteDataSource {
 
     private fun getBusDocument(path: String) = firestore.collection(COLLECTION_BUS).document(path)
 
@@ -60,7 +60,6 @@ class BusFirebaseDataSource : BusRemoteDataSource {
                     continuation.resume(travalersList)
                 }
         }
-
 
     override suspend fun shareActualLocation(bus: BusWithTravelers, traveler: Traveler) {
         val (path) = bus

@@ -1,11 +1,17 @@
 package com.mupper.gobus
 
+import android.Manifest
 import android.app.Application
+import android.content.Context
+import android.location.LocationManager
+import android.os.Looper
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.firestore.FirebaseFirestore
 import com.mupper.data.repository.BusRepositoryDerived
 import com.mupper.data.repository.MapResourcesRepository
 import com.mupper.data.repository.MapResourcesRepositoryDerived
@@ -29,12 +35,12 @@ import com.mupper.gobus.data.source.resources.MapBitmapDescriptorDataSource
 import com.mupper.gobus.data.source.resources.TravelerMapMarkerDataSource
 import com.mupper.gobus.data.source.room.BusRoomDataSource
 import com.mupper.gobus.data.source.room.TravelerRoomDataSource
+import com.mupper.gobus.model.PermissionChecker
 import com.mupper.gobus.model.TravelControl
 import com.mupper.gobus.viewmodel.BusViewModel
 import com.mupper.gobus.viewmodel.MapViewModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import com.mupper.gobus.viewmodel.TravelerViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -65,7 +71,12 @@ const val DEPENDENCY_NAME_IO_DISPATCHER = "ioDispatcher"
 
 private val appModule = module {
     single { GobusDatabase.getInstance(get()) }
-    single<CoroutineDispatcher>(named(DEPENDENCY_NAME_UI_DISPATCHER)) { Dispatchers.Main }
+    single(named(DEPENDENCY_NAME_UI_DISPATCHER)) { Dispatchers.Main }
+    single { LocationServices.getFusedLocationProviderClient(get()) }
+    single { PermissionChecker(get(), Manifest.permission.ACCESS_FINE_LOCATION) }
+    single { (get() as Application).getSystemService(Context.LOCATION_SERVICE) as LocationManager }
+    single { Looper.getMainLooper() }
+    single { FirebaseFirestore.getInstance() }
     single(named(DEPENDENCY_NAME_IO_DISPATCHER)) { Dispatchers.IO }
 }
 
@@ -73,19 +84,26 @@ val dataSourceModule = module {
     single(named(DEPENDENCY_NAME_STATIC_USER_EMAIL)) { STATIC_USER_EMAIL }
     factory<MapResourcesDataSource<BitmapDescriptor>> { MapBitmapDescriptorDataSource(get()) }
     factory { TravelControl(get()) }
-    factory<LocationDataSource<LocationRequest, LocationCallback>> { PlayServicesLocationDataSource(get()) }
+    factory<LocationDataSource<LocationRequest, LocationCallback>> {
+        PlayServicesLocationDataSource(
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
     factory<BusLocalDataSource> {
         BusRoomDataSource(
             get()
         )
     }
-    factory<BusRemoteDataSource> { BusFirebaseDataSource() }
+    factory<BusRemoteDataSource> { BusFirebaseDataSource(get()) }
     factory<TravelerLocalDataSource> {
         TravelerRoomDataSource(
             get()
         )
     }
-    factory<TravelerRemoteDataSource> { TravelerFirebaseDataSource() }
+    factory<TravelerRemoteDataSource> { TravelerFirebaseDataSource(get()) }
 }
 
 val repositoryModule = module {
