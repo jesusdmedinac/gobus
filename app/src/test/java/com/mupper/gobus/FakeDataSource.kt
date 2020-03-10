@@ -58,7 +58,7 @@ class FakeLocationDataSource :
 }
 
 class FakeBusLocalDataSource : BusLocalDataSource {
-    private var travelingBusWithTravelersList: List<BusWithTravelers> = emptyList()
+    var travelingBusWithTravelersList: List<BusWithTravelers> = emptyList()
 
     override suspend fun getBusCount(path: String): Int = travelingBusWithTravelersList.size
 
@@ -71,9 +71,9 @@ class FakeBusLocalDataSource : BusLocalDataSource {
 }
 
 class FakeBusRemoteDataSource : BusRemoteDataSource {
-    private var bus: Bus = fakeBus.copy()
+    var bus: Bus = fakeBus.copy()
 
-    private var travelerList: List<Traveler> = emptyList()
+    var travelerList: List<Traveler> = emptyList()
 
     override fun addNewBusWithTravelers(bus: Bus, traveler: Traveler) {}
 

@@ -63,8 +63,8 @@ private val mockedDataSourceModule = module {
     single { FakeMapResourcesDataSource().getBusIcon() }
     single<TravelControlDataSource<Drawable>> { FakeTravelControl() }
     single<LocationDataSource<LocationRequest, LocationCallback>> { spy(FakeLocationDataSource()) }
-    single<BusLocalDataSource> { FakeBusLocalDataSource() }
-    single<BusRemoteDataSource> { FakeBusRemoteDataSource() }
+    single<BusLocalDataSource> { spy(FakeBusLocalDataSource()) }
+    single<BusRemoteDataSource> { spy(FakeBusRemoteDataSource()) }
     single<TravelerLocalDataSource> { spy(FakeTravelerLocalDataSource()) }
     single<TravelerRemoteDataSource> { spy(FakeTravelerRemoteDataSource()) }
     single<MapMarkerDataSource<Marker, MarkerOptions>> { spy(FakeMapMarkerDataSource()) }
