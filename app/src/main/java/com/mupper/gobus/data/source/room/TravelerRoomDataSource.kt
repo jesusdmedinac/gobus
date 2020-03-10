@@ -14,7 +14,7 @@ class TravelerRoomDataSource(db: GobusDatabase) : TravelerLocalDataSource {
 
     private val travelerDao = db.travelerDao()
 
-    override suspend fun getCount(): Int =
+    override suspend fun getTravelerCount(): Int =
         withContext(Dispatchers.IO) {
             travelerDao.travelerCount()
         }

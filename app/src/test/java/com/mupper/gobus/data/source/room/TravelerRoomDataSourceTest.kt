@@ -45,7 +45,7 @@ class TravelerRoomDataSourceTest {
                 given(travelerDao.travelerCount()).willReturn(expectedCount)
 
                 // WHEN
-                val actualCount = getCount()
+                val actualCount = getTravelerCount()
 
                 // THEN
                 assertThat(actualCount, `is`(expectedCount))
@@ -63,7 +63,7 @@ class TravelerRoomDataSourceTest {
                     .willReturn(expectedCount)
 
                 // WHEN
-                getCount()
+                getTravelerCount()
 
                 // THEN
                 verify(travelerDao).travelerCount()

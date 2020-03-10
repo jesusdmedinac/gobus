@@ -12,7 +12,9 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.FirebaseFirestore
+import com.mupper.data.repository.BusRepository
 import com.mupper.data.repository.BusRepositoryDerived
+import com.mupper.data.repository.TravelerRepository
 import com.mupper.data.repository.TravelerRepositoryDerived
 import com.mupper.data.source.local.BusLocalDataSource
 import com.mupper.data.source.local.TravelerLocalDataSource
@@ -102,8 +104,8 @@ private val dataSourceModule = module {
 }
 
 val repositoryModule = module {
-    factory { BusRepositoryDerived(get(), get()) }
-    factory {
+    factory<BusRepository> { BusRepositoryDerived(get(), get()) }
+    factory<TravelerRepository> {
         TravelerRepositoryDerived(
             get(named(DEPENDENCY_NAME_STATIC_USER_EMAIL)),
             get(),
@@ -112,10 +114,10 @@ val repositoryModule = module {
     }
 }
 val useCaseModule = module {
-    factory { GetActualTraveler(get()) }
-    factory { AddNewBusWithTravelers(get(), get(), get(named(DEPENDENCY_NAME_IO_DISPATCHER))) }
-    factory { GetActualBusWithTravelers(get()) }
-    factory {
+    single { GetActualTraveler(get()) }
+    single { AddNewBusWithTravelers(get(), get(), get(named(DEPENDENCY_NAME_IO_DISPATCHER))) }
+    single { GetActualBusWithTravelers(get()) }
+    single {
         ShareActualLocation(get(), get(), get(), get(named(DEPENDENCY_NAME_IO_DISPATCHER)))
     }
 }

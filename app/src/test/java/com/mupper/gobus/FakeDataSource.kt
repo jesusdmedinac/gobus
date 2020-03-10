@@ -22,7 +22,6 @@ import com.mupper.domain.relations.BusWithTravelers
 import com.mupper.domain.resources.BusIcon
 import com.mupper.domain.traveler.Traveler
 import com.mupper.sharedtestcode.fakeBus
-import com.mupper.sharedtestcode.fakeBusWithTravelers
 import com.mupper.sharedtestcode.fakeLatLng
 import com.mupper.sharedtestcode.fakeTraveler
 import com.nhaarman.mockitokotlin2.mock
@@ -59,10 +58,12 @@ class FakeLocationDataSource :
 }
 
 class FakeBusLocalDataSource : BusLocalDataSource {
-    override suspend fun getCount(path: String): Int = 0
+    private var travelingBusWithTravelersList: List<BusWithTravelers> = emptyList()
+
+    override suspend fun getBusCount(path: String): Int = travelingBusWithTravelersList.size
 
     override suspend fun getTravelingBusWithTravelers(): List<BusWithTravelers> =
-        listOf(fakeBusWithTravelers)
+        travelingBusWithTravelersList
 
     override suspend fun addNewBus(bus: Bus) {}
 
@@ -70,31 +71,39 @@ class FakeBusLocalDataSource : BusLocalDataSource {
 }
 
 class FakeBusRemoteDataSource : BusRemoteDataSource {
+    private var bus: Bus = fakeBus.copy()
+
+    private var travelerList: List<Traveler> = emptyList()
+
     override fun addNewBusWithTravelers(bus: Bus, traveler: Traveler) {}
 
-    override suspend fun findBusByPathName(path: String): Bus = fakeBus.copy()
+    override suspend fun findBusByPathName(path: String): Bus = bus
 
-    override suspend fun findBusTravelersByPathName(path: String): List<Traveler> = listOf(
-        fakeTraveler.copy()
-    )
+    override suspend fun findBusTravelersByPathName(path: String): List<Traveler> = travelerList
 
     override suspend fun shareActualLocation(bus: BusWithTravelers, traveler: Traveler) {}
 }
 
 class FakeTravelerLocalDataSource : TravelerLocalDataSource {
-    override suspend fun getCount(): Int = 0
+    var traveler = fakeTraveler.copy()
+
+    var travelerCount = 1
+
+    override suspend fun getTravelerCount(): Int = travelerCount
 
     override suspend fun insertTraveler(travelingPath: String, traveler: Traveler) {}
 
-    override suspend fun findTravelerByEmail(email: String): Traveler? = fakeTraveler.copy()
+    override suspend fun findTravelerByEmail(email: String): Traveler? = traveler
 
     override suspend fun shareActualLocation(traveler: Traveler) {}
 }
 
 class FakeTravelerRemoteDataSource : TravelerRemoteDataSource {
-    override suspend fun addTraveler(traveler: Traveler): Traveler = fakeTraveler.copy()
+    var traveler: Traveler? = fakeTraveler.copy()
 
-    override suspend fun findTravelerByEmail(email: String): Traveler? = fakeTraveler.copy()
+    override suspend fun addTraveler(traveler: Traveler): Traveler = traveler
+
+    override suspend fun findTravelerByEmail(email: String): Traveler? = traveler
 
     override suspend fun shareActualLocation(traveler: Traveler) {}
 }
