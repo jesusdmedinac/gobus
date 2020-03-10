@@ -16,7 +16,7 @@ private class TravelerRepositoryImpl(
     private val travelerRemoteDataSource: TravelerRemoteDataSource
 ) : TravelerRepository {
     override suspend fun retrieveActualTraveler(travelingPath: String): Traveler? {
-        if (travelerLocalDataSource.getCount() == 0) {
+        if (travelerLocalDataSource.getTravelerCount() == 0) {
             val remoteTraveler = travelerRemoteDataSource.findTravelerByEmail(actualEmail)
                 ?: addStaticTraveler()
 

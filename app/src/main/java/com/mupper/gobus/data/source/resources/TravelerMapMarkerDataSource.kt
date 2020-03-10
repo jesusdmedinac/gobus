@@ -7,7 +7,6 @@ import androidx.annotation.VisibleForTesting
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.mupper.data.repository.MapResourcesRepository
 import com.mupper.data.source.resources.MapMarkerDataSource
 import com.mupper.domain.LatLng
 import com.mupper.gobus.commons.MILLISECONDS_SIXTEEN_MILLIS
@@ -16,7 +15,7 @@ import com.mupper.gobus.data.mapper.toDomainLatLng
 import com.mupper.gobus.data.mapper.toMapsLatLng
 
 class TravelerMapMarkerDataSource(
-    private val mapResourcesRepository: MapResourcesRepository<BitmapDescriptor>
+    private val busIcon: BitmapDescriptor
 ) : MapMarkerDataSource<Marker, MarkerOptions> {
     override var mapMarker: Marker? = null
     override var mapMarkerOptions: MarkerOptions? = null
@@ -31,7 +30,7 @@ class TravelerMapMarkerDataSource(
         if (mapMarkerOptions == null || mapMarker == null) {
             mapMarkerOptions = MarkerOptions().apply {
                 position(mapsLatLng)?.title("User position")
-                icon(mapResourcesRepository.getBusIcon())
+                icon(busIcon)
                 addMarkerToMap(this)?.let {
                     mapMarker = it
                 }

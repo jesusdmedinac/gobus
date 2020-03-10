@@ -2,11 +2,11 @@ package com.mupper.gobus.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.mupper.features.bus.AddNewBusWithTravelers
 import com.mupper.gobus.R
 import com.mupper.gobus.commons.Event
 import com.mupper.sharedtestcode.fakeBus
 import com.mupper.sharedtestcode.fakeTraveler
+import com.mupper.usecase.bus.AddNewBusWithTravelers
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.Dispatchers

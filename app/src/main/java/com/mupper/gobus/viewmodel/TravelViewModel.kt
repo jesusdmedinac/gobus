@@ -4,9 +4,9 @@ import android.graphics.drawable.Drawable
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.mupper.data.source.resources.TravelControlDataSource
 import com.mupper.gobus.commons.Event
 import com.mupper.gobus.commons.scope.ScopedViewModel
-import com.mupper.gobus.model.TravelControl
 import kotlinx.coroutines.CoroutineDispatcher
 
 /**
@@ -14,7 +14,7 @@ import kotlinx.coroutines.CoroutineDispatcher
  * Mupper
  */
 class TravelViewModel(
-    private val travelControl: TravelControl,
+    private val travelControl: TravelControlDataSource<Drawable>,
     uiDispatcher: CoroutineDispatcher
 ) : ScopedViewModel(uiDispatcher) {
     private val _navigateToStartTravelDialogLiveData = MutableLiveData<Event<Unit>>()

@@ -1,10 +1,10 @@
-package com.mupper.features
+package com.mupper.usecase
 
 import com.mupper.data.repository.BusRepository
 import com.mupper.data.repository.TravelerRepository
 import com.mupper.domain.LatLng
 import com.mupper.domain.traveler.Traveler
-import com.mupper.features.bus.GetActualBusWithTravelers
+import com.mupper.usecase.bus.GetActualBusWithTravelers
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 

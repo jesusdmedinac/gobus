@@ -4,7 +4,10 @@ import com.mupper.data.source.local.TravelerLocalDataSource
 import com.mupper.data.source.remote.TravelerRemoteDataSource
 import com.mupper.sharedtestcode.fakeTraveler
 import com.mupper.sharedtestcode.fakeTravelingPath
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.given
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
@@ -38,7 +41,7 @@ class TravelerRepositoryTest {
     fun `retrieveActualTraveler should return a Traveler when there is almost one on travelerRepository with given actualEmail`() {
         runBlocking {
             // GIVEN
-            given(travelerLocalDataSource.getCount()).willReturn(1)
+            given(travelerLocalDataSource.getTravelerCount()).willReturn(1)
             val expectedTraveler = fakeTraveler.copy()
             given(travelerLocalDataSource.findTravelerByEmail(expectedTraveler.email)).willReturn(
                 expectedTraveler
@@ -56,7 +59,7 @@ class TravelerRepositoryTest {
     fun `retrieveActualTraveler should call findTravelerByEmail of travelerLocalDataSource with given email when getCount return 0`() {
         runBlocking {
             // GIVEN
-            given(travelerLocalDataSource.getCount()).willReturn(0)
+            given(travelerLocalDataSource.getTravelerCount()).willReturn(0)
 
             // WHEN
             travelerRepository.retrieveActualTraveler(fakeTravelingPath)
@@ -70,7 +73,7 @@ class TravelerRepositoryTest {
     fun `retrieveActualTraveler should call findTravelerByEmail of travelerRemoteDataSource with given email when getCount return 0`() {
         runBlocking {
             // GIVEN
-            given(travelerLocalDataSource.getCount()).willReturn(0)
+            given(travelerLocalDataSource.getTravelerCount()).willReturn(0)
 
             // WHEN
             travelerRepository.retrieveActualTraveler(fakeTravelingPath)
@@ -84,7 +87,7 @@ class TravelerRepositoryTest {
     fun `retrieveActualTraveler should call invertTraveler of travelerLocalDataSource with expected travelingPath and remoteTraveler when getCount return 0`() {
         runBlocking {
             // GIVEN
-            given(travelerLocalDataSource.getCount()).willReturn(0)
+            given(travelerLocalDataSource.getTravelerCount()).willReturn(0)
             val expectedTraveler = fakeTraveler.copy()
             given(travelerRemoteDataSource.findTravelerByEmail(expectedTraveler.email)).willReturn(
                 expectedTraveler
@@ -103,7 +106,7 @@ class TravelerRepositoryTest {
     fun `retrieveActualTraveler should call addStaticTraveler when findTravelerByEmail of travelerRemoteDataSource returns null and getCount return 0`() {
         runBlocking {
             // GIVEN
-            given(travelerLocalDataSource.getCount()).willReturn(0)
+            given(travelerLocalDataSource.getTravelerCount()).willReturn(0)
 
             // WHEN
             whenever(travelerRemoteDataSource.findTravelerByEmail(fakeTraveler.copy().email)).thenReturn(

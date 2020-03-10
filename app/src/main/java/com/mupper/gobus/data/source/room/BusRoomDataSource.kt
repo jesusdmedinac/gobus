@@ -15,7 +15,7 @@ class BusRoomDataSource(db: GobusDatabase) : BusLocalDataSource {
 
     private val busDao = db.busDao()
 
-    override suspend fun getCount(path: String): Int =
+    override suspend fun getBusCount(path: String): Int =
         withContext(Dispatchers.IO) {
             busDao.busCount(path)
         }

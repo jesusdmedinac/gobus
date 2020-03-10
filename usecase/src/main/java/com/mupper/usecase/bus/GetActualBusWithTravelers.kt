@@ -1,4 +1,4 @@
-package com.mupper.features.bus
+package com.mupper.usecase.bus
 
 import com.mupper.data.repository.BusRepository
 import com.mupper.domain.relations.BusWithTravelers

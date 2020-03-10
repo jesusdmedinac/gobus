@@ -46,7 +46,7 @@ class BusRoomDataSourceTest {
                 given(busDao.busCount(fakeTravelingPath)).willReturn(expectedCount)
 
                 // WHEN
-                val actualCount = getCount(fakeTravelingPath)
+                val actualCount = getBusCount(fakeTravelingPath)
 
                 // THEN
                 assertThat(actualCount, `is`(expectedCount))
@@ -63,7 +63,7 @@ class BusRoomDataSourceTest {
                 given(busDao.busCount(fakeTravelingPath)).willReturn(expectedCount)
 
                 // WHEN
-                getCount(fakeTravelingPath)
+                getBusCount(fakeTravelingPath)
 
                 // THEN
                 verify(busDao).busCount(fakeTravelingPath)

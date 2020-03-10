@@ -1,4 +1,4 @@
-package com.mupper.features.traveler
+package com.mupper.usecase.traveler
 
 import com.mupper.data.repository.TravelerRepository
 import com.mupper.domain.traveler.Traveler

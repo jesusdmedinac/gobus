@@ -3,18 +3,18 @@ package com.mupper.gobus
 import android.Manifest
 import android.app.Application
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.location.LocationManager
 import android.os.Looper
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.FirebaseFirestore
+import com.mupper.data.repository.BusRepository
 import com.mupper.data.repository.BusRepositoryDerived
-import com.mupper.data.repository.MapResourcesRepository
-import com.mupper.data.repository.MapResourcesRepositoryDerived
+import com.mupper.data.repository.TravelerRepository
 import com.mupper.data.repository.TravelerRepositoryDerived
 import com.mupper.data.source.local.BusLocalDataSource
 import com.mupper.data.source.local.TravelerLocalDataSource
@@ -22,11 +22,7 @@ import com.mupper.data.source.location.LocationDataSource
 import com.mupper.data.source.remote.BusRemoteDataSource
 import com.mupper.data.source.remote.TravelerRemoteDataSource
 import com.mupper.data.source.resources.MapMarkerDataSource
-import com.mupper.data.source.resources.MapResourcesDataSource
-import com.mupper.features.ShareActualLocation
-import com.mupper.features.bus.AddNewBusWithTravelers
-import com.mupper.features.bus.GetActualBusWithTravelers
-import com.mupper.features.traveler.GetActualTraveler
+import com.mupper.data.source.resources.TravelControlDataSource
 import com.mupper.gobus.data.database.GobusDatabase
 import com.mupper.gobus.data.source.firebase.BusFirebaseDataSource
 import com.mupper.gobus.data.source.firebase.TravelerFirebaseDataSource
@@ -41,6 +37,10 @@ import com.mupper.gobus.viewmodel.BusViewModel
 import com.mupper.gobus.viewmodel.MapViewModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import com.mupper.gobus.viewmodel.TravelerViewModel
+import com.mupper.usecase.ShareActualLocation
+import com.mupper.usecase.bus.AddNewBusWithTravelers
+import com.mupper.usecase.bus.GetActualBusWithTravelers
+import com.mupper.usecase.traveler.GetActualTraveler
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -57,7 +57,7 @@ fun Application.initDI() {
                 appModule,
                 dataSourceModule,
                 repositoryModule,
-                featureModule,
+                useCaseModule,
                 viewModelModule
             )
         )
@@ -80,10 +80,10 @@ private val appModule = module {
     single(named(DEPENDENCY_NAME_IO_DISPATCHER)) { Dispatchers.IO }
 }
 
-val dataSourceModule = module {
+private val dataSourceModule = module {
     single(named(DEPENDENCY_NAME_STATIC_USER_EMAIL)) { STATIC_USER_EMAIL }
-    factory<MapResourcesDataSource<BitmapDescriptor>> { MapBitmapDescriptorDataSource(get()) }
-    factory { TravelControl(get()) }
+    factory { MapBitmapDescriptorDataSource(get()).getBusIcon() }
+    factory<TravelControlDataSource<Drawable?>> { TravelControl(get()) }
     factory<LocationDataSource<LocationRequest, LocationCallback>> {
         PlayServicesLocationDataSource(
             get(),
@@ -98,26 +98,26 @@ val dataSourceModule = module {
         )
     }
     factory<BusRemoteDataSource> { BusFirebaseDataSource(get()) }
-    factory<TravelerLocalDataSource> {
-        TravelerRoomDataSource(
-            get()
-        )
-    }
+    factory<TravelerLocalDataSource> { TravelerRoomDataSource(get()) }
     factory<TravelerRemoteDataSource> { TravelerFirebaseDataSource(get()) }
+    factory<MapMarkerDataSource<Marker, MarkerOptions>> { TravelerMapMarkerDataSource(get()) }
 }
 
 val repositoryModule = module {
-    factory<MapResourcesRepository<BitmapDescriptor>> { MapResourcesRepositoryDerived(get()) }
-    factory<MapMarkerDataSource<Marker, MarkerOptions>> { TravelerMapMarkerDataSource(get()) } // TOD O : Remove MapResourcesRepository dependency
-    factory { BusRepositoryDerived(get(), get()) }
-    factory { TravelerRepositoryDerived(get(named(DEPENDENCY_NAME_STATIC_USER_EMAIL)), get(), get()) }
+    factory<BusRepository> { BusRepositoryDerived(get(), get()) }
+    factory<TravelerRepository> {
+        TravelerRepositoryDerived(
+            get(named(DEPENDENCY_NAME_STATIC_USER_EMAIL)),
+            get(),
+            get()
+        )
+    }
 }
-
-private val featureModule = module {
-    factory { GetActualTraveler(get()) }
-    factory { AddNewBusWithTravelers(get(), get(), get(named(DEPENDENCY_NAME_IO_DISPATCHER))) }
-    factory { GetActualBusWithTravelers(get()) }
-    factory {
+val useCaseModule = module {
+    single { GetActualTraveler(get()) }
+    single { AddNewBusWithTravelers(get(), get(), get(named(DEPENDENCY_NAME_IO_DISPATCHER))) }
+    single { GetActualBusWithTravelers(get()) }
+    single {
         ShareActualLocation(get(), get(), get(), get(named(DEPENDENCY_NAME_IO_DISPATCHER)))
     }
 }
