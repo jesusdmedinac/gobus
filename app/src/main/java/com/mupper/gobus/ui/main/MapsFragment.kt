@@ -16,13 +16,12 @@ import com.mupper.gobus.commons.extension.navigate
 import com.mupper.gobus.commons.extension.supportFragmentManager
 import com.mupper.gobus.databinding.FragmentMapsBinding
 import com.mupper.gobus.viewmodel.MapViewModel
-import com.mupper.gobus.viewmodel.MapViewModel.MapsModel
+import com.mupper.gobus.viewmodel.MapViewModel.MapModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import com.mupper.gobus.viewmodel.TravelerViewModel
 import org.koin.android.ext.android.inject
 
 class MapsFragment : Fragment() {
-
     private val mapViewModel: MapViewModel by inject()
     private val travelViewModel: TravelViewModel by inject()
     private val travelerViewModel: TravelerViewModel by inject()
@@ -64,9 +63,9 @@ class MapsFragment : Fragment() {
     }
 
     private fun initObservers() {
-        mapViewModel.mapsEventLiveData.observe(
+        mapViewModel.mapEventLiveData.observe(
             viewLifecycleOwner,
-            EventObserver(::onMapsModelChange)
+            EventObserver(::onMapModelChange)
         )
 
         mapViewModel.requestLocationPermissionEventLiveData.observe(viewLifecycleOwner,
@@ -77,20 +76,20 @@ class MapsFragment : Fragment() {
                 }
             })
 
-        travelViewModel.navigateToStartTravelDialog.observe(viewLifecycleOwner,
+        travelViewModel.navigateToStartTravelDialogLiveData.observe(viewLifecycleOwner,
             EventObserver {
-                val toStartTravel: NavDirections =
+                val toStartTravelDialogFragment: NavDirections =
                     MapsFragmentDirections.actionMapsFragmentToStartTravelFragment()
-                navigate(toStartTravel)
+                navigate(toStartTravelDialogFragment)
             })
-        travelViewModel.navigateToStopTravelDialog.observe(viewLifecycleOwner,
+        travelViewModel.navigateToStopTravelDialogLiveData.observe(viewLifecycleOwner,
             EventObserver {
-                val toStopTravel: NavDirections =
+                val toStopTravelDialogFragment: NavDirections =
                     MapsFragmentDirections.actionMapsFragmentToStopTravelFragment()
-                navigate(toStopTravel)
+                navigate(toStopTravelDialogFragment)
             })
 
-        travelViewModel.travelState.observe(
+        travelViewModel.travelStateLiveData.observe(
             viewLifecycleOwner,
             EventObserver(::onTravelModelChange)
         )
@@ -107,11 +106,11 @@ class MapsFragment : Fragment() {
         supportFragmentManager.beginTransaction().remove(mapFragment).commit()
     }
 
-    private fun onMapsModelChange(model: MapsModel) {
+    private fun onMapModelChange(model: MapModel) {
         when (model) {
-            is MapsModel.MapReady -> mapFragment.getMapAsync(model.onMapReady)
-            is MapsModel.RequestNewLocation -> mapViewModel.onNewLocationRequested()
-            is MapsModel.NewLocation -> with(model.lastLocation) {
+            is MapModel.MapReady -> mapFragment.getMapAsync(model.onMapReady)
+            is MapModel.RequestNewLocation -> mapViewModel.onNewLocationRequested()
+            is MapModel.NewLocation -> with(model.lastLocation) {
                 if (model.isTraveling) {
                     travelerViewModel.shareActualLocation(this)
                 }

@@ -1,11 +1,12 @@
 package com.mupper.gobus.viewmodel
 
 import android.graphics.drawable.Drawable
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.mupper.data.source.resources.TravelControlDataSource
 import com.mupper.gobus.commons.Event
 import com.mupper.gobus.commons.scope.ScopedViewModel
-import com.mupper.gobus.model.TravelControl
 import kotlinx.coroutines.CoroutineDispatcher
 
 /**
@@ -13,29 +14,30 @@ import kotlinx.coroutines.CoroutineDispatcher
  * Mupper
  */
 class TravelViewModel(
-    private val travelControl: TravelControl,
+    private val travelControl: TravelControlDataSource<Drawable>,
     uiDispatcher: CoroutineDispatcher
 ) : ScopedViewModel(uiDispatcher) {
-    private val _navigateToStartTravelDialog = MutableLiveData<Event<Unit>>()
-    val navigateToStartTravelDialog: LiveData<Event<Unit>> get() = _navigateToStartTravelDialog
+    private val _navigateToStartTravelDialogLiveData = MutableLiveData<Event<Unit>>()
+    val navigateToStartTravelDialogLiveData: LiveData<Event<Unit>> get() = _navigateToStartTravelDialogLiveData
 
-    private val _navigateToStopTravelDialog = MutableLiveData<Event<Unit>>()
-    val navigateToStopTravelDialog: LiveData<Event<Unit>> get() = _navigateToStopTravelDialog
+    private val _navigateToStopTravelDialogLiveData = MutableLiveData<Event<Unit>>()
+    val navigateToStopTravelDialogLiveData: LiveData<Event<Unit>> get() = _navigateToStopTravelDialogLiveData
 
-    private val _navigateToBusNavigation = MutableLiveData<Event<Unit>>()
-    val navigateToBusNavigation: LiveData<Event<Unit>> get() = _navigateToBusNavigation
+    private val _navigateToBusNavigationLiveData = MutableLiveData<Event<Unit>>()
+    val navigateToBusNavigationLiveData: LiveData<Event<Unit>> get() = _navigateToBusNavigationLiveData
 
-    private val _travelState = MutableLiveData<Event<TravelState>>()
-    val travelState: LiveData<Event<TravelState>> get() = _travelState
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    val travelStateMutableLiveData = MutableLiveData<Event<TravelState>>()
+    val travelStateLiveData: LiveData<Event<TravelState>> get() = travelStateMutableLiveData
 
-    private val _fabIcon = MutableLiveData<Drawable>(travelControl.playIcon)
-    val fabIcon: LiveData<Drawable> get() = _fabIcon
+    private val _fabIconLiveData = MutableLiveData<Drawable>(travelControl.playIcon)
+    val fabIconLiveData: LiveData<Drawable> get() = _fabIconLiveData
 
-    private val _fabColor = MutableLiveData<Int>(travelControl.defaultFabColor)
-    val fabColor: LiveData<Int> get() = _fabColor
+    private val _fabColorLiveData = MutableLiveData<Int>(travelControl.defaultFabColor)
+    val fabColorLiveData: LiveData<Int> get() = _fabColorLiveData
 
-    private val _fabIconColor = MutableLiveData<Int>(travelControl.defaultFabIconColor)
-    val fabIconColor: LiveData<Int> get() = _fabIconColor
+    private val _fabIconColorLiveData = MutableLiveData<Int>(travelControl.defaultFabIconColor)
+    val fabIconColorLiveData: LiveData<Int> get() = _fabIconColorLiveData
 
     sealed class TravelState {
         object OnWay : TravelState()
@@ -43,7 +45,7 @@ class TravelViewModel(
     }
 
     fun toggleTravelState() {
-        if (travelState.value?.peekContent() == TravelState.OnWay) {
+        if (travelStateLiveData.value?.peekContent() == TravelState.OnWay) {
             navigateToStopTravelDialog()
         } else {
             navigateToStartTravelDialog()
@@ -51,38 +53,38 @@ class TravelViewModel(
     }
 
     private fun navigateToStartTravelDialog() {
-        _navigateToStartTravelDialog.value = Event(Unit)
+        _navigateToStartTravelDialogLiveData.value = Event(Unit)
     }
 
     private fun navigateToStopTravelDialog() {
-        _navigateToStopTravelDialog.value = Event(Unit)
+        _navigateToStopTravelDialogLiveData.value = Event(Unit)
     }
 
     fun navigateToBusNavigation() {
-        _navigateToBusNavigation.value = Event(Unit)
+        _navigateToBusNavigationLiveData.value = Event(Unit)
     }
 
     fun letsWalk() {
-        _travelState.value = Event(TravelState.Walking)
+        travelStateMutableLiveData.value = Event(TravelState.Walking)
     }
 
     fun letsTravel() {
-        _travelState.value = Event(TravelState.OnWay)
+        travelStateMutableLiveData.value = Event(TravelState.OnWay)
     }
 
     fun setFabToStop() {
         with(travelControl) {
-            _fabIcon.value = stopIcon
-            _fabColor.value = defaultFabIconColor
-            _fabIconColor.value = defaultFabColor
+            _fabIconLiveData.value = stopIcon
+            _fabColorLiveData.value = defaultFabIconColor
+            _fabIconColorLiveData.value = defaultFabColor
         }
     }
 
     fun setFabToStart() {
         with(travelControl) {
-            _fabIcon.value = playIcon
-            _fabColor.value = defaultFabColor
-            _fabIconColor.value = defaultFabIconColor
+            _fabIconLiveData.value = playIcon
+            _fabColorLiveData.value = defaultFabColor
+            _fabIconColorLiveData.value = defaultFabIconColor
         }
     }
 }

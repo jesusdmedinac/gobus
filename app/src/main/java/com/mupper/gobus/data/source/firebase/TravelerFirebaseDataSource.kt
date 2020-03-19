@@ -9,8 +9,9 @@ import com.mupper.gobus.data.mapper.toDomainTraveler
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
-class TravelerFirebaseDataSource : TravelerRemoteDataSource {
-    private val firestore = FirebaseFirestore.getInstance()
+class TravelerFirebaseDataSource(
+    private val firestore: FirebaseFirestore
+) : TravelerRemoteDataSource {
 
     private fun getTravelerDocument(email: String) =
         firestore.collection(COLLECTION_TRAVELER).document(email)

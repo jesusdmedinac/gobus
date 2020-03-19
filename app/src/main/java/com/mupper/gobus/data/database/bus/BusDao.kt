@@ -1,11 +1,6 @@
 package com.mupper.gobus.data.database.bus
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Update
-import androidx.room.Transaction
+import androidx.room.*
 import com.mupper.gobus.data.database.relations.BusWithTravelers
 
 /**
@@ -15,7 +10,7 @@ import com.mupper.gobus.data.database.relations.BusWithTravelers
 @Dao
 interface BusDao {
     @Query("SELECT count(*) FROM bus WHERE path = :path")
-    fun getCount(path: String): Int
+    fun busCount(path: String): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertBus(bus: Bus)

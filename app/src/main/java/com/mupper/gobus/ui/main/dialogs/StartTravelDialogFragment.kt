@@ -42,7 +42,7 @@ class StartTravelDialogFragment : DialogFragment() {
     ): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
-        travelViewModel.navigateToBusNavigation.observe(viewLifecycleOwner,
+        travelViewModel.navigateToBusNavigationLiveData.observe(viewLifecycleOwner,
             EventObserver {
                 val toBusNavigation: NavDirections =
                     StartTravelDialogFragmentDirections.actionStartTravelFragmentToBusNav()

@@ -3,7 +3,7 @@ package com.mupper.gobus.ui.bus.steps
 import android.os.Bundle
 import android.view.View
 import com.mupper.gobus.R
-import com.mupper.gobus.commons.newInstance
+import com.mupper.gobus.commons.newStepInstance
 import com.mupper.gobus.commons.stepper.StepFragment
 import com.mupper.gobus.databinding.FragmentBusNewPathNameBinding
 import com.stepstone.stepper.VerificationError
@@ -15,7 +15,11 @@ import com.stepstone.stepper.VerificationError
 class NewBusPathNameFragment : StepFragment<FragmentBusNewPathNameBinding>() {
     companion object {
         fun newInstance(): StepFragment<FragmentBusNewPathNameBinding> {
-            return newInstance(NewBusPathNameFragment(), R.layout.fragment_bus_new_path_name)
+            return newStepInstance(
+                NewBusPathNameFragment(),
+                R.layout.fragment_bus_new_path_name,
+                Bundle()
+            )
         }
     }
 

@@ -25,7 +25,7 @@
             app:boxCornerRadiusBottomStart="8dp"
             app:boxCornerRadiusTopEnd="8dp"
             app:boxCornerRadiusTopStart="8dp"
-            app:boxStrokeColor="@{bus.pathColorInt}"
+            app:boxStrokeColor="@{bus.pathColorIntLiveData}"
             app:boxStrokeWidth="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +40,7 @@
                 android:focusableInTouchMode="false"
                 android:onClick="@{() -> bus.showColorPickerDialog(@color/md_red_500)}"
                 android:singleLine="true"
-                android:text="@={bus.pathColor}" />
+                android:text="@={bus.pathColorLiveData}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
