@@ -3,18 +3,18 @@
 package com.mupper.gobus.ui
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.findNavController
-import androidx.test.core.app.ActivityScenario.launch
-import androidx.test.espresso.matcher.ViewMatchers.assertThat
+import androidx.test.rule.GrantPermissionRule
 import androidx.test.runner.AndroidJUnit4
 import com.mupper.gobus.DEPENDENCY_NAME_UI_DISPATCHER
 import com.mupper.gobus.R
 import com.mupper.gobus.initMockedDi
+import com.mupper.gobus.launchMainActivity
 import com.mupper.gobus.viewmodel.MapViewModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import com.mupper.gobus.viewmodel.TravelerViewModel
-import org.hamcrest.core.Is.`is`
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -29,6 +29,10 @@ class MainActivityTest : AutoCloseKoinTest() {
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
+    @get:Rule
+    var permissionRule: GrantPermissionRule =
+        GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION)
+
     @Before
     fun setUp() {
         val vmModule = module {
@@ -41,17 +45,15 @@ class MainActivityTest : AutoCloseKoinTest() {
     }
 
     @Test
-    fun `validate that first destination is MapsFragment`() {
+    fun `first destination is MapsFragment`() {
         // GIVEN
-        val scenario = launch(MainActivity::class.java)
-
-        // WHEN
-        scenario.moveToState(Lifecycle.State.CREATED)
-
-        // THEN
-        scenario.onActivity { activity ->
-            val navController = activity.findNavController(R.id.main_nav_host_fragment)
-            assertThat(navController.currentDestination?.label.toString(), `is`("MapsFragment"))
+        with(launchMainActivity()) {
+            // WHEN
+            onActivity {
+                val navController = it.findNavController(R.id.main_nav_host_fragment)
+                // THEN
+                assertThat(navController.currentDestination?.label.toString(), `is`("MapsFragment"))
+            }
         }
     }
 }

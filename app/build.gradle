@@ -33,6 +33,9 @@ android {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
+    kotlinOptions {
+        jvmTarget = 1.8
+    }
     lintOptions {
         abortOnError false
     }
@@ -56,6 +59,11 @@ dependencies {
     implementation kotlinLibs.values()
     implementation uiLibs.values()
     implementation extraToolsLibs.values()
+
+    debugImplementation("androidx.fragment:fragment-testing:$fragment_version") {
+        // exclude androidx.test:core while fragment_testing depends on 1.1.0
+        exclude group: 'androidx.test', module: 'core'
+    }
 
     kapt androidKaptLibs.values()
 

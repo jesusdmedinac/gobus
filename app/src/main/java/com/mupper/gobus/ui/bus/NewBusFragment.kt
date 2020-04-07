@@ -9,14 +9,14 @@ import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import com.mupper.gobus.R
 import com.mupper.gobus.commons.extension.bindingInflate
-import com.mupper.gobus.databinding.FragmentBusNewBinding
+import com.mupper.gobus.databinding.FragmentNewBusBinding
 import com.mupper.gobus.ui.bus.stepper.NewBusStepperAdapter
 import com.mupper.gobus.ui.bus.steps.NewBusStep
 import com.mupper.gobus.viewmodel.BusViewModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import com.stepstone.stepper.StepperLayout
 import com.stepstone.stepper.VerificationError
-import kotlinx.android.synthetic.main.fragment_bus_new.*
+import kotlinx.android.synthetic.main.fragment_new_bus.*
 import org.koin.android.ext.android.inject
 
 /**
@@ -28,7 +28,7 @@ class NewBusFragment : Fragment(), StepperLayout.StepperListener {
     private val busViewModel: BusViewModel by inject()
     private val travelViewModel: TravelViewModel by inject()
 
-    private var binding: FragmentBusNewBinding? = null
+    private var binding: FragmentNewBusBinding? = null
 
     private var newBusStepSteps: List<NewBusStep> = listOf(
         NewBusStep("new_bus_path_name", "Nombre de la ruta", 0),
@@ -40,7 +40,7 @@ class NewBusFragment : Fragment(), StepperLayout.StepperListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = container?.bindingInflate(R.layout.fragment_bus_new, false)
+        binding = container?.bindingInflate(R.layout.fragment_new_bus, false)
 
         return binding?.root
     }

@@ -30,13 +30,13 @@ class TravelViewModel(
     val travelStateMutableLiveData = MutableLiveData<Event<TravelState>>()
     val travelStateLiveData: LiveData<Event<TravelState>> get() = travelStateMutableLiveData
 
-    private val _fabIconLiveData = MutableLiveData<Drawable>(travelControl.playIcon)
+    private val _fabIconLiveData = MutableLiveData(travelControl.playIcon)
     val fabIconLiveData: LiveData<Drawable> get() = _fabIconLiveData
 
-    private val _fabColorLiveData = MutableLiveData<Int>(travelControl.defaultFabColor)
+    private val _fabColorLiveData = MutableLiveData(travelControl.defaultFabColor)
     val fabColorLiveData: LiveData<Int> get() = _fabColorLiveData
 
-    private val _fabIconColorLiveData = MutableLiveData<Int>(travelControl.defaultFabIconColor)
+    private val _fabIconColorLiveData = MutableLiveData(travelControl.defaultFabIconColor)
     val fabIconColorLiveData: LiveData<Int> get() = _fabIconColorLiveData
 
     sealed class TravelState {
