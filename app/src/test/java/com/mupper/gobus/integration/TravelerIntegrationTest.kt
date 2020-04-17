@@ -1,15 +1,18 @@
 package com.mupper.gobus.integration
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.runner.AndroidJUnit4
 import com.mupper.data.source.local.BusLocalDataSource
 import com.mupper.data.source.local.TravelerLocalDataSource
 import com.mupper.data.source.remote.BusRemoteDataSource
 import com.mupper.data.source.remote.TravelerRemoteDataSource
 import com.mupper.domain.LatLng
-import com.mupper.gobus.*
+import com.mupper.gobus.DEPENDENCY_NAME_UI_DISPATCHER
 import com.mupper.gobus.data.mapper.toDomainBus
-import com.mupper.gobus.utils.*
+import com.mupper.gobus.utils.FakeBusLocalDataSource
+import com.mupper.gobus.utils.FakeBusRemoteDataSource
+import com.mupper.gobus.utils.FakeTravelerLocalDataSource
+import com.mupper.gobus.utils.FakeTravelerRemoteDataSource
+import com.mupper.gobus.utils.initMockedDi
 import com.mupper.gobus.viewmodel.TravelerViewModel
 import com.mupper.sharedtestcode.fakeBusWithTravelers
 import com.mupper.sharedtestcode.fakeLatLng
@@ -25,8 +28,9 @@ import org.koin.dsl.module
 import org.koin.test.AutoCloseKoinTest
 import org.koin.test.get
 import org.mockito.MockitoAnnotations
+import org.robolectric.RobolectricTestRunner
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
 class TravelerIntegrationTest : AutoCloseKoinTest() {
 
     @get:Rule

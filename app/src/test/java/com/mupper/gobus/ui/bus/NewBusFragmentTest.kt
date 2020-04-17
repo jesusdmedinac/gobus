@@ -6,11 +6,17 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import com.mupper.gobus.DEPENDENCY_NAME_UI_DISPATCHER
 import com.mupper.gobus.R
-import com.mupper.gobus.utils.*
+import com.mupper.gobus.utils.initMockedDi
+import com.mupper.gobus.utils.DataBindingIdlingResourceRule
+import com.mupper.gobus.utils.launchStyledFragmentInContainer
+import com.mupper.gobus.utils.typeTextWithoutConstraints
+import com.mupper.gobus.utils.clickWithoutConstraints
+import com.mupper.gobus.utils.mockMeasureSpec
+import com.mupper.gobus.utils.findNavController
+import com.mupper.gobus.utils.childAtPosition
 import com.mupper.gobus.viewmodel.BusViewModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import io.mockk.verify
@@ -21,8 +27,9 @@ import org.junit.runner.RunWith
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.test.AutoCloseKoinTest
+import org.robolectric.RobolectricTestRunner
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
 class NewBusFragmentTest : AutoCloseKoinTest() {
 
     @Rule

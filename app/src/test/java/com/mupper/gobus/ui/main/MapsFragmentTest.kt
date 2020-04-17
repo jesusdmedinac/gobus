@@ -8,8 +8,8 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.rule.GrantPermissionRule
-import androidx.test.runner.AndroidJUnit4
-import com.mupper.gobus.*
+import com.mupper.gobus.DEPENDENCY_NAME_UI_DISPATCHER
+import com.mupper.gobus.R
 import com.mupper.gobus.commons.Event
 import com.mupper.gobus.utils.findNavController
 import com.mupper.gobus.utils.initMockedDi
@@ -26,8 +26,9 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.test.AutoCloseKoinTest
 import org.koin.test.get
+import org.robolectric.RobolectricTestRunner
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
 class MapsFragmentTest : AutoCloseKoinTest() {
 
     @get:Rule

@@ -4,7 +4,6 @@ package com.mupper.gobus.integration
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import androidx.test.runner.AndroidJUnit4
 import com.mupper.data.source.local.BusLocalDataSource
 import com.mupper.data.source.local.TravelerLocalDataSource
 import com.mupper.data.source.remote.BusRemoteDataSource
@@ -31,8 +30,9 @@ import org.koin.test.get
 import org.mockito.ArgumentMatchers
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
+import org.robolectric.RobolectricTestRunner
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
 class BusIntegrationTest : AutoCloseKoinTest() {
 
     @get:Rule

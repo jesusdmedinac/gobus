@@ -1,7 +1,7 @@
 apply plugin: 'jacoco-android'
 
 jacoco {
-    toolVersion = "0.8.4"
+    toolVersion = "0.7.6.201602180812"
 }
 
 tasks.withType(Test) {
@@ -31,7 +31,15 @@ def excludesFiles = [
         '**/$*.class',
         '**/$.class',
         '**/*$.class',
-        '**/*$*.class'
+        '**/*$*.class',
+        // Robolectric tests
+        '**/NewBusFragment*.class',
+        '**/NewBusFragment.class',
+        '**/*NewBusFragment.class',
+        '**/*NewBusFragment*.class',
+//        '**/MapsFragment.class',
+//        '**/StartTravelDialogFragment.class',
+//        '**/StopTravelDialogFragment.class'
 ]
 
 jacocoAndroidUnitTestReport {

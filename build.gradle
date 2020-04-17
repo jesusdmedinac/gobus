@@ -48,7 +48,7 @@ allprojects {
     def koin_version = '2.0.1'
     def mockk_version = '1.9.3'
     def espresso_version = '3.2.0'
-    def robolectric_version = '4.3.1'
+    def robolectric_version = '4.3'
     def arch_version = '1.1.1'
 
     ext {
@@ -107,7 +107,6 @@ allprojects {
                 extJunit       : 'androidx.test.ext:junit-ktx:1.1.1',
                 archCoreTesting: "android.arch.core:core-testing:$arch_version",
                 fragment       : "androidx.fragment:fragment:$fragment_version",
-//                fragmentTest   : "androidx.fragment:fragment-testing:$fragment_version",
                 espressoIdling : "androidx.test.espresso:espresso-idling-resource:$espresso_version"
         ]
 
@@ -122,7 +121,6 @@ allprojects {
                 extJunit       : 'androidx.test.ext:junit-ktx:1.1.1',
                 archCoreTesting: "android.arch.core:core-testing:$arch_version",
                 fragment       : "androidx.fragment:fragment:$fragment_version",
-//                fragmentTest   : "androidx.fragment:fragment-testing:$fragment_version",
                 espressoIdling : "androidx.test.espresso:espresso-idling-resource:$espresso_version"
         ]
     }

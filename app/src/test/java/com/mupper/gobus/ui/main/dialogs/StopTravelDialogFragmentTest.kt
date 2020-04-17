@@ -7,7 +7,6 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mupper.gobus.*
 import com.mupper.gobus.utils.*
 import com.mupper.gobus.viewmodel.MapViewModel
@@ -22,8 +21,9 @@ import org.junit.runner.RunWith
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.test.AutoCloseKoinTest
+import org.robolectric.RobolectricTestRunner
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
 class StopTravelDialogFragmentTest : AutoCloseKoinTest() {
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()

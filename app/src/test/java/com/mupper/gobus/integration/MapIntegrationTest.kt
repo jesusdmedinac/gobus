@@ -5,7 +5,6 @@ package com.mupper.gobus.integration
 import android.location.Location
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import androidx.test.runner.AndroidJUnit4
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
@@ -42,8 +41,9 @@ import org.koin.test.get
 import org.mockito.BDDMockito.willReturn
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
+import org.robolectric.RobolectricTestRunner
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
 class MapIntegrationTest : AutoCloseKoinTest() {
 
     @get:Rule

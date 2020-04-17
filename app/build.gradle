@@ -40,8 +40,14 @@ android {
         abortOnError false
     }
     testOptions {
+        animationsDisabled true
+
         unitTests {
             includeAndroidResources = true
+        }
+        unitTests.all {
+            systemProperty 'robolectric.enabledSdks', '28'
+            jvmArgs '-noverify'
         }
     }
 }

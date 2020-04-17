@@ -5,7 +5,6 @@ package com.mupper.gobus.ui
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.navigation.findNavController
 import androidx.test.rule.GrantPermissionRule
-import androidx.test.runner.AndroidJUnit4
 import com.mupper.gobus.DEPENDENCY_NAME_UI_DISPATCHER
 import com.mupper.gobus.R
 import com.mupper.gobus.utils.initMockedDi
@@ -22,8 +21,9 @@ import org.junit.runner.RunWith
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.test.AutoCloseKoinTest
+import org.robolectric.RobolectricTestRunner
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
 class MainActivityTest : AutoCloseKoinTest() {
 
     @get:Rule
