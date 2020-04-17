@@ -1,5 +1,6 @@
 package com.mupper.gobus.commons.extension
 
+import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavDirections

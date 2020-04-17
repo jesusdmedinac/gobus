@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
@@ -12,6 +13,7 @@ import com.mupper.gobus.commons.extension.bindingInflate
 import com.mupper.gobus.databinding.FragmentNewBusBinding
 import com.mupper.gobus.ui.bus.stepper.NewBusStepperAdapter
 import com.mupper.gobus.ui.bus.steps.NewBusStep
+import com.mupper.gobus.utils.autoCleared
 import com.mupper.gobus.viewmodel.BusViewModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import com.stepstone.stepper.StepperLayout
@@ -28,18 +30,20 @@ class NewBusFragment : Fragment(), StepperLayout.StepperListener {
     private val busViewModel: BusViewModel by inject()
     private val travelViewModel: TravelViewModel by inject()
 
+//    private var binding by autoCleared<FragmentNewBusBinding>()
     private var binding: FragmentNewBusBinding? = null
 
     private var newBusStepSteps: List<NewBusStep> = listOf(
         NewBusStep("new_bus_path_name", "Nombre de la ruta", 0),
         NewBusStep("new_bus_path_color", "Color de la ruta", 1),
-        NewBusStep("new_bus_capacity", "Capcidad del autobus", 2)
+        NewBusStep("new_bus_capacity", "Capacidad del autobus", 2)
     )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+//        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_new_bus, container, false)
         binding = container?.bindingInflate(R.layout.fragment_new_bus, false)
 
         return binding?.root
@@ -48,10 +52,11 @@ class NewBusFragment : Fragment(), StepperLayout.StepperListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        stepperLayout.adapter =
-            NewBusStepperAdapter(newBusStepSteps, childFragmentManager, requireActivity())
-        stepperLayout.setListener(this)
-        stepperLayout.currentStepPosition = 0
+        stepperLayout.apply {
+            adapter = NewBusStepperAdapter(newBusStepSteps, childFragmentManager, requireActivity())
+            setListener(this@NewBusFragment)
+            currentStepPosition = 0
+        }
 
         binding?.apply {
             bus = busViewModel

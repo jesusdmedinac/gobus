@@ -8,8 +8,8 @@ import androidx.test.rule.GrantPermissionRule
 import androidx.test.runner.AndroidJUnit4
 import com.mupper.gobus.DEPENDENCY_NAME_UI_DISPATCHER
 import com.mupper.gobus.R
-import com.mupper.gobus.initMockedDi
-import com.mupper.gobus.launchMainActivity
+import com.mupper.gobus.utils.initMockedDi
+import com.mupper.gobus.utils.launchMainActivity
 import com.mupper.gobus.viewmodel.MapViewModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import com.mupper.gobus.viewmodel.TravelerViewModel

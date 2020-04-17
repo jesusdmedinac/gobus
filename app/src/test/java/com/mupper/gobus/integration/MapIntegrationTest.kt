@@ -18,6 +18,9 @@ import com.mupper.data.source.resources.MapMarkerDataSource
 import com.mupper.gobus.*
 import com.mupper.gobus.commons.Event
 import com.mupper.gobus.commons.extension.getOrAwaitValue
+import com.mupper.gobus.utils.FakeLocationDataSource
+import com.mupper.gobus.utils.FakeMapMarkerDataSource
+import com.mupper.gobus.utils.initMockedDi
 import com.mupper.gobus.viewmodel.MapViewModel
 import com.mupper.sharedtestcode.fakeLatLng
 import com.nhaarman.mockitokotlin2.mock
@@ -152,7 +155,10 @@ class MapIntegrationTest : AutoCloseKoinTest() {
                 mapEvent.onMapReady.onMapReady(mockGoogleMap)
 
                 // THEN
-                verify(spyFakeLocationDataSource).requestLocationUpdates(any(), any())
+                verify(spyFakeLocationDataSource).requestLocationUpdates(
+                    com.mupper.gobus.utils.any(),
+                    com.mupper.gobus.utils.any()
+                )
             }
         }
     }
@@ -276,7 +282,7 @@ class MapIntegrationTest : AutoCloseKoinTest() {
                 onNewLocationRequested()
 
                 // THEN
-                verify(mockGoogleMap).animateCamera(any())
+                verify(mockGoogleMap).animateCamera(com.mupper.gobus.utils.any())
             }
         }
     }

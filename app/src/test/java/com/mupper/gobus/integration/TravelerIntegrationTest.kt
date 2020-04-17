@@ -9,6 +9,7 @@ import com.mupper.data.source.remote.TravelerRemoteDataSource
 import com.mupper.domain.LatLng
 import com.mupper.gobus.*
 import com.mupper.gobus.data.mapper.toDomainBus
+import com.mupper.gobus.utils.*
 import com.mupper.gobus.viewmodel.TravelerViewModel
 import com.mupper.sharedtestcode.fakeBusWithTravelers
 import com.mupper.sharedtestcode.fakeLatLng

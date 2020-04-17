@@ -11,6 +11,7 @@ import com.mupper.data.source.remote.BusRemoteDataSource
 import com.mupper.data.source.remote.TravelerRemoteDataSource
 import com.mupper.gobus.*
 import com.mupper.gobus.commons.Event
+import com.mupper.gobus.utils.*
 import com.mupper.gobus.viewmodel.BusViewModel
 import com.mupper.sharedtestcode.fakeTraveler
 import com.nhaarman.mockitokotlin2.times

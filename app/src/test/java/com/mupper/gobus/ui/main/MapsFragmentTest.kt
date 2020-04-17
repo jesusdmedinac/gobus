@@ -11,6 +11,9 @@ import androidx.test.rule.GrantPermissionRule
 import androidx.test.runner.AndroidJUnit4
 import com.mupper.gobus.*
 import com.mupper.gobus.commons.Event
+import com.mupper.gobus.utils.findNavController
+import com.mupper.gobus.utils.initMockedDi
+import com.mupper.gobus.utils.launchMainActivity
 import com.mupper.gobus.viewmodel.MapViewModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import com.mupper.gobus.viewmodel.TravelerViewModel

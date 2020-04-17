@@ -1,5 +1,6 @@
 package com.mupper.gobus.viewmodel
 
+import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
@@ -27,7 +28,7 @@ class BusViewModel(
     val capacityLiveData = MutableLiveData<String>()
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    val isTravelingStateToNewBus = MutableLiveData<Boolean>(false)
+    val isTravelingStateToNewBus = MutableLiveData(false)
 
     private val _showColorPickerDialog = MutableLiveData<Event<Int?>>()
     val showColorPickerDialog: LiveData<Event<Int?>> get() = _showColorPickerDialog
@@ -40,7 +41,7 @@ class BusViewModel(
             Event(pathColorIntLiveData.value)
     }
 
-    fun onColorPicked(@ColorRes color: Int, colorString: String) {
+    fun onColorPicked(@ColorInt color: Int, colorString: String) {
         pathColorIntLiveData.value = color
         pathColorLiveData.value = colorString
     }

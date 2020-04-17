@@ -1,4 +1,4 @@
-package com.mupper.gobus
+package com.mupper.gobus.utils
 
 import android.view.View
 import android.widget.Button

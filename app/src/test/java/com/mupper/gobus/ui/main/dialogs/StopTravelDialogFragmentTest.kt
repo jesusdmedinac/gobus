@@ -4,11 +4,12 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.testing.FragmentScenario.FragmentAction
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.RootMatchers
+import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mupper.gobus.*
+import com.mupper.gobus.utils.*
 import com.mupper.gobus.viewmodel.MapViewModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import com.mupper.gobus.viewmodel.TravelerViewModel
@@ -57,7 +58,7 @@ class StopTravelDialogFragmentTest : AutoCloseKoinTest() {
 
             // THEN
             onView(withId(R.id.alertTitle))
-                .inRoot(RootMatchers.isDialog())
+                .inRoot(isDialog())
                 .check(matches(withText(expectedString)))
         })
     }
@@ -71,7 +72,7 @@ class StopTravelDialogFragmentTest : AutoCloseKoinTest() {
 
             // THEN
             onView(withId(android.R.id.button1))
-                .inRoot(RootMatchers.isDialog())
+                .inRoot(isDialog())
                 .check(matches(withText(expectedString)))
         })
     }
@@ -85,7 +86,7 @@ class StopTravelDialogFragmentTest : AutoCloseKoinTest() {
 
             // THEN
             onView(withId(android.R.id.button2))
-                .inRoot(RootMatchers.isDialog())
+                .inRoot(isDialog())
                 .check(matches(withText(expectedString)))
         })
     }
@@ -100,7 +101,7 @@ class StopTravelDialogFragmentTest : AutoCloseKoinTest() {
 
             // WHEN
             onView(withId(android.R.id.button1))
-                .inRoot(RootMatchers.isDialog())
+                .inRoot(isDialog())
                 .clickWithoutConstraints()
 
             // THEN
@@ -118,7 +119,7 @@ class StopTravelDialogFragmentTest : AutoCloseKoinTest() {
 
             // WHEN
             onView(withId(android.R.id.button2))
-                .inRoot(RootMatchers.isDialog())
+                .inRoot(isDialog())
                 .clickWithoutConstraints()
 
             // THEN
