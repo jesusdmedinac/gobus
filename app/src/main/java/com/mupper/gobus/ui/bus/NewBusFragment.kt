@@ -7,14 +7,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.mupper.gobus.R
 import com.mupper.gobus.commons.extension.bindingInflate
 import com.mupper.gobus.databinding.FragmentNewBusBinding
 import com.mupper.gobus.ui.bus.stepper.NewBusStepperAdapter
 import com.mupper.gobus.ui.bus.steps.NewBusStep
-import com.mupper.gobus.utils.autoCleared
 import com.mupper.gobus.viewmodel.BusViewModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import com.stepstone.stepper.StepperLayout
@@ -31,7 +29,6 @@ class NewBusFragment : Fragment(), StepperLayout.StepperListener {
     private val busViewModel: BusViewModel by inject()
     private val travelViewModel: TravelViewModel by inject()
 
-//    private var binding by autoCleared<FragmentNewBusBinding>()
     private var binding: FragmentNewBusBinding? = null
 
     private var newBusStepSteps: List<NewBusStep> = listOf(
@@ -44,7 +41,6 @@ class NewBusFragment : Fragment(), StepperLayout.StepperListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-//        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_new_bus, container, false)
         binding = container?.bindingInflate(R.layout.fragment_new_bus, false)
 
         return binding?.root
