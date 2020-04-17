@@ -21,9 +21,7 @@ import org.junit.runner.RunWith
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.test.AutoCloseKoinTest
-import org.robolectric.annotation.Config
 
-@Config(qualifiers = "normal")
 @RunWith(AndroidJUnit4::class)
 class NewBusFragmentTest : AutoCloseKoinTest() {
 
