@@ -3,6 +3,7 @@ package com.mupper.gobus.utils
 import android.view.View
 import android.view.View.MeasureSpec
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.testing.FragmentScenario
@@ -53,12 +54,22 @@ fun findNavController(): NavController {
 }
 
 fun clickWithoutConstraints() = object : ViewAction {
-    override fun getDescription(): String = "Click without constraint"
+    override fun getDescription(): String = "Click without constraints"
 
     override fun getConstraints(): Matcher<View> = ViewMatchers.isClickable()
 
     override fun perform(uiController: UiController?, view: View?) {
         view?.performClick()
+    }
+}
+
+fun typeTextWithoutConstraints(inputText: String) = object : ViewAction {
+    override fun getDescription(): String = "Type without constraints"
+
+    override fun getConstraints(): Matcher<View> = ViewMatchers.isFocusable()
+
+    override fun perform(uiController: UiController?, view: View?) {
+        (view as EditText).setText(inputText)
     }
 }
 

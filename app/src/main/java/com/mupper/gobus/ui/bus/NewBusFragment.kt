@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.mupper.gobus.R
 import com.mupper.gobus.commons.extension.bindingInflate
 import com.mupper.gobus.databinding.FragmentNewBusBinding
@@ -81,6 +82,6 @@ class NewBusFragment : Fragment(), StepperLayout.StepperListener {
         travelViewModel.letsTravel()
         val toMapsFragment = NewBusFragmentDirections.actionBusNewNavToMapsFragment()
         val popUpTo = NavOptions.Builder().setPopUpTo(R.id.mapsFragment, true).build()
-        view?.findNavController()?.navigate(toMapsFragment.actionId, null, popUpTo)
+        findNavController().navigate(toMapsFragment.actionId, null, popUpTo)
     }
 }
