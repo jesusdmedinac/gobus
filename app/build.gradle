@@ -56,7 +56,6 @@ dependencies {
 
     implementation googleLibs.values()
     implementation androidxLibs.values()
-//    implementation androidLibs.values()
     implementation kotlinLibs.values()
     implementation uiLibs.values()
     implementation extraToolsLibs.values()

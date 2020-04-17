@@ -107,8 +107,8 @@ allprojects {
                 extJunit       : 'androidx.test.ext:junit-ktx:1.1.1',
                 archCoreTesting: "android.arch.core:core-testing:$arch_version",
                 fragment       : "androidx.fragment:fragment:$fragment_version",
-                fragmentTest   : "androidx.fragment:fragment-testing:$fragment_version",
-                espressoIdling    : "androidx.test.espresso:espresso-idling-resource:$espresso_version"
+//                fragmentTest   : "androidx.fragment:fragment-testing:$fragment_version",
+                espressoIdling : "androidx.test.espresso:espresso-idling-resource:$espresso_version"
         ]
 
         androidTestLibs = [
@@ -122,8 +122,8 @@ allprojects {
                 extJunit       : 'androidx.test.ext:junit-ktx:1.1.1',
                 archCoreTesting: "android.arch.core:core-testing:$arch_version",
                 fragment       : "androidx.fragment:fragment:$fragment_version",
-                fragmentTest   : "androidx.fragment:fragment-testing:$fragment_version",
-                espressoIdling    : "androidx.test.espresso:espresso-idling-resource:$espresso_version"
+//                fragmentTest   : "androidx.fragment:fragment-testing:$fragment_version",
+                espressoIdling : "androidx.test.espresso:espresso-idling-resource:$espresso_version"
         ]
     }
 }

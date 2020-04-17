@@ -25,6 +25,12 @@ import org.koin.test.AutoCloseKoinTest
 
 @RunWith(AndroidJUnit4::class)
 class StartTravelDialogFragmentTest : AutoCloseKoinTest() {
+
+    @Rule
+    @JvmField
+    val dataBindingIdlingResourceRule: DataBindingIdlingResourceRule =
+        DataBindingIdlingResourceRule()
+
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
@@ -43,10 +49,16 @@ class StartTravelDialogFragmentTest : AutoCloseKoinTest() {
     fun `dialog should be showing`() {
         // GIVEN
         // WHEN
-        onFragment(FragmentAction<StartTravelDialogFragment> { fragment ->
-            // THEN
-            assertThat(fragment.requireDialog().isShowing, `is`(true))
-        })
+        launchStyledFragment<StartTravelDialogFragment>().run {
+            dataBindingIdlingResourceRule.monitorFragment(this)
+            onFragment {
+                assertThat(it.requireDialog().isShowing, `is`(true))
+            }
+        }
+//        onFragment(FragmentAction<StartTravelDialogFragment> { fragment ->
+//            // THEN
+//            assertThat(fragment.requireDialog().isShowing, `is`(true))
+//        })
     }
 
     @Test

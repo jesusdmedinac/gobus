@@ -1,16 +1,10 @@
 package com.mupper.gobus.ui.bus
 
-import android.widget.SearchView
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.testing.FragmentScenario
-import androidx.lifecycle.Lifecycle
-import androidx.navigation.ActionOnlyNavDirections
-import androidx.navigation.NavOptions
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
@@ -20,8 +14,6 @@ import com.mupper.gobus.utils.*
 import com.mupper.gobus.viewmodel.BusViewModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import io.mockk.verify
-import org.hamcrest.Matchers.allOf
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -60,7 +52,7 @@ class NewBusFragmentTest : AutoCloseKoinTest() {
 
         initMockedDi(vmModule)
 
-        fragmentScenario = launchStyledFragment<NewBusFragment>()
+        fragmentScenario = launchStyledFragmentInContainer<NewBusFragment>()
         dataBindingIdlingResourceRule.monitorFragment(fragmentScenario)
     }
 
