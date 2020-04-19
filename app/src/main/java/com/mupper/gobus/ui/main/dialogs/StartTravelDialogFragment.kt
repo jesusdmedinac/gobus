@@ -2,15 +2,12 @@ package com.mupper.gobus.ui.main.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.NavDirections
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mupper.gobus.R
 import com.mupper.gobus.commons.EventObserver
-import com.mupper.gobus.commons.extension.navigate
+import com.mupper.gobus.commons.extension.navigateTo
 import com.mupper.gobus.viewmodel.TravelViewModel
 import org.koin.android.ext.android.inject
 
@@ -23,7 +20,7 @@ class StartTravelDialogFragment : DialogFragment() {
     private val travelViewModel: TravelViewModel by inject()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
-        MaterialAlertDialogBuilder(requireActivity())
+        MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.lets_travel_title)
             .setMessage(R.string.lets_travel_message)
             .setPositiveButton(R.string.lets_travel) { _, _ ->
@@ -35,20 +32,15 @@ class StartTravelDialogFragment : DialogFragment() {
             .setCancelable(true)
             .create()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = super.onCreateView(inflater, container, savedInstanceState)
+    override fun onResume() {
+        super.onResume()
 
-        travelViewModel.navigateToBusNavigationLiveData.observe(viewLifecycleOwner,
+        travelViewModel.navigateToBusNavigationLiveData.observe(
+            this,
             EventObserver {
                 val toBusNavigation: NavDirections =
-                    StartTravelDialogFragmentDirections.actionStartTravelFragmentToBusNav()
-                navigate(toBusNavigation)
+                    StartTravelDialogFragmentDirections.actionStartTravelDialogFragmentToBusNav()
+                navigateTo(toBusNavigation)
             })
-
-        return view
     }
 }

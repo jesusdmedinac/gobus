@@ -5,7 +5,6 @@ package com.mupper.gobus.integration
 import android.location.Location
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import androidx.test.runner.AndroidJUnit4
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
@@ -18,6 +17,9 @@ import com.mupper.data.source.resources.MapMarkerDataSource
 import com.mupper.gobus.*
 import com.mupper.gobus.commons.Event
 import com.mupper.gobus.commons.extension.getOrAwaitValue
+import com.mupper.gobus.utils.FakeLocationDataSource
+import com.mupper.gobus.utils.FakeMapMarkerDataSource
+import com.mupper.gobus.utils.initMockedDi
 import com.mupper.gobus.viewmodel.MapViewModel
 import com.mupper.sharedtestcode.fakeLatLng
 import com.nhaarman.mockitokotlin2.mock
@@ -39,8 +41,9 @@ import org.koin.test.get
 import org.mockito.BDDMockito.willReturn
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
+import org.robolectric.RobolectricTestRunner
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
 class MapIntegrationTest : AutoCloseKoinTest() {
 
     @get:Rule
@@ -152,7 +155,10 @@ class MapIntegrationTest : AutoCloseKoinTest() {
                 mapEvent.onMapReady.onMapReady(mockGoogleMap)
 
                 // THEN
-                verify(spyFakeLocationDataSource).requestLocationUpdates(any(), any())
+                verify(spyFakeLocationDataSource).requestLocationUpdates(
+                    com.mupper.gobus.utils.any(),
+                    com.mupper.gobus.utils.any()
+                )
             }
         }
     }
@@ -276,7 +282,7 @@ class MapIntegrationTest : AutoCloseKoinTest() {
                 onNewLocationRequested()
 
                 // THEN
-                verify(mockGoogleMap).animateCamera(any())
+                verify(mockGoogleMap).animateCamera(com.mupper.gobus.utils.any())
             }
         }
     }

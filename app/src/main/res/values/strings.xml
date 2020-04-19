@@ -18,4 +18,5 @@
     <string name="bus_new_capacity">Capacidad del autobus</string>
     <string name="bus_new_path_color">Color de la ruta</string>
     <string name="bus_new_path_name">Nombre de la ruta</string>
+    <string name="whats_color_bus_title">¿De qué color es el camión?</string>
 </resources>

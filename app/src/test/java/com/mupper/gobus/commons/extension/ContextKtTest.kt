@@ -76,6 +76,6 @@ class ContextKtTest {
         val expectedColor = mockContext.getCompatColor(colorId)
 
         // THEN
-        assertThat(expectedColor, `is`(2131099793))
+        assertThat(expectedColor, `is`(2131099787))
     }
 }

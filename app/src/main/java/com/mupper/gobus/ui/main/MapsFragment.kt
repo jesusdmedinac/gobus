@@ -12,7 +12,7 @@ import com.mupper.gobus.PermissionRequester
 import com.mupper.gobus.R
 import com.mupper.gobus.commons.EventObserver
 import com.mupper.gobus.commons.extension.bindingInflate
-import com.mupper.gobus.commons.extension.navigate
+import com.mupper.gobus.commons.extension.navigateTo
 import com.mupper.gobus.commons.extension.supportFragmentManager
 import com.mupper.gobus.databinding.FragmentMapsBinding
 import com.mupper.gobus.viewmodel.MapViewModel
@@ -79,14 +79,14 @@ class MapsFragment : Fragment() {
         travelViewModel.navigateToStartTravelDialogLiveData.observe(viewLifecycleOwner,
             EventObserver {
                 val toStartTravelDialogFragment: NavDirections =
-                    MapsFragmentDirections.actionMapsFragmentToStartTravelFragment()
-                navigate(toStartTravelDialogFragment)
+                    MapsFragmentDirections.actionMapsFragmentToStartTravelDialogFragment()
+                navigateTo(toStartTravelDialogFragment)
             })
         travelViewModel.navigateToStopTravelDialogLiveData.observe(viewLifecycleOwner,
             EventObserver {
                 val toStopTravelDialogFragment: NavDirections =
-                    MapsFragmentDirections.actionMapsFragmentToStopTravelFragment()
-                navigate(toStopTravelDialogFragment)
+                    MapsFragmentDirections.actionMapsFragmentToStopTravelDialogFragment()
+                navigateTo(toStopTravelDialogFragment)
             })
 
         travelViewModel.travelStateLiveData.observe(
@@ -96,14 +96,14 @@ class MapsFragment : Fragment() {
     }
 
     override fun onResume() {
-        super.onResume()
         mapViewModel.requestLocationPermission()
+        super.onResume()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
         mapViewModel.clearMap()
-        supportFragmentManager.beginTransaction().remove(mapFragment).commit()
+        supportFragmentManager.beginTransaction().remove(mapFragment).commitAllowingStateLoss()
     }
 
     private fun onMapModelChange(model: MapModel) {

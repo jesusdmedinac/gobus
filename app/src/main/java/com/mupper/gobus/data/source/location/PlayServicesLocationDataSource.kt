@@ -52,11 +52,9 @@ class PlayServicesLocationDataSource(
         )
     }
 
-    private fun isLocationEnabled(): Boolean {
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-            LocationManager.NETWORK_PROVIDER
-        )
-    }
+    private fun isLocationEnabled(): Boolean = locationManager
+        .isProviderEnabled(LocationManager.GPS_PROVIDER)
+            || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
 
     private fun isLocationPermissionAllowed(): Boolean = fineLocationPermissionChecker.check()
 

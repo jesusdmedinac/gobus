@@ -3,18 +3,18 @@
 package com.mupper.gobus.ui
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Lifecycle
-import androidx.navigation.findNavController
-import androidx.test.core.app.ActivityScenario.launch
-import androidx.test.espresso.matcher.ViewMatchers.assertThat
-import androidx.test.runner.AndroidJUnit4
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.rule.GrantPermissionRule
 import com.mupper.gobus.DEPENDENCY_NAME_UI_DISPATCHER
 import com.mupper.gobus.R
-import com.mupper.gobus.initMockedDi
+import com.mupper.gobus.utils.initMockedDi
+import com.mupper.gobus.utils.launchMainActivity
 import com.mupper.gobus.viewmodel.MapViewModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import com.mupper.gobus.viewmodel.TravelerViewModel
-import org.hamcrest.core.Is.`is`
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -22,12 +22,17 @@ import org.junit.runner.RunWith
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.test.AutoCloseKoinTest
+import org.robolectric.RobolectricTestRunner
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
 class MainActivityTest : AutoCloseKoinTest() {
 
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
+
+    @get:Rule
+    var permissionRule: GrantPermissionRule =
+        GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION)
 
     @Before
     fun setUp() {
@@ -41,17 +46,11 @@ class MainActivityTest : AutoCloseKoinTest() {
     }
 
     @Test
-    fun `validate that first destination is MapsFragment`() {
-        // GIVEN
-        val scenario = launch(MainActivity::class.java)
-
+    fun `first destination is MapsFragment`() {
         // WHEN
-        scenario.moveToState(Lifecycle.State.CREATED)
+        launchMainActivity()
 
         // THEN
-        scenario.onActivity { activity ->
-            val navController = activity.findNavController(R.id.main_nav_host_fragment)
-            assertThat(navController.currentDestination?.label.toString(), `is`("MapsFragment"))
-        }
+        onView(withId(R.id.btnToggleTravel)).check(matches(isDisplayed()))
     }
 }

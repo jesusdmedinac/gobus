@@ -9,7 +9,7 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.GoogleMap
 import com.mupper.data.source.location.LocationDataSource
-import com.mupper.gobus.any
+import com.mupper.gobus.utils.any
 import com.mupper.gobus.commons.Event
 import com.mupper.gobus.commons.extension.getOrAwaitValue
 import com.mupper.gobus.data.source.resources.TravelerMapMarkerDataSource
@@ -137,7 +137,10 @@ class MapViewModelTest {
                 mapsEvent.onMapReady.onMapReady(mockGoogleMap)
 
                 // THEN
-                verify(mockLocationDataSource).requestLocationUpdates(any(), any())
+                verify(mockLocationDataSource).requestLocationUpdates(
+                    any(),
+                    any()
+                )
             }
         }
     }
