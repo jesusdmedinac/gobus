@@ -3,7 +3,10 @@
 package com.mupper.gobus.ui
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.navigation.findNavController
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.rule.GrantPermissionRule
 import com.mupper.gobus.DEPENDENCY_NAME_UI_DISPATCHER
 import com.mupper.gobus.R
@@ -12,8 +15,6 @@ import com.mupper.gobus.utils.launchMainActivity
 import com.mupper.gobus.viewmodel.MapViewModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import com.mupper.gobus.viewmodel.TravelerViewModel
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -46,14 +47,10 @@ class MainActivityTest : AutoCloseKoinTest() {
 
     @Test
     fun `first destination is MapsFragment`() {
-        // GIVEN
-        with(launchMainActivity()) {
-            // WHEN
-            onActivity {
-                val navController = it.findNavController(R.id.main_nav_host_fragment)
-                // THEN
-                assertThat(navController.currentDestination?.label.toString(), `is`("MapsFragment"))
-            }
-        }
+        // WHEN
+        launchMainActivity()
+
+        // THEN
+        onView(withId(R.id.btnToggleTravel)).check(matches(isDisplayed()))
     }
 }
