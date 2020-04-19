@@ -1,7 +1,6 @@
 package com.mupper.gobus.ui.bus
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.fragment.app.testing.FragmentScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
@@ -9,17 +8,11 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.rule.GrantPermissionRule
 import com.mupper.gobus.DEPENDENCY_NAME_UI_DISPATCHER
 import com.mupper.gobus.R
-import com.mupper.gobus.utils.initMockedDi
-import com.mupper.gobus.utils.DataBindingIdlingResourceRule
-import com.mupper.gobus.utils.launchStyledFragmentInContainer
-import com.mupper.gobus.utils.typeTextWithoutConstraints
-import com.mupper.gobus.utils.clickWithoutConstraints
-import com.mupper.gobus.utils.mockMeasureSpec
-import com.mupper.gobus.utils.findNavController
-import com.mupper.gobus.utils.childAtPosition
+import com.mupper.gobus.utils.*
 import com.mupper.gobus.viewmodel.BusViewModel
 import com.mupper.gobus.viewmodel.TravelViewModel
 import io.mockk.verify
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -46,8 +39,6 @@ class NewBusFragmentTest : AutoCloseKoinTest() {
     var permissionRule: GrantPermissionRule =
         GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION)
 
-    lateinit var fragmentScenario: FragmentScenario<NewBusFragment>
-
     @Before
     fun setUp() {
         val vmModule = module {
@@ -57,8 +48,14 @@ class NewBusFragmentTest : AutoCloseKoinTest() {
 
         initMockedDi(vmModule)
 
-        fragmentScenario = launchStyledFragmentInContainer<NewBusFragment>()
-        dataBindingIdlingResourceRule.monitorFragment(fragmentScenario)
+        launchStyledFragmentInContainer<NewBusFragment>().let {
+            dataBindingIdlingResourceRule.monitorFragment(it)
+        }
+    }
+
+    @After
+    fun tearDown() {
+        super.autoClose()
     }
 
     @Test
