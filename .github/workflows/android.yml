@@ -34,5 +34,3 @@ jobs:
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: true
-      - name: Build with Gradle
-        run: ./gradlew build
