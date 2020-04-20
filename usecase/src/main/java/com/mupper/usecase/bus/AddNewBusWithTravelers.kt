@@ -12,9 +12,9 @@ class AddNewBusWithTravelers(
     private val dispatcher: CoroutineDispatcher
 ) {
     suspend fun invoke(bus: Bus) = withContext(dispatcher) {
-        val traveler = getActualTraveler.invoke(bus.path)
+        val traveler = withContext(dispatcher) { getActualTraveler.invoke(bus.path) }
         traveler?.let {
-            busRepository.addNewBusWithTravelers(bus, traveler)
+            withContext(dispatcher) { busRepository.addNewBusWithTravelers(bus, it) }
         }
     }
 }

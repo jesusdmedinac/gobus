@@ -111,12 +111,19 @@ private val dataSourceModule = module {
 }
 
 val repositoryModule = module {
-    factory<BusRepository> { BusRepositoryDerived(get(), get()) }
+    factory<BusRepository> {
+        BusRepositoryDerived(
+            get(),
+            get(),
+            get(named(DEPENDENCY_NAME_IO_DISPATCHER))
+        )
+    }
     factory<TravelerRepository> {
         TravelerRepositoryDerived(
             get(named(DEPENDENCY_NAME_STATIC_USER_EMAIL)),
             get(),
-            get()
+            get(),
+            get(named(DEPENDENCY_NAME_IO_DISPATCHER))
         )
     }
 }
@@ -124,15 +131,15 @@ val repositoryModule = module {
 val useCaseModule = module {
     single { GetActualTraveler(get()) }
     single { AddNewBusWithTravelers(get(), get(), get(named(DEPENDENCY_NAME_IO_DISPATCHER))) }
-    single { GetActualBusWithTravelers(get()) }
+    single { GetActualBusWithTravelers(get(), get(named(DEPENDENCY_NAME_IO_DISPATCHER))) }
     single {
         ShareActualLocation(get(), get(), get(), get(named(DEPENDENCY_NAME_IO_DISPATCHER)))
     }
 }
 
 private val viewModelModule = module {
-    factory { MapViewModel(get(), get(), get(named(DEPENDENCY_NAME_UI_DISPATCHER))) }
-    factory { TravelerViewModel(get(), get(named(DEPENDENCY_NAME_UI_DISPATCHER))) }
-    factory { TravelViewModel(get(), get(named(DEPENDENCY_NAME_UI_DISPATCHER))) }
-    factory { BusViewModel(get(), get(named(DEPENDENCY_NAME_UI_DISPATCHER))) }
+    single { MapViewModel(get(), get(), get(named(DEPENDENCY_NAME_UI_DISPATCHER))) }
+    single { TravelerViewModel(get(), get(named(DEPENDENCY_NAME_UI_DISPATCHER))) }
+    single { TravelViewModel(get(), get(named(DEPENDENCY_NAME_UI_DISPATCHER))) }
+    single { BusViewModel(get(), get(named(DEPENDENCY_NAME_UI_DISPATCHER))) }
 }

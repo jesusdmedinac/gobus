@@ -66,7 +66,9 @@ class BusRoomDataSourceTest {
                 getBusCount(fakeTravelingPath)
 
                 // THEN
-                verify(busDao).busCount(fakeTravelingPath)
+                verifyBlocking(busDao) {
+                    busCount(fakeTravelingPath)
+                }
             }
         }
     }

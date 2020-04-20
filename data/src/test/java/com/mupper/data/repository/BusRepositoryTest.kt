@@ -6,6 +6,7 @@ import com.mupper.sharedtestcode.fakeBus
 import com.mupper.sharedtestcode.fakeBusWithTravelers
 import com.mupper.sharedtestcode.fakeTraveler
 import com.nhaarman.mockitokotlin2.verify
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -25,7 +26,8 @@ class BusRepositoryTest {
 
     @Before
     fun setUp() {
-        busRepository = BusRepositoryDerived(busLocalDataSource, busRemoteDataSource)
+        busRepository =
+            BusRepositoryDerived(busLocalDataSource, busRemoteDataSource, Dispatchers.Unconfined)
     }
 
     @Test
