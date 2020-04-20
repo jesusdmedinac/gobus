@@ -1,4 +1,4 @@
-package com.mupper.gobus
+package com.mupper.gobus.utils
 
 import android.Manifest
 import android.content.Context
@@ -19,6 +19,7 @@ import com.mupper.data.source.remote.BusRemoteDataSource
 import com.mupper.data.source.remote.TravelerRemoteDataSource
 import com.mupper.data.source.resources.MapMarkerDataSource
 import com.mupper.data.source.resources.TravelControlDataSource
+import com.mupper.gobus.*
 import com.mupper.gobus.data.database.GobusDatabase
 import com.mupper.gobus.model.PermissionChecker
 import com.nhaarman.mockitokotlin2.spy

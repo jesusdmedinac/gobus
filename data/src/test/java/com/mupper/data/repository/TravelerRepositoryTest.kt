@@ -8,6 +8,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
@@ -33,7 +34,8 @@ class TravelerRepositoryTest {
         travelerRepository = TravelerRepositoryDerived(
             fakeTraveler.copy().email,
             travelerLocalDataSource,
-            travelerRemoteDataSource
+            travelerRemoteDataSource,
+            Dispatchers.Unconfined
         )
     }
 

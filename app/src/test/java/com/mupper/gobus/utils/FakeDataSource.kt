@@ -1,4 +1,4 @@
-package com.mupper.gobus
+package com.mupper.gobus.utils
 
 import android.graphics.Color
 import android.graphics.drawable.Drawable
@@ -21,6 +21,7 @@ import com.mupper.domain.bus.Bus
 import com.mupper.domain.relations.BusWithTravelers
 import com.mupper.domain.resources.BusIcon
 import com.mupper.domain.traveler.Traveler
+import com.mupper.gobus.R
 import com.mupper.sharedtestcode.fakeBus
 import com.mupper.sharedtestcode.fakeLatLng
 import com.mupper.sharedtestcode.fakeTraveler
@@ -35,9 +36,15 @@ class FakeMapResourcesDataSource : MapResourcesDataSource<BitmapDescriptor> {
 
 class FakeTravelControl : TravelControlDataSource<Drawable> {
     override val playIcon: Drawable
-        get() = Drawable.createFromXml(app.resources, app.resources.getXml(R.drawable.ic_stop))
+        get() = Drawable.createFromXml(
+            app.resources, app.resources.getXml(
+                R.drawable.ic_stop
+            ))
     override val stopIcon: Drawable
-        get() = Drawable.createFromXml(app.resources, app.resources.getXml(R.drawable.ic_stop))
+        get() = Drawable.createFromXml(
+            app.resources, app.resources.getXml(
+                R.drawable.ic_stop
+            ))
     override val defaultFabColor: Int
         get() = Color.GREEN
     override val defaultFabIconColor: Int

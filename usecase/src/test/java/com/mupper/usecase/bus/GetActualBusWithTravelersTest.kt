@@ -3,6 +3,7 @@ package com.mupper.usecase.bus
 import com.mupper.data.repository.BusRepository
 import com.mupper.sharedtestcode.fakeBusWithTravelers
 import com.nhaarman.mockitokotlin2.given
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.nullValue
@@ -22,7 +23,7 @@ class GetActualBusWithTravelersTest {
 
     @Before
     fun setUp() {
-        getActualBusWithTravelers = GetActualBusWithTravelers(busRepository)
+        getActualBusWithTravelers = GetActualBusWithTravelers(busRepository, Dispatchers.Unconfined)
     }
 
     @Test

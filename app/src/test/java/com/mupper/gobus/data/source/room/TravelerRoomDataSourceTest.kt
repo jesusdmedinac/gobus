@@ -66,7 +66,9 @@ class TravelerRoomDataSourceTest {
                 getTravelerCount()
 
                 // THEN
-                verify(travelerDao).travelerCount()
+                verifyBlocking(travelerDao) {
+                    travelerCount()
+                }
             }
         }
     }

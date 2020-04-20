@@ -4,6 +4,8 @@ import com.mupper.data.source.local.TravelerLocalDataSource
 import com.mupper.data.source.remote.TravelerRemoteDataSource
 import com.mupper.domain.LatLng
 import com.mupper.domain.traveler.Traveler
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 
 interface TravelerRepository {
     suspend fun retrieveActualTraveler(travelingPath: String): Traveler?
@@ -13,21 +15,23 @@ interface TravelerRepository {
 private class TravelerRepositoryImpl(
     private val actualEmail: String,
     private val travelerLocalDataSource: TravelerLocalDataSource,
-    private val travelerRemoteDataSource: TravelerRemoteDataSource
+    private val travelerRemoteDataSource: TravelerRemoteDataSource,
+    private val dispatcher: CoroutineDispatcher
 ) : TravelerRepository {
     override suspend fun retrieveActualTraveler(travelingPath: String): Traveler? {
-        if (travelerLocalDataSource.getTravelerCount() == 0) {
-            val remoteTraveler = travelerRemoteDataSource.findTravelerByEmail(actualEmail)
-                ?: addStaticTraveler()
+        val travelerCount = withContext(dispatcher) { travelerLocalDataSource.getTravelerCount() }
+        if (travelerCount == 0) {
+            val remoteTraveler = withContext(dispatcher) { travelerRemoteDataSource.findTravelerByEmail(actualEmail)
+                ?: addStaticTraveler() }
 
-            travelerLocalDataSource.insertTraveler(travelingPath, remoteTraveler)
+            withContext(dispatcher) { travelerLocalDataSource.insertTraveler(travelingPath, remoteTraveler) }
         }
-        return travelerLocalDataSource.findTravelerByEmail(actualEmail)
+        return withContext(dispatcher) { travelerLocalDataSource.findTravelerByEmail(actualEmail) }
     }
 
     override suspend fun shareActualLocation(travelerInBus: Traveler) {
-        travelerLocalDataSource.shareActualLocation(travelerInBus)
-        travelerRemoteDataSource.shareActualLocation(travelerInBus)
+        withContext(dispatcher) { travelerLocalDataSource.shareActualLocation(travelerInBus) }
+        withContext(dispatcher) { travelerRemoteDataSource.shareActualLocation(travelerInBus) }
     }
 
     private suspend fun addStaticTraveler(): Traveler = travelerRemoteDataSource.addTraveler(
@@ -45,9 +49,11 @@ private class TravelerRepositoryImpl(
 class TravelerRepositoryDerived(
     actualEmail: String,
     travelerLocalDataSource: TravelerLocalDataSource,
-    travelerRemoteDataSource: TravelerRemoteDataSource
+    travelerRemoteDataSource: TravelerRemoteDataSource,
+    dispatcher: CoroutineDispatcher
 ) : TravelerRepository by TravelerRepositoryImpl(
     actualEmail,
     travelerLocalDataSource,
-    travelerRemoteDataSource
+    travelerRemoteDataSource,
+    dispatcher
 )

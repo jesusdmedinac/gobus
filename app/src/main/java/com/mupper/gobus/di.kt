@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.location.LocationManager
 import android.os.Looper
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
@@ -66,24 +67,30 @@ fun Application.initDI() {
 
 const val STATIC_USER_EMAIL = "dmc12345628@gmail.com"
 const val DEPENDENCY_NAME_STATIC_USER_EMAIL = "staticUserEmail"
+
+//const val DEPENDENCY_NAME_APP_CONTEXT = "appContext"
 const val DEPENDENCY_NAME_UI_DISPATCHER = "uiDispatcher"
 const val DEPENDENCY_NAME_IO_DISPATCHER = "ioDispatcher"
 
 private val appModule = module {
-    single { GobusDatabase.getInstance(get()) }
+    single { GobusDatabase.getInstance(androidContext()) }
     single(named(DEPENDENCY_NAME_UI_DISPATCHER)) { Dispatchers.Main }
-    single { LocationServices.getFusedLocationProviderClient(get()) }
+    single<FusedLocationProviderClient> {
+        LocationServices.getFusedLocationProviderClient(
+            androidContext()
+        )
+    }
     single { PermissionChecker(get(), Manifest.permission.ACCESS_FINE_LOCATION) }
-    single { (get() as Application).getSystemService(Context.LOCATION_SERVICE) as LocationManager }
-    single { Looper.getMainLooper() }
+    single { (androidContext() as Application).getSystemService(Context.LOCATION_SERVICE) as LocationManager }
+    single<Looper> { Looper.getMainLooper() }
     single { FirebaseFirestore.getInstance() }
     single(named(DEPENDENCY_NAME_IO_DISPATCHER)) { Dispatchers.IO }
 }
 
 private val dataSourceModule = module {
     single(named(DEPENDENCY_NAME_STATIC_USER_EMAIL)) { STATIC_USER_EMAIL }
-    factory { MapBitmapDescriptorDataSource(get()).getBusIcon() }
-    factory<TravelControlDataSource<Drawable?>> { TravelControl(get()) }
+    factory { MapBitmapDescriptorDataSource(androidContext() as Application).getBusIcon() }
+    factory<TravelControlDataSource<Drawable?>> { TravelControl(androidContext()) }
     factory<LocationDataSource<LocationRequest, LocationCallback>> {
         PlayServicesLocationDataSource(
             get(),
@@ -104,27 +111,35 @@ private val dataSourceModule = module {
 }
 
 val repositoryModule = module {
-    factory<BusRepository> { BusRepositoryDerived(get(), get()) }
+    factory<BusRepository> {
+        BusRepositoryDerived(
+            get(),
+            get(),
+            get(named(DEPENDENCY_NAME_IO_DISPATCHER))
+        )
+    }
     factory<TravelerRepository> {
         TravelerRepositoryDerived(
             get(named(DEPENDENCY_NAME_STATIC_USER_EMAIL)),
             get(),
-            get()
+            get(),
+            get(named(DEPENDENCY_NAME_IO_DISPATCHER))
         )
     }
 }
+
 val useCaseModule = module {
     single { GetActualTraveler(get()) }
     single { AddNewBusWithTravelers(get(), get(), get(named(DEPENDENCY_NAME_IO_DISPATCHER))) }
-    single { GetActualBusWithTravelers(get()) }
+    single { GetActualBusWithTravelers(get(), get(named(DEPENDENCY_NAME_IO_DISPATCHER))) }
     single {
         ShareActualLocation(get(), get(), get(), get(named(DEPENDENCY_NAME_IO_DISPATCHER)))
     }
 }
 
 private val viewModelModule = module {
-    factory { MapViewModel(get(), get(), get(named(DEPENDENCY_NAME_UI_DISPATCHER))) }
-    factory { TravelerViewModel(get(), get(named(DEPENDENCY_NAME_UI_DISPATCHER))) }
-    factory { TravelViewModel(get(), get(named(DEPENDENCY_NAME_UI_DISPATCHER))) }
-    factory { BusViewModel(get(), get(named(DEPENDENCY_NAME_UI_DISPATCHER))) }
+    single { MapViewModel(get(), get(), get(named(DEPENDENCY_NAME_UI_DISPATCHER))) }
+    single { TravelerViewModel(get(), get(named(DEPENDENCY_NAME_UI_DISPATCHER))) }
+    single { TravelViewModel(get(), get(named(DEPENDENCY_NAME_UI_DISPATCHER))) }
+    single { BusViewModel(get(), get(named(DEPENDENCY_NAME_UI_DISPATCHER))) }
 }

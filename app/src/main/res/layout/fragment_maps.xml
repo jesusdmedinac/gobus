@@ -28,10 +28,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:backgroundTint="@{ travel.fabColorLiveData }"
+            android:backgroundTint="@{travel.fabColorLiveData}"
             android:onClick="@{() -> travel.toggleTravelState()}"
             android:src="@{travel.fabIconLiveData}"
-            android:tint="@{ travel.fabIconColorLiveData}"
+            android:tint="@{travel.fabIconColorLiveData}"
             app:layout_constraintBottom_toBottomOf="@id/map"
             app:layout_constraintEnd_toEndOf="@id/map" />
     </androidx.constraintlayout.widget.ConstraintLayout>

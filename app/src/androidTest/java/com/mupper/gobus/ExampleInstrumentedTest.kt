@@ -3,7 +3,6 @@ package com.mupper.gobus
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
 import junit.framework.TestCase.assertEquals
-
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -14,6 +13,7 @@ import org.junit.runner.RunWith
  */
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {
+
     @Test
     fun useAppContext() {
         // Context of the app under test.

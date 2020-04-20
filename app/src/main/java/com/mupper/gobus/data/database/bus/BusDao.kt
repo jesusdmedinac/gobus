@@ -10,7 +10,7 @@ import com.mupper.gobus.data.database.relations.BusWithTravelers
 @Dao
 interface BusDao {
     @Query("SELECT count(*) FROM bus WHERE path = :path")
-    fun busCount(path: String): Int
+    suspend fun busCount(path: String): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertBus(bus: Bus)
@@ -20,5 +20,5 @@ interface BusDao {
 
     @Transaction
     @Query("SELECT * FROM bus WHERE is_traveling = 1")
-    fun getBusWithTravelers(): List<BusWithTravelers>
+    suspend fun getBusWithTravelers(): List<BusWithTravelers>
 }

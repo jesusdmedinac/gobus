@@ -15,7 +15,7 @@ class ShareActualLocation(
     private val dispatcher: CoroutineDispatcher
 ) {
     suspend fun invoke(newLatLng: LatLng) = withContext(dispatcher) {
-        val travelingBus = getActualBusWithTravelers.invoke()
+        val travelingBus = withContext(dispatcher) { getActualBusWithTravelers.invoke() }
         travelingBus?.let {
             val travelersInBus = it.travelers
             if (travelersInBus.isNullOrEmpty()) {
@@ -24,14 +24,16 @@ class ShareActualLocation(
             val travelerInBus = travelersInBus[0]
             travelerInBus.isTraveling = true
             travelerInBus.currentPosition = newLatLng
-            busRepository.shareActualLocation(
-                travelingBus, Traveler(
-                    travelerInBus.email,
-                    newLatLng,
-                    true
+            withContext(dispatcher) {
+                busRepository.shareActualLocation(
+                    travelingBus, Traveler(
+                        travelerInBus.email,
+                        newLatLng,
+                        true
+                    )
                 )
-            )
-            travelerRepository.shareActualLocation(travelerInBus)
+            }
+            withContext(dispatcher) { travelerRepository.shareActualLocation(travelerInBus) }
         }
     }
 }
