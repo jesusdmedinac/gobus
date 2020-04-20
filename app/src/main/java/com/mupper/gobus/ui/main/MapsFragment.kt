@@ -100,8 +100,8 @@ class MapsFragment : Fragment() {
         super.onResume()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         mapViewModel.clearMap()
         supportFragmentManager.beginTransaction().remove(mapFragment).commitAllowingStateLoss()
     }
@@ -110,9 +110,9 @@ class MapsFragment : Fragment() {
         when (model) {
             is MapModel.MapReady -> mapFragment.getMapAsync(model.onMapReady)
             is MapModel.RequestNewLocation -> mapViewModel.onNewLocationRequested()
-            is MapModel.NewLocation -> with(model.lastLocation) {
-                if (model.isTraveling) {
-                    travelerViewModel.shareActualLocation(this)
+            is MapModel.NewLocation -> with(model) {
+                if (isTraveling) {
+                    travelerViewModel.shareActualLocation(lastLocation)
                 }
             }
         }

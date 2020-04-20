@@ -38,7 +38,7 @@ fun Map<String, Any>.toDomainTraveler(): DomainTraveler {
     var email = ""
     if (hasAll(FIELDS_TRAVELER)) {
         val currentPositionMap =
-            get(FIELD_TRAVELER_CURRENT_POSITION) as HashMap<*, *>
+            get(FIELD_TRAVELER_CURRENT_POSITION) as Map<*, *>
 
         currentPosition =
             LatLng(
@@ -48,7 +48,7 @@ fun Map<String, Any>.toDomainTraveler(): DomainTraveler {
         email = get(FIELD_TRAVELER_EMAIL) as String
     }
     var isTraveling = false
-    if (this.containsKey(FIELD_TRAVELER_IS_TRAVELING)) {
+    if (containsKey(FIELD_TRAVELER_IS_TRAVELING)) {
         isTraveling = get(FIELD_TRAVELER_IS_TRAVELING) as Boolean
     }
 

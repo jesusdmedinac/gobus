@@ -42,7 +42,6 @@ class NewBusFragment : Fragment(), StepperLayout.StepperListener {
         savedInstanceState: Bundle?
     ): View? {
         binding = container?.bindingInflate(R.layout.fragment_new_bus, false)
-
         return binding?.root
     }
 
